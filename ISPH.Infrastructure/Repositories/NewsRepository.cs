@@ -16,9 +16,9 @@ namespace ISPH.Infrastructure.Repositories
         {
             return await Context.News.AnyAsync(news => news.Title == entity.Title);
         }
-        public override async Task<IList<News>> GetAll()
+        public override async Task<IEnumerable<News>> GetAll()
         {
-          return await Context.News.AsQueryable().OrderByDescending(news => news.PublishDate).ToListAsync();
+          return await Context.News.OrderByDescending(news => news.PublishDate).ToListAsync();
         }
     }
 }

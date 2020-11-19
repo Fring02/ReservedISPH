@@ -1,4 +1,5 @@
-﻿using ISPH.Infrastructure.Data;
+﻿using System;
+using ISPH.Infrastructure.Data;
 using ISPH.Core.Models;
 using ISPH.Core.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace ISPH.Infrastructure.Repositories
         public ResumesRepository(EntityContext context) : base(context)
         {
         }
-        public override async Task<Resume> GetById(int id)
+        public override async Task<Resume> GetById(Guid id)
         {
             return await Context.Resumes.AsNoTracking().FirstOrDefaultAsync(res => res.StudentId == id);
         }
@@ -23,10 +24,10 @@ namespace ISPH.Infrastructure.Repositories
             return await Context.Resumes.AnyAsync(res => res.StudentId == resume.StudentId);
         }
 
-        public override async Task<IList<Resume>> GetAll()
+        public override async Task<IEnumerable<Resume>> GetAll()
         {
-            return await Context.Resumes.AsQueryable().OrderBy(res => res.Id).
-                Include(res => res.Student).ToListAsync();
+            return await Context.Resumes.Include(res => res.Student).
+                OrderBy(res => res.Id).ToListAsync();
         }
     }
 }

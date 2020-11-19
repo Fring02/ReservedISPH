@@ -1,4 +1,5 @@
-﻿using ISPH.Infrastructure.Data;
+﻿using System;
+using ISPH.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,12 +25,12 @@ namespace ISPH.Infrastructure.Repositories
             return await Context.SaveChangesAsync() > 0;
         }
 
-        public virtual async Task<IList<T>> GetAll()
+        public virtual async Task<IEnumerable<T>> GetAll()
         {
-            return await Context.Set<T>().ToListAsync();
+            return await Context.Set<T>().AsNoTracking().ToListAsync();
         }
 
-        public virtual async Task<T> GetById(int id)
+        public virtual async Task<T> GetById(Guid id)
         {
             return await Context.Set<T>().FindAsync(id);
         }

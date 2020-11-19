@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ISPH.Core.DTO;
 using ISPH.Core.Models;
 using ISPH.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ISPH.Infrastructure;
 using ISPH.Infrastructure.Configuration;
 
 namespace ISPH.API.Controllers.ApiControllers
@@ -22,12 +21,12 @@ namespace ISPH.API.Controllers.ApiControllers
         }
         [HttpGet]
         [Authorize(Roles = RoleType.Admin)]
-        public async Task<IList<Employer>> GetAllEmployersAsync()
+        public async Task<IEnumerable<Employer>> GetAllEmployersAsync()
         {
             return await _repos.GetAll();
         }
         [HttpGet("id={id}")]
-        public async Task<Employer> GetEmployerAsync(int id)
+        public async Task<Employer> GetEmployerAsync(Guid id)
         {
             return await _repos.GetById(id);
         }
@@ -35,56 +34,47 @@ namespace ISPH.API.Controllers.ApiControllers
 
         [HttpPut("id={id}/update/email")]
         [Authorize(Roles = RoleType.Employer)]
-        public async Task<IActionResult> UpdateEmployerEmailAsync(EmployerDto em, int id)
+        public async Task<IActionResult> UpdateEmployerEmailAsync(EmployerDto em, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
-                Employer employer = await _repos.GetById(id);
-                if (await _repos.HasEntity(employer))
-                {
-                    employer.Email = em.Email;
-                    if (await _repos.Update(employer)) return Ok("Updated employer");
-                    return BadRequest("Failed to update employer");
-                }
-            return BadRequest("This employer is not in database");
+                var employer = await _repos.GetById(id);
+                if (!await _repos.HasEntity(employer)) return BadRequest("This employer is not in database");
+                employer.Email = em.Email;
+                if (await _repos.Update(employer)) return Ok("Updated employer");
+                return BadRequest("Failed to update employer");
         }
 
         [HttpPut("id={id}/update/company")]
         [Authorize(Roles = RoleType.Employer)]
-        public async Task<IActionResult> UpdateEmployerCompanyAsync(EmployerDto em, int id)
+        public async Task<IActionResult> UpdateEmployerCompanyAsync(EmployerDto em, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
-            Employer employer = await _repos.GetById(id);
-            if (await _repos.HasEntity(employer))
+            var employer = await _repos.GetById(id);
+            if (!await _repos.HasEntity(employer)) return BadRequest("This employer is not in database");
+            if (await _repos.UpdateCompany(employer, em.CompanyName))
             {
-                if (await _repos.UpdateCompany(employer, em.CompanyName))
-                {
-                    return Ok("Updated employer");
-                }
-                return BadRequest("Failed to update employer");
+                return Ok("Updated employer");
             }
-            return BadRequest("This employer is not in database");
+            return BadRequest("Failed to update employer");
         }
 
         [HttpPut("id={id}/update/password")]
         [Authorize(Roles = RoleType.Employer)]
-        public async Task<IActionResult> UpdateEmployerPasswordAsync(EmployerDto st, int id)
+        public async Task<IActionResult> UpdateEmployerPasswordAsync(EmployerDto st, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
-            Employer employer = await _repos.GetById(id);
-            if (await _repos.HasEntity(employer))
-            {
-                if (await _repos.UpdatePassword(employer, st.Password)) return Ok(new { message = "Updated"});
-                return BadRequest("Failed to update employer");
-            }
-            return BadRequest("This employer is not in database");
+            var employer = await _repos.GetById(id);
+            if (!await _repos.HasEntity(employer)) return BadRequest("This employer is not in database");
+            if (await _repos.UpdatePassword(employer, st.Password)) return Ok(new { message = "Updated"});
+            return BadRequest("Failed to update employer");
         }
 
 
         [HttpDelete("id={id}/delete")]
         [Authorize(Roles = RoleType.Admin)]
-        public async Task<IActionResult> DeleteEmployerAsync(int id)
+        public async Task<IActionResult> DeleteEmployerAsync(Guid id)
         {
-            Employer employer = await _repos.GetById(id);
+            var employer = await _repos.GetById(id);
             if (employer == null) return BadRequest("This employer is already deleted");
             if(await _repos.Delete(employer)) return Ok("Deleted employer");
             return BadRequest("Failed to delete employer");

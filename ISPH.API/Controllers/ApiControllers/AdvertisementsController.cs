@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using ISPH.Core.DTO;
@@ -29,7 +29,7 @@ namespace ISPH.API.Controllers.ApiControllers
         [HttpGet]
         public async Task<IList<AdvertisementDto>> GetAdvertisementsPerPage(int page)
         {
-            IList<Advertisement> ads;
+            IEnumerable<Advertisement> ads;
             if (page == 0) ads = await _repos.GetAll();
             else ads = await _repos.GetAdvertisementsPerPage(page);
             return _mapper.Map<IList<AdvertisementDto>>(ads);
@@ -49,19 +49,19 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpGet("pos={id}")]
-        public async Task<IList<AdvertisementDto>> GetAdvertisementsForPosition(int id)
+        public async Task<IList<AdvertisementDto>> GetAdvertisementsForPosition(Guid id)
         {
             var ads = await _repos.GetAdvertisementsByEntityId(id, EntityType.Position);
             return _mapper.Map<IList<AdvertisementDto>>(ads);
         }
         [HttpGet("emp={id}")]
-        public async Task<IList<AdvertisementDto>> GetAdvertisementsByEmployer(int id)
+        public async Task<IList<AdvertisementDto>> GetAdvertisementsByEmployer(Guid id)
         {
             var ads = await _repos.GetAdvertisementsByEntityId(id, EntityType.Employer);
             return _mapper.Map<IList<AdvertisementDto>>(ads);
         }
         [HttpGet("com={id}")]
-        public async Task<IList<AdvertisementDto>> GetAllAdvertisementsForCompany(int id)
+        public async Task<IList<AdvertisementDto>> GetAllAdvertisementsForCompany(Guid id)
         {
             var ads = await _repos.GetAdvertisementsByEntityId(id, EntityType.Company);
             return _mapper.Map<IList<AdvertisementDto>>(ads);
@@ -85,19 +85,18 @@ namespace ISPH.API.Controllers.ApiControllers
 
         [HttpPost("emp={id}/add")]
         [Authorize(Roles = RoleType.Employer)]
-        public async Task<IActionResult> AddAdvertisement(AdvertisementDto adv, int id)
+        public async Task<IActionResult> AddAdvertisement(AdvertisementDto adv, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
-            Position pos = await _positionRepos.GetPositionByName(adv.PositionName);
+            var pos = await _positionRepos.GetPositionByName(adv.PositionName);
             if (pos == null) return BadRequest("Such position is not in database");
             var advertisement = new Advertisement()
             {
                 Title = adv.Title,
-                Salary = adv.Salary.Value,
+                Salary = adv.Salary.GetValueOrDefault(),
                 Description = adv.Description,
-                PositionName = adv.PositionName,
                 PositionId = pos.PositionId,
-                EmployerId = id
+                EmployerId = id,
             };
             if (await _repos.HasEntity(advertisement)) return BadRequest("Ads with this title already exists");
             if (await _repos.Create(advertisement)) return Ok("Added new ads");
@@ -106,34 +105,32 @@ namespace ISPH.API.Controllers.ApiControllers
 
 
         [HttpGet("id={id}")]
-        public async Task<AdvertisementDto> GetAdvertisementById(int id)
+        public async Task<AdvertisementDto> GetAdvertisementById(Guid id)
         {
             var ad = await _repos.GetById(id);
             return _mapper.Map<AdvertisementDto>(ad);
         }
         [HttpPut("id={id}/update")]
         [Authorize(Roles = RoleType.Employer)]
-        public async Task<IActionResult> UpdateAdvertisement(AdvertisementDto advertisement, int id)
+        public async Task<IActionResult> UpdateAdvertisement(AdvertisementDto dto, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
 
-            Advertisement ad = await _repos.GetById(id);
-            if(ad != null)
-            {
-                ad.Title = advertisement.Title;
-                ad.Description = advertisement.Description;
-                ad.Salary = advertisement.Salary.GetValueOrDefault();
-                ad.PositionName = advertisement.PositionName;
-                if (await _repos.Update(ad)) return Ok("Updated ads");
-            }
+            var ad = await _repos.GetById(id);
+            if (ad == null) return BadRequest("This ads is not in database");
+            ad.Title = dto.Title;
+            ad.Description = dto.Description;
+            ad.Salary = dto.Salary.GetValueOrDefault();
+            ad.PositionId = dto.PositionId;
+            if (await _repos.Update(ad)) return Ok("Updated ads");
             return BadRequest("This ads is not in database");
         }
 
         [HttpDelete("id={id}/delete")]
         [Authorize(Roles = RoleType.Employer)]
-        public async Task<IActionResult> DeleteAdvertisement(int id)
+        public async Task<IActionResult> DeleteAdvertisement(Guid id)
         {
-            Advertisement ad = await _repos.GetById(id);
+            var ad = await _repos.GetById(id);
             if (ad == null) return BadRequest("This ads already deleted");
             if (await _repos.Delete(ad)) return Ok("Deleted ads");
             return BadRequest("Failed to delete ads");

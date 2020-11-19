@@ -15,9 +15,10 @@ namespace ISPH.Core.DTO
         public string Title { get; set; }
         [Required]
         public DateTime PublishDate { get; set; }
-        public string PublishDateString { get { return PublishDate.ToString("D", CultureInfo.CreateSpecificCulture("ru-RU")); } }
         [Required]
         public string Description { get; set; }
+        
+        public string PublishDateString => PublishDate.ToString("D", CultureInfo.CreateSpecificCulture("ru-RU"));
         public IFormFile File { get; set; }
         public string ImagePath { get; set; }
     }

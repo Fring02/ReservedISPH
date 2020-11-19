@@ -10,15 +10,14 @@ namespace ISPH.Core.DTO
 {
     public class NewsDto
     {
-        public int NewsId { get; set; }
+        public Guid NewsId { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
         public DateTime? PublishDate { get; set; }
-        public string PublishDateString { get { return PublishDate.Value.ToString("D", CultureInfo.CreateSpecificCulture("ru-RU")); } }
+        public string PublishDateString => PublishDate.Value.ToString("D", CultureInfo.CreateSpecificCulture("ru-RU"));
         [Required]
         public string Description { get; set; }
-
         public IFormFile File { get; set; }
         public string ImagePath { get; set; }
     }

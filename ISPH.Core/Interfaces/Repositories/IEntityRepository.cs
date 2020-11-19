@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ISPH.Core.Interfaces.Repositories
@@ -9,7 +10,7 @@ namespace ISPH.Core.Interfaces.Repositories
          Task<bool> Update(T entity);
          Task<bool> Delete(T entity);
          Task<bool> HasEntity(T entity);
-         Task<T> GetById(int id);
-         Task<IList<T>> GetAll();
+         Task<T> GetById(Guid id);
+         Task<IEnumerable<T>> GetAll();
     }
 }

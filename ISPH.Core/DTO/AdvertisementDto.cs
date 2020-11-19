@@ -9,9 +9,8 @@ namespace ISPH.Core.DTO
 {
     public class AdvertisementDto
     {
-        public int AdvertisementId { get; set; }
-        public int EmployerId { get; set; }
-        public int PositionId { get; set; }
+        public Guid AdvertisementId { get; set; }
+        public Guid EmployerId { get; set; }
         public Employer Employer { get; set; }
         [Required]
         public string Title { get; set; }
@@ -20,6 +19,7 @@ namespace ISPH.Core.DTO
         [Required]
         public string Description { get; set; }
         [Required]
+        public Guid PositionId { get; set; }
         public string PositionName { get; set; }
     }
 }

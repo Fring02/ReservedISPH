@@ -1,10 +1,12 @@
-﻿using ISPH.Infrastructure.Data;
+﻿using System;
+using ISPH.Infrastructure.Data;
 using ISPH.Core.Models;
 using ISPH.Core.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ISPH.Infrastructure.Extensions;
 
 namespace ISPH.Infrastructure.Repositories
 {
@@ -14,14 +16,13 @@ namespace ISPH.Infrastructure.Repositories
         {
         }
 
-        public override async Task<IList<Position>> GetAll()
+        public override async Task<IEnumerable<Position>> GetAll()
         {
-           return await Context.Positions.AsQueryable().Include(pos => pos.Advertisements).
-               //JoinAdvertisements(Context).
+           return await Context.Positions.AsNoTracking().JoinAdvertisements(Context).
                OrderBy(pos => pos.Name).ToListAsync();
         }
 
-        public override async Task<Position> GetById(int id)
+        public override async Task<Position> GetById(Guid id)
         {
             return await Context.Positions.AsNoTracking().Include(pos => pos.Advertisements).
                 FirstOrDefaultAsync(pos => pos.PositionId == id);

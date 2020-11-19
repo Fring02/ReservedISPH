@@ -11,8 +11,8 @@ namespace ISPH.Infrastructure.Services.TokenConfiguration
 {
     public abstract class TokenCreatingService<T>
     {
-       protected readonly IUserAuthRepository<T> _repos;
-        protected TokenCreatingService(IUserAuthRepository<T> repos)
+       protected readonly IUserAuthentification<T> _repos;
+        protected TokenCreatingService(IUserAuthentification<T> repos)
         {
             _repos = repos;
         }
@@ -21,9 +21,9 @@ namespace ISPH.Infrastructure.Services.TokenConfiguration
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
             var token = new JwtSecurityToken(
                 claims: identity.Claims,
-                audience: AuthentificationOptions.AUDIENCE,
-                issuer: AuthentificationOptions.ISSUER,
-                expires: DateTime.Now.AddHours(AuthentificationOptions.LIFETIME),
+                audience: AuthOptions.Audience,
+                issuer: AuthOptions.Issuer,
+                expires: DateTime.Now.AddHours(AuthOptions.Lifetime),
                 signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
                 );
             var handler = new JwtSecurityTokenHandler();

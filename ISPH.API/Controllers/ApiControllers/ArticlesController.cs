@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using ISPH.Core.DTO;
 using ISPH.Core.Models;
-using ISPH.Infrastructure;
 using ISPH.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using ISPH.Infrastructure.Configuration;
 
@@ -36,7 +35,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpGet("id={id}")]
-        public async Task<ArticleDto> GetArticleById(int id)
+        public async Task<ArticleDto> GetArticleById(Guid id)
         {
             var art = await _repos.GetById(id);
             return _mapper.Map<ArticleDto>(art);
@@ -47,7 +46,7 @@ namespace ISPH.API.Controllers.ApiControllers
         {
             if(!ModelState.IsValid) return BadRequest("Fill all fields");
             string path = "/images/" + art.File.FileName;
-            Article article = new Article()
+            var article = new Article()
             {
                 Title = art.Title,
                 PublishDate = art.PublishDate,
@@ -55,7 +54,7 @@ namespace ISPH.API.Controllers.ApiControllers
                 ImagePath = path
             };
             if (await _repos.HasEntity(article)) return BadRequest("This article already exists");
-           await using(var stream = new FileStream(_env.WebRootPath + path, FileMode.Create))
+            await using(var stream = new FileStream(_env.WebRootPath + path, FileMode.Create))
             {
                 await art.File.CopyToAsync(stream);
             }
@@ -67,11 +66,10 @@ namespace ISPH.API.Controllers.ApiControllers
 
         [HttpPut("id={id}/update")]
         [Authorize(Roles = RoleType.Admin)]
-        public async Task<IActionResult> UpdateArticle(ArticleDto art, int id)
+        public async Task<IActionResult> UpdateArticle(ArticleDto art, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
-
-            Article article = await _repos.GetById(id);
+            var article = await _repos.GetById(id);
             if (article == null) return BadRequest("This article doesn't exist");
              article.Title = art.Title;
              article.PublishDate = art.PublishDate;
@@ -83,7 +81,7 @@ namespace ISPH.API.Controllers.ApiControllers
 
         [HttpDelete("id={id}/delete")]
         [Authorize(Roles = RoleType.Admin)]
-        public async Task<IActionResult> DeleteArticle(int id)
+        public async Task<IActionResult> DeleteArticle(Guid id)
         {
             Article article = await _repos.GetById(id);
             if (article == null) return BadRequest("This article is already deleted");

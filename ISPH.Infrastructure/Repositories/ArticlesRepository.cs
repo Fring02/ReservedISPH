@@ -2,7 +2,6 @@
 using ISPH.Core.Models;
 using ISPH.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,9 +18,9 @@ namespace ISPH.Infrastructure.Repositories
         {
             return await Context.Articles.AnyAsync(art => art.Title == entity.Title);
         }
-        public override async Task<IList<Article>> GetAll()
+        public override async Task<IEnumerable<Article>> GetAll()
         {
-           return await Context.Articles.AsQueryable().OrderByDescending(art => art.PublishDate).ToListAsync();
+           return await Context.Articles.AsNoTracking().OrderByDescending(art => art.PublishDate).ToListAsync();
         }
     }
 }

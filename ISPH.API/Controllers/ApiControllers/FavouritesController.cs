@@ -28,21 +28,21 @@ namespace ISPH.API.Controllers.ApiControllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IList<AdvertisementDto>> GetFavourites(int studentId)
+        public async Task<IList<AdvertisementDto>> GetFavourites(Guid studentId)
         {
-            var favs = await _repos.GetFavourites(studentId);
-            return _mapper.Map<IList<AdvertisementDto>>(favs.Select(fav => fav.Advertisement));
+            var favourites = await _repos.GetFavourites(studentId);
+            return _mapper.Map<IList<AdvertisementDto>>(favourites.Select(fav => fav.Advertisement));
         }
 
 
         [HttpGet("ad={adId}")]
-        public async Task<FavouriteAdvertisement> GetFavourite(int studentId, int adId)
+        public async Task<FavouriteAdvertisement> GetFavourite(Guid studentId, Guid adId)
         {
             return await _repos.GetById(studentId, adId);
         }
 
         [HttpPost("ad={adId}/add")]
-        public async Task<IActionResult> AddToFavourites(int studentId, int adId)
+        public async Task<IActionResult> AddToFavourites(Guid studentId, Guid adId)
         {
             var fav = new FavouriteAdvertisement() { AdvertisementId = adId, StudentId = studentId };
             if (await _repos.AddToFavourites(fav)) return LocalRedirect("/home/advertisements/id=" + adId);
@@ -50,7 +50,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpPost("ad={adId}/delete")]
-        public async Task<IActionResult> DeleteFromFavourites(int studentId, int adId)
+        public async Task<IActionResult> DeleteFromFavourites(Guid studentId, Guid adId)
         {
             var fav = await _repos.GetById(studentId, adId);
             if (await _repos.DeleteFromFavourites(fav)) return LocalRedirect("/home/advertisements/id=" + adId);

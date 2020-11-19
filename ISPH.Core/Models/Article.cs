@@ -9,17 +9,11 @@ namespace ISPH.Core.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ArticleId { get; set; }
+        public Guid ArticleId { get; set; }
         public string Title { get; set; }
         public DateTime PublishDate { get; set; }
-        public  string PublishDateString
-        {
-            get {
-                return PublishDate.ToString("D", CultureInfo.CreateSpecificCulture("ru-Ru"));
-            }
-        }
+        public string PublishDateString => PublishDate.ToString("D", CultureInfo.CreateSpecificCulture("ru-Ru"));
         public string Description { get; set; }
-
         public string ImagePath { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace ISPH.Core.DTO
 {
     public class StudentDto
     {
-        public int ID { get; set; }
+        public Guid StudentId { get; set; }
         [Required]
         public string LastName { get; set; }
         [Required]

@@ -8,14 +8,13 @@ namespace ISPH.Core.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AdvertisementId { get; set; }
-        public int EmployerId { get; set; }
+        public Guid AdvertisementId { get; set; }
+        public Guid EmployerId { get; set; }
         public Employer Employer { get; set; }
         public string Title { get; set; }
         public uint Salary { get; set; }
         public string Description { get; set; }
-        public int PositionId { get; set; }
-        public string PositionName { get; set; }
+        public Guid PositionId { get; set; }
         public Position Position { get; set; }
 
     }

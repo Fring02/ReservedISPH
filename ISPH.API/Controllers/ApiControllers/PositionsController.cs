@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ISPH.Core.DTO;
 using ISPH.Core.Models;
 using ISPH.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using ISPH.Infrastructure.Configuration;
 using Microsoft.AspNetCore.Authorization;
@@ -26,15 +26,15 @@ namespace ISPH.API.Controllers.ApiControllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IList<PositionDto>> GetAllPositionsAsync()
+        public async Task<IEnumerable<PositionDto>> GetAllPositionsAsync()
         {
             var positions = await _repos.GetAll();
-            return _mapper.Map<IList<PositionDto>>(positions);
+            return _mapper.Map<IEnumerable<PositionDto>>(positions);
         }
 
         [HttpGet("id={id}")]
         [AllowAnonymous]
-        public async Task<PositionDto> GetPositionByIdAsync(int id)
+        public async Task<PositionDto> GetPositionByIdAsync(Guid id)
         {
             var pos = await _repos.GetById(id);
             return _mapper.Map<PositionDto>(pos);
@@ -44,7 +44,7 @@ namespace ISPH.API.Controllers.ApiControllers
         public async Task<IActionResult> AddPositionAsync(PositionDto pos)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
-            Position position = new Position()
+            var position = new Position()
             {
                 Name = pos.Name
             };
@@ -54,10 +54,10 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpPut("id={id}/update")]
-        public async Task<IActionResult> UpdatePositionAsync(PositionDto pos, int id)
+        public async Task<IActionResult> UpdatePositionAsync(PositionDto pos, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
-            Position position = await _repos.GetById(id);
+            var position = await _repos.GetById(id);
             if (!(await _repos.HasEntity(position))) return BadRequest("Position doesn't exist");
             position.Name = pos.Name;
             if (await _repos.Update(position)) return Ok("Updated Position");
@@ -65,9 +65,9 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpDelete("id={id}/delete")]
-        public async Task<IActionResult> DeletePositionAsync(int id)
+        public async Task<IActionResult> DeletePositionAsync(Guid id)
         {
-            Position position = await _repos.GetById(id);
+            var position = await _repos.GetById(id);
             if (position == null) return BadRequest("This position is already deleted");
             if (await _repos.Delete(position)) return Ok("Deleted position");
             return BadRequest("Failed to delete position");

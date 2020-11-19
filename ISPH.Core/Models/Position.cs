@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,9 +9,9 @@ namespace ISPH.Core.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PositionId { get; set; }
+        public Guid PositionId { get; set; }
         public string Name { get; set; }
         public int Amount { get; set; }
-        public IList<Advertisement> Advertisements { get; set; }
+        public IEnumerable<Advertisement> Advertisements { get; set; }
     }
 }

@@ -14,11 +14,14 @@ namespace ISPH.Infrastructure.Repositories
         {
         }
 
-        public override async Task<IList<Company>> GetAll()
+        public override async Task<IEnumerable<Company>> GetAll()
         {
-            return await Context.Companies.AsQueryable().
-                OrderBy(company => company.CompanyId).Include(company => company.Employers)
-               .ToListAsync();
+            return await Context.Companies.AsNoTracking().Select(com => new Company()
+                {
+                    CompanyId = com.CompanyId,
+                    Name = com.Name
+                }).OrderBy(company => company.Name).
+               ToListAsync();
         }
        
         public override async Task<bool> HasEntity(Company entity)

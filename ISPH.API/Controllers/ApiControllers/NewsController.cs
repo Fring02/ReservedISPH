@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using ISPH.Core.DTO;
 using ISPH.Core.Models;
-using ISPH.Infrastructure;
 using ISPH.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -28,35 +28,35 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IList<NewsDto>> GetAllNewsAsync()
+        public async Task<IEnumerable<NewsDto>> GetAllNewsAsync()
         {
             var news = await _repos.GetAll();
-            return _mapper.Map<IList<NewsDto>>(news);
+            return _mapper.Map<IEnumerable<NewsDto>>(news);
         }
 
         [HttpGet("id={id}")]
-        public async Task<NewsDto> GetNewsByIdAsync(int id)
+        public async Task<NewsDto> GetNewsByIdAsync(Guid id)
         {
             var news = await _repos.GetById(id);
             return _mapper.Map<NewsDto>(news);
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddNewsAsync([FromForm] NewsDto newsDTO)
+        public async Task<IActionResult> AddNewsAsync([FromForm] NewsDto dto)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
-            string path = "/images/" + newsDTO.File.FileName;
-            News news = new News()
+            string path = "/images/" + dto.File.FileName;
+            var news = new News()
             {
-                Title = newsDTO.Title,
-                PublishDate = newsDTO.PublishDate.Value,
-                Description = newsDTO.Description,
+                Title = dto.Title,
+                PublishDate = dto.PublishDate.GetValueOrDefault(),
+                Description = dto.Description,
                 ImagePath = path
             };
             if (await _repos.HasEntity(news)) return BadRequest("These news already exist");
-            using (var stream = new FileStream(_env.WebRootPath + path, FileMode.Create))
+            await using (var stream = new FileStream(_env.WebRootPath + path, FileMode.Create))
             {
-               await newsDTO.File.CopyToAsync(stream);
+               await dto.File.CopyToAsync(stream);
             }
             if (await _repos.Create(news)) return LocalRedirect("/home/index");
 
@@ -65,15 +65,15 @@ namespace ISPH.API.Controllers.ApiControllers
 
         [HttpPut("id={id}/update")]
         [Authorize(Roles = RoleType.Admin)]
-        public async Task<IActionResult> UpdateNewsAsync(NewsDto newsDTO, int id)
+        public async Task<IActionResult> UpdateNewsAsync(NewsDto dto, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
 
-            News news = await _repos.GetById(id);
+            var news = await _repos.GetById(id);
             if (news == null) return BadRequest("These news doesn't exist");
-            news.Title = newsDTO.Title;
-            news.PublishDate = newsDTO.PublishDate.Value;
-            news.Description = newsDTO.Description;
+            news.Title = dto.Title;
+            news.PublishDate = dto.PublishDate.GetValueOrDefault();
+            news.Description = dto.Description;
 
             if (await _repos.Update(news)) return Ok("/home/index");
             return BadRequest("Failed to update news");
@@ -81,9 +81,9 @@ namespace ISPH.API.Controllers.ApiControllers
 
         [HttpDelete("id={id}/delete")]
         [Authorize(Roles = RoleType.Admin)]
-        public async Task<IActionResult> DeleteNewsAsync(int id)
+        public async Task<IActionResult> DeleteNewsAsync(Guid id)
         {
-            News news = await _repos.GetById(id);
+            var news = await _repos.GetById(id);
             if (news == null) return BadRequest("These news are already deleted");
             string fullPath = Path.GetFullPath("static" + news.ImagePath);
             System.IO.File.Delete(fullPath);

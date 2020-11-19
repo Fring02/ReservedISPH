@@ -1,9 +1,9 @@
 ﻿namespace ISPH.Infrastructure
 {
-    public class AuthentificationOptions
+    public class AuthOptions
     {
-        public const string ISSUER = "AuthServer"; 
-        public const string AUDIENCE = "AuthClient";
-        public const int LIFETIME = 1;
+        public const string Issuer = "AuthServer"; 
+        public const string Audience = "AuthClient";
+        public const int Lifetime = 1;
     }
 }

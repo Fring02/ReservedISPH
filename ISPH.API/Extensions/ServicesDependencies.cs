@@ -4,19 +4,19 @@ using ISPH.Core.Interfaces.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using ISPH.Core.Interfaces.Authentification;
 
-namespace ISPH.API
+namespace ISPH.API.Extensions
 {
     public static class ServicesDependencies
     {
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IStudentsRepository, StudentRepository>();
-            services.AddScoped<IUserAuthRepository<Student>, StudentRepository>();
+            services.AddScoped<IUserAuthentification<Student>, StudentRepository>();
             services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<IAdvertisementsRepository, AdvertisementsRepository>();
             services.AddScoped<ICompanyRepository, CompaniesRepository>();
             services.AddScoped<IEmployersRepository, EmployersRepository>();
-            services.AddScoped<IUserAuthRepository<Employer>, EmployersRepository>();
+            services.AddScoped<IUserAuthentification<Employer>, EmployersRepository>();
             services.AddScoped<IArticlesRepository, ArticlesRepository>();
             services.AddScoped<ICompanyRepository, CompaniesRepository>();
             services.AddScoped<IPositionsRepository, PositionsRepository>();

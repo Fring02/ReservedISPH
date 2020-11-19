@@ -10,7 +10,7 @@ namespace ISPH.Core.Interfaces.Repositories
     {
         Task<bool> AddToFavourites(FavouriteAdvertisement ad);
         Task<bool> DeleteFromFavourites(FavouriteAdvertisement ad);
-        Task<FavouriteAdvertisement> GetById(int studentId, int adId);
-        Task<IList<FavouriteAdvertisement>> GetFavourites(int id);
+        Task<FavouriteAdvertisement> GetById(Guid studentId, Guid adId);
+        Task<IList<FavouriteAdvertisement>> GetFavourites(Guid id);
     }
 }

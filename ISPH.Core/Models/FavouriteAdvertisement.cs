@@ -10,10 +10,10 @@ namespace ISPH.Core.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public int AdvertisementId { get; set; }
+        public Guid Id { get; set; }
+        public Guid AdvertisementId { get; set; }
         public Advertisement Advertisement { get; set; }
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         public Student Student { get; set; }
     }
 }

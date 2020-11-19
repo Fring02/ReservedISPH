@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.AspNetCore.Http;
 using System;
 using AutoMapper;
+using ISPH.API.Extensions;
 using ISPH.Infrastructure;
 using ISPH.Infrastructure.Hubs;
 using ISPH.Infrastructure.Data;
@@ -25,7 +26,7 @@ namespace ISPH.API
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -51,9 +52,9 @@ namespace ISPH.API
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                     ValidateIssuer = true,
-                    ValidIssuer = AuthentificationOptions.ISSUER,
+                    ValidIssuer = AuthOptions.Issuer,
                     ValidateAudience = true,
-                    ValidAudience = AuthentificationOptions.AUDIENCE,
+                    ValidAudience = AuthOptions.Audience,
                     ValidateLifetime = true
                 };
             }); 

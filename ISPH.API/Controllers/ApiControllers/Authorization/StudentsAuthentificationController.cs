@@ -15,16 +15,16 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
 {
     [Route("users/students/auth/")]
     [ApiController]
-    public class StudentsAuthentificationController : ControllerBase
+    public class StudentsAuthController : ControllerBase
     {
-        private readonly IUserAuthRepository<Student> _authRepos;
-        private readonly TokenCreatingService<Student> tokenService;
+        private readonly IUserAuthentification<Student> _authRepos;
+        private readonly TokenCreatingService<Student> _tokenService;
         private IConfiguration Configuration { get; }
-        public StudentsAuthentificationController(IUserAuthRepository<Student> authRepos, IConfiguration config)
+        public StudentsAuthController(IUserAuthentification<Student> authRepos, IConfiguration config)
         {
             _authRepos = authRepos;
             Configuration = config;
-            tokenService = new StudentTokenService(_authRepos);
+            _tokenService = new StudentTokenService(_authRepos);
         }
 
         [HttpPost("register")]
@@ -41,27 +41,27 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
             if (await _authRepos.UserExists(student)) return BadRequest(new { message = "This user already exists" });
             student = await _authRepos.Register(student, st.Password);
             if (student == null) return BadRequest(new { message = "Oops, failed to register" });
-            var identity = await tokenService.CreateIdentity(st.Email, st.Password);
-            string token = tokenService.CreateToken(identity, out string identityName, Configuration);
+            var identity = await _tokenService.CreateIdentity(st.Email, st.Password);
+            string token = _tokenService.CreateToken(identity, out string identityName, Configuration);
             HttpContext.Session.SetString("Token", token);
-            HttpContext.Session.SetInt32("Id", student.StudentId);
+            HttpContext.Session.SetString("Id", student.StudentId.ToString());
             HttpContext.Session.SetString("Name", student.FirstName);
             HttpContext.Session.SetString("Role", student.Role);
-            return Ok(new { token = token, name = identityName });
+            return Ok(new {token, name = identityName });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> LoginStudent(LoginDto st)
         {
             if (!ModelState.IsValid) return BadRequest(new { message = "Fill all fields" });
-            var student = await tokenService.CreateIdentity(st.Email, st.Password);
+            var student = await _tokenService.CreateIdentity(st.Email, st.Password);
             if (student == null) return Unauthorized(new { message = "Username or password is incorrect" });
-            string token = tokenService.CreateToken(student, out string identityName, Configuration);
+            string token = _tokenService.CreateToken(student, out string identityName, Configuration);
             HttpContext.Session.SetString("Token", token);
-            HttpContext.Session.SetInt32("Id", int.Parse(student.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value));
+            HttpContext.Session.SetString("Id", student.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             HttpContext.Session.SetString("Name", student.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Name).Value);
             HttpContext.Session.SetString("Role", student.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Role).Value);
-            return Ok(new { token = token, name = identityName });
+            return Ok(new {token, name = identityName });
         }
 
         [HttpPost("signout")]

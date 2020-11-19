@@ -8,7 +8,7 @@ namespace ISPH.Core.DTO
 {
     public class EmployerDto
     {
-        public int EmployerId { get; set; }
+        public Guid EmployerId { get; set; }
         [Required]
         public string LastName { get; set; }
         [Required]
@@ -21,5 +21,6 @@ namespace ISPH.Core.DTO
         public string Email { get; set; }
         [Required]
         public string CompanyName { get; set; }
+        public Guid CompanyId { get; set; }
     }
 }

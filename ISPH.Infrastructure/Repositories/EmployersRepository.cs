@@ -1,4 +1,5 @@
-﻿using ISPH.Infrastructure.Data;
+﻿using System;
+using ISPH.Infrastructure.Data;
 using ISPH.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using ISPH.Core.Interfaces.Repositories;
@@ -10,20 +11,20 @@ using ISPH.Infrastructure.Services.Hashing;
 
 namespace ISPH.Infrastructure.Repositories
 {
-    public class EmployersRepository : EntityRepository<Employer>, IUserAuthRepository<Employer>, IEmployersRepository
+    public class EmployersRepository : EntityRepository<Employer>, IUserAuthentification<Employer>, IEmployersRepository
     {
         private readonly DataHashService<Employer> _hashService = new EmployersHashService();
         public EmployersRepository(EntityContext context) : base(context)
         {
         }
 
-        public override async Task<IList<Employer>> GetAll()
+        public override async Task<IEnumerable<Employer>> GetAll()
         {
-           return await Context.Employers.AsQueryable().OrderBy(emp => emp.EmployerId).
+           return await Context.Employers.AsNoTracking().OrderBy(emp => emp.EmployerId).
                Include(emp => emp.Company).Include(emp => emp.Advertisements).
                 ToListAsync();
         }
-        public override async Task<Employer> GetById(int id)
+        public override async Task<Employer> GetById(Guid id)
         {
             return await Context.Employers.AsNoTracking().Include(emp => emp.Advertisements).
                 FirstOrDefaultAsync(adv => adv.EmployerId == id);
@@ -45,15 +46,12 @@ namespace ISPH.Infrastructure.Repositories
         public async Task<bool> UpdateCompany(Employer entity, string companyName)
         {
             var company = await Context.Companies.FirstOrDefaultAsync(com => com.Name == companyName);
-            if (company != null)
-            {
-                entity.CompanyName = companyName;
-                entity.CompanyId = company.CompanyId;
-                Context.Employers.Update(entity);
-                var ads = Context.Advertisements.AsQueryable().
-                    Where(ad => ad.EmployerId == entity.EmployerId);
-                Context.Advertisements.RemoveRange(ads);
-            }
+            if (company == null) return false;
+            entity.CompanyId = company.CompanyId;
+            Context.Employers.Update(entity);
+            var ads = Context.Advertisements.
+                Where(ad => ad.EmployerId == entity.EmployerId);
+            Context.Advertisements.RemoveRange(ads);
             return await Context.SaveChangesAsync() > 0;
         }
         //Auth
@@ -64,18 +62,17 @@ namespace ISPH.Infrastructure.Repositories
             user.HashedPassword = hashedPass;
             user.SaltPassword = saltPass;
             await Context.Employers.AddAsync(user);
+            user.Company = await Context.Companies.FindAsync(user.CompanyId);
             await Context.SaveChangesAsync();
             return user;
         }
 
         public async Task<Employer> Login(string email, string password)
         {
-            var user = await Context.Employers.FirstOrDefaultAsync(em => em.Email == email);
-            if (user != null)
-            {
-                if (_hashService.CheckHashedPassword(user, password)) return user;
-            }
-            return null;
+            var user = await Context.Employers.AsNoTracking().
+                Include(emp => emp.Company).FirstOrDefaultAsync(em => em.Email == email);
+            if (user == null) return null;
+            return _hashService.CheckHashedPassword(user, password) ? user : null;
         }
 
         public async Task<bool> UserExists(Employer user)

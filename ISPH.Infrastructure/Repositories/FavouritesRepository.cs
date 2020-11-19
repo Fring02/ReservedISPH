@@ -1,4 +1,5 @@
-﻿using ISPH.Core.Interfaces.Repositories;
+﻿using System;
+using ISPH.Core.Interfaces.Repositories;
 using ISPH.Core.Models;
 using ISPH.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ namespace ISPH.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<FavouriteAdvertisement> GetById(int studentId, int adId)
+        public async Task<FavouriteAdvertisement> GetById(Guid studentId, Guid adId)
         {
             return await _context.Favourites.
            FirstOrDefaultAsync(fav => fav.AdvertisementId == adId && fav.StudentId == studentId);
@@ -33,9 +34,9 @@ namespace ISPH.Infrastructure.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<IList<FavouriteAdvertisement>> GetFavourites(int id)
+        public async Task<IList<FavouriteAdvertisement>> GetFavourites(Guid id)
         {
-            return await _context.Favourites.AsQueryable().Where(fav => fav.StudentId == id).
+            return await _context.Favourites.Where(fav => fav.StudentId == id).
                 Include(fav => fav.Advertisement).ToListAsync();
         }
     }

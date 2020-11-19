@@ -10,12 +10,12 @@ namespace ISPH.Core.Interfaces.Repositories
 {
     public interface IAdvertisementsRepository : IEntityRepository<Advertisement>
     {
-        Task<IList<Advertisement>> GetAdvertisementsByEntityId(int id, EntityType type);
-        Task<IList<Advertisement>> GetFilteredAdvertisements(string value);
-        Task<IList<Advertisement>> GetFilteredAdvertisements(FilteredAdvertisementDto ad);
+        Task<IEnumerable<Advertisement>> GetAdvertisementsByEntityId(Guid id, EntityType type);
+        Task<IEnumerable<Advertisement>> GetFilteredAdvertisements(string value);
+        Task<IEnumerable<Advertisement>> GetFilteredAdvertisements(FilteredAdvertisementDto ad);
         Task<int> GetAdvertisementsCount();
 
-        Task<IList<Advertisement>> GetAdvertisementsPerPage(int page);
-        Task<IList<Advertisement>> GetAdvertisementsAmount(int amount);
+        Task<IEnumerable<Advertisement>> GetAdvertisementsPerPage(int page);
+        Task<IEnumerable<Advertisement>> GetAdvertisementsAmount(int amount);
     }
 }
