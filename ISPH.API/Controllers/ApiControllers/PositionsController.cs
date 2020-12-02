@@ -28,8 +28,7 @@ namespace ISPH.API.Controllers.ApiControllers
         [AllowAnonymous]
         public async Task<IEnumerable<PositionDto>> GetAllPositionsAsync()
         {
-            var positions = await _repos.GetAll();
-            return _mapper.Map<IEnumerable<PositionDto>>(positions);
+            return await _repos.GetAll();
         }
 
         [HttpGet("id={id}")]
@@ -46,7 +45,8 @@ namespace ISPH.API.Controllers.ApiControllers
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var position = new Position()
             {
-                Name = pos.Name
+                Name = pos.Name,
+                ImagePath = pos.ImagePath
             };
             if (await _repos.HasEntity(position)) return BadRequest("Position is already in database");
             if (await _repos.Create(position)) return Ok("Added new position");
@@ -58,7 +58,7 @@ namespace ISPH.API.Controllers.ApiControllers
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var position = await _repos.GetById(id);
-            if (!(await _repos.HasEntity(position))) return BadRequest("Position doesn't exist");
+            if (position == null) return BadRequest("Position doesn't exist");
             position.Name = pos.Name;
             if (await _repos.Update(position)) return Ok("Updated Position");
             return BadRequest("Failed to add Position");
@@ -67,9 +67,7 @@ namespace ISPH.API.Controllers.ApiControllers
         [HttpDelete("id={id}/delete")]
         public async Task<IActionResult> DeletePositionAsync(Guid id)
         {
-            var position = await _repos.GetById(id);
-            if (position == null) return BadRequest("This position is already deleted");
-            if (await _repos.Delete(position)) return Ok("Deleted position");
+            if (await _repos.DeleteById(id)) return Ok("Deleted position");
             return BadRequest("Failed to delete position");
         }
     }

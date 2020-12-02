@@ -5,22 +5,20 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ISPH.Core.DTO;
+using System;
 
 namespace ISPH.Infrastructure.Repositories
 {
-    public class CompaniesRepository : EntityRepository<Company>, ICompanyRepository
+    public class CompaniesRepository : EntityRepository<Company, CompanyDto>, ICompanyRepository
     {
         public CompaniesRepository(EntityContext context) : base(context)
         {
         }
 
-        public override async Task<IEnumerable<Company>> GetAll()
+        public override async Task<IEnumerable<CompanyDto>> GetAll()
         {
-            return await Context.Companies.AsNoTracking().Select(com => new Company()
-                {
-                    CompanyId = com.CompanyId,
-                    Name = com.Name
-                }).OrderBy(company => company.Name).
+            return await Context.Companies.AsNoTracking().OrderBy(company => company.Name).Select(com => new CompanyDto(com)).
                ToListAsync();
         }
        
@@ -32,6 +30,11 @@ namespace ISPH.Infrastructure.Repositories
         public async Task<Company> GetCompanyByName(string name)
         {
             return await Context.Companies.AsNoTracking().FirstOrDefaultAsync(company => company.Name == name);
+        }
+
+        public override async Task<Company> GetById(Guid id)
+        {
+           return await Context.Companies.AsNoTracking().FirstOrDefaultAsync(com => com.CompanyId == id);
         }
     }
 }

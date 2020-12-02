@@ -15,7 +15,7 @@ namespace ISPH.Infrastructure.Services.TokenConfiguration
         }
         public override async Task<ClaimsIdentity> CreateIdentity(string email, string password)
         {
-            var student = await _repos.Login(email, password);
+            var student = await Repos.Login(email, password);
             if (student == null) return null;
             List<Claim> claims = new List<Claim>
             {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using ISPH.Core.DTO;
 
 namespace ISPH.Core.Interfaces.Repositories
 {
@@ -11,6 +12,6 @@ namespace ISPH.Core.Interfaces.Repositories
         Task<bool> AddToFavourites(FavouriteAdvertisement ad);
         Task<bool> DeleteFromFavourites(FavouriteAdvertisement ad);
         Task<FavouriteAdvertisement> GetById(Guid studentId, Guid adId);
-        Task<IList<FavouriteAdvertisement>> GetFavourites(Guid id);
+        Task<IEnumerable<FavouriteAdvertisementDto>> GetFavourites(Guid id);
     }
 }

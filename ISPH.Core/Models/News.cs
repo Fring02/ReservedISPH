@@ -8,7 +8,6 @@ namespace ISPH.Core.Models
     public class News
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid NewsId { get; set; }
         public string Title { get; set; }
         public DateTime PublishDate { get; set; }

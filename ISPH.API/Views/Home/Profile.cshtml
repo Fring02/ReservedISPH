@@ -1,352 +1,487 @@
-﻿@using Microsoft.AspNetCore.Http
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-<style>
-    .user {
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 20px 0;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        font-family: Bahnschrift, Arial, Helvetica, sans-serif;
-    }
-
-        .user ul {
-            display: flex;
-            justify-content: center;
-        }
-
-    .user-data {
-        margin: 20px 0;
-        font-size: 22px;
-    }
-
-    .change-data {
-        display: block;
-        list-style-type: none;
-        font-size: 20px;
-        margin: 30px 20px;
-    }
-
-    button.changedata {
-        padding: 10px 20px;
-        background-color: dodgerblue;
-        color: white;
-        font-weight: bold;
-        border: none;
-    }
-
-        button.changedata:hover {
-            cursor: pointer;
-            background-color: mediumspringgreen;
-            color: black;
-        }
-
-    #profileimg {
-        max-width: 100px;
-        border: 2px solid white;
-        padding: 20px;
-        border-radius: 200px;
-    }
-
-    .userads {
-        text-align: left !important;
-        font-family: Bahnschrift, Arial, Helvetica, sans-serif;
-        color: white;
-        padding: 20px;
-    }
-
-    .signs i {
-        font-size: 30px;
-    }
-
-    .ads {
-        background-color: rgba(0, 0, 0, 0.8);
-        padding: 20px;
-    }
-
-    .empty {
-        height: 50px;
-    }
-
-    .deleteads i {
-        color: white;
-    }
-
-    .deleteads button {
-        background: none;
-        border: none;
-        cursor: pointer;
-    }
-
-    .deleteads i:hover {
-        color: crimson;
-    }
-
-    .ads a {
-        font-size: 20px;
-        color: mediumspringgreen;
-    }
-
-        .ads a:hover {
-            color: dodgerblue;
-        }
-
-    .ads-title {
-        font-style: italic;
-    }
-</style>
-@{ int? id = HttpContextAccessor.HttpContext.Session.GetInt32("Id");
-                string url = (HttpContextAccessor.HttpContext.Session.Keys.Contains("Company")) ? "/users/employers/id=" : "/users/students/id=";
-                url += id;
+﻿@page
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var session = HttpContextAccessor.HttpContext.Session;
+    var role = session.GetString("Role");
+    var id = session.GetString("Id");
+    bool isEmployer = (role != null && role == "employer");
+    bool isStudent = (role != null && (role == "student" || role == "admin"));
+    string url = (isEmployer) ? "/users/employers/id=" + id : "/users/students/id=" + id;
+    string ads = (isEmployer) ? "My advertisements" : "My favourites";
     <script>
-        $(document).ready(function () {
-            let user = null;
-            $.ajax({
-                method: "GET",
-                headers: {
-                    'Authorization': "Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")"
-                },
-                url: "@url",
-                success: function (data) {
-                    user = data;
-                    $('.names').html(user.firstName + " " + user.lastName);
-                    $('.email').html(user.email);
+    let id = '@id';
+    let role = '@role';
+    $.get(
+        '@url'
+    ).done(function (data) {
+        let user = data;
+        $('.user-namesurname').html(data.firstName + " " + data.lastName);
+        $('.user-firstname').html(data.firstName);
+        $('.user-lastname').html(data.lastName);
+        $('.user-email').html(data.email);
+        $('.user-company').html(data.companyName);
+        $('.companyId').val(data.companyId);
+        if (data.resumeName !== null) {
+            $('#uploadresumebtn').hide();
+            $('.resume').append('<form style="margin-top: 20px;" method="post" action="@url/resume">' +
+                '<div class="form-row"><button type="submit" class="btn btn-primary">' + data.resumeName + '</button></div></form>');
+            $('.resume').append('<form style="margin-top: 20px;" method="post" action="@url/resume/delete"><button type="submit" class="btn btn-outline-danger">Delete resume</button></form>');
+        } else {
+            $('#uploadresumebtn').show();
+            $('#uploadresumebtn').click(function () {
+                $('.resume').append('<form method="post" enctype="multipart/form-data" action="@url/resume/add" style="margin-top: 30px;"><div class="form-group">' +
+                        '<input type="file" class="form-control-file" id="resume" name="file">' +
+                '</div><div class="form-row"><button type="submit" class="btn btn-outline-primary">Submit</button></div></form>');
+            });
+        }
 
-                    if (user.hasOwnProperty('companyName')) {
-                        $('.companyName').html("Компания: " + user.companyName);
-                        $('.changedataul').append('<li class="change-data" id="company-field"><button type="button" id="changecompany" class="changedata">'
-                            + "Изменить компанию" + '</button></li>');
-                        $('#addadsbtn').html('Добавить обьявление');
-                        let ads = user.advertisements;
-                        for (let i = 0; i < ads.length; i++) {
-                            $('.userads').append('<div class="ads"><div class="signs"><form class="deleteads"><button style="border: none; background: none; cursor: pointer; font-size: 1.5em;" type="submit"><i class="fas fa-trash-alt"></i></button></form>' +
-                                '</div><h2 class="ads-title">' + ads[i].title + '</h2><a href="/home/advertisements/id=' + ads[i].advertisementId + '">Learn more...</a></div>'
-                                + '<div class="empty"></div>');
+        $('.changeemailform').each(function() {
+            $(this).submit(function (e) {
+                e.preventDefault();
+                let email = $('.newemail').val();
+                if (email === null || email === '') $('.changefieldsblock').html('Enter your new email');
+                else {
+                user.email = email;
+                user.password = "foo";
+                    $.ajax({
+                        method: "PUT",
+                        headers: {
+                            'Authorization': "Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")"
+                        },
+                        url: '@url' + "/update/email",
+                        data: JSON.stringify(user),
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            location.reload();
+                        },
+                        error: function (data) {
+                            $('.changefieldsblock').html(data.responseText);
                         }
-                        $('.deleteads').each(function (id) {
-                            $(this).submit(function () {
-                                $.ajax({
-                                    type: "DELETE",
-                                    headers: {
-                                        'Authorization': 'Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")'
-                                    },
-                                    async: false,
-                                    url: '/advertisements/id=' + ads[id].advertisementId + '/delete',
-                                    error: function (response) {
-                                        alert(JSON.stringify(response));
-                                    }
-                                });
-                            });
-                        });
-
-                    } else {
-                        $('#addadsbtn').hide();
-                        $('.changedataul').append('<li class="change-data addresume-field"><button type="button" id="addresumebtn" class="changedata">'
-                            + "Добавить резюме" + '</button></li>');
-                        $('#addresumebtn').click(function () {
-                            $('.resume').append('<form method="post" action="@url/resume/add" enctype="multipart/form-data" id="addresume-form"><input type="file" name="file" id="resume">' +
-                                '<br><br><button class="signout hoverbtn" type="submit" style="background-color: dodgerblue;">Отправить</button></form>');
-                        });
-                        $.get(
-                            '@url/resume'
-                        ).done(function (data) {
-                            $('.addresume-field').show();
-                            if (data.name !== null) $('#addresumebtn').hide();
-                            $('.resume').append('Резюме: <form style="margin: 20px 0;" action="@url/resume" method="post" enctype="multipart/form-data"><button type="submit" class="signout hoverbtn" style="background-color: mediumspringgreen;">' + data.name + '</button></form>' +
-                                '<form style="display: inline; margin-left: 15px;" method="delete" id="deleteresume-form"><button style="border: none; background: none; cursor: pointer; font-size: 1.5em;" type="submit"><i class="fas fa-trash-alt"></i></button></form>');
-                            $('#deleteresume-form').submit(function () {
-                                $.ajax({
-                                    type: "DELETE",
-                                    headers: {
-                                        'Authorization': 'Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")'
-                                    },
-                                    async: false,
-                                    url: '@url/resume/delete',
-                                    success: function (response) {
-                                        window.location.reload();
-                                    },
-                                    error: function (response) {
-                                        alert(JSON.stringify(response));
-                                    }
-                                });
-                            });
-                        });
-
-                        $.ajax({
-                            method: "GET",
-                            url: '@url' + '/favourites',
-                            headers: {
-                                'Authorization': 'Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")'
-                            },
-                            success: function (data) {
-                                let ads = data;
-                                $('.userads').append('<h1 style="color: white; text-align: center; margin: 20px 0;">Мое избранное: </h1>');
-                                for (let i = 0; i < ads.length; i++) {
-                                    $('.userads').append('<div class="ads"><div class="signs"><i class="fas fa-star" style="color: yellow; font-size: 25px;"></i>' +
-                                        '</div><h2 class="ads-title">' + ads[i].title + '</h2><a href="/home/advertisements/id=' + ads[i].advertisementId + '">Learn more...</a></div>'
-                                        + '<div class="empty"></div>');
-                                }
-                            }
-                        });
-                    }
-                    $('#changepass-form').hide();
-                    $('#changeemail-form').hide();
-                    $('button#changepass').click(function () {
-                        let userdto = {
-                            FirstName: user.firstName,
-                            LastName: user.lastName,
-                            Email: user.email,
-                            CompanyName: user.companyName,
-                            Password: ""
-                        };
-                        $('#changepass-form').show();
-                        $('#changepass-form').submit(function (e) {
-                            userdto.Password = $('input[name="changepass"]').val();
-                            $.ajax({
-                                method: "PUT",
-                                headers: {
-                                    'Authorization': "Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")"
-                                },
-                                async: false,
-                                url: "@url/update/password",
-                                data: JSON.stringify(userdto),
-                                contentType: "application/json; charset=utf-8",
-                                success: function (data) {
-                                    location.reload();
-                                },
-                                error: function (data) {
-                                    $('#changepassinfo').html("<span style='color: crimson;'>Failed to update password</span>");
-                                }
-                            });
-                        });
-                    });
-
-
-                    $('button#changeemail').click(function () {
-                        let userdto = {
-                            FirstName: user.firstName,
-                            LastName: user.lastName,
-                            Email: "",
-                            CompanyName: user.companyName,
-                            Password: "Password"
-                        };
-                        $('#changeemail-form').show();
-                        $('#changeemail-form').submit(function (e) {
-                            userdto.Email = $('input[name="changeemail"]').val();
-                            $.ajax({
-                                method: "PUT",
-                                headers: {
-                                    'Authorization': "Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")"
-                                },
-                                async: false,
-                                url: "@url/update/email",
-                                data: JSON.stringify(userdto),
-                                contentType: "application/json; charset=utf-8",
-                                success: function (data) {
-                                    location.reload();
-                                },
-                                error: function (data) {
-                                    alert(JSON.stringify(data));
-                                    $('#changeemailinfo').html("<span style='color: crimson;'>Failed to update email</span>");
-                                }
-                            });
-                        });
-                    });
-
-                    $('button#changecompany').click(function(){
-                        let employerdto = {
-                            FirstName: user.firstName,
-                            LastName: user.lastName,
-                            Email: user.email,
-                            Password: "Password",
-                            CompanyName: user.companyName
-                        };
-                        $('#company-field').append('<h5 id="changecompanyinfo" style="margin-top: 20px"></h5><form id="changecompany-form" style="font-size: 15px"><select style="padding: 5px" class="custom-select" id="CompanyName">'
-                            + '<option>Выберите вашу компанию...</option></select><br><br><button type="submit" class="signout" style="border:none; color: white; padding: 5px 20px;' +
-                        'font-size: 22px; background-color: dodgerblue; font-family: Bahnschrift, Arial, serif; cursor: pointer;">Отправить</button></form>');
-                        $.get(
-                            '/companies'
-                        ).done(function (data) {
-                            for (let i = 0; i < data.length; i++) {
-                                $('select#CompanyName').append('<option value="' + data[i].name + '">' + data[i].name + '</option>');
-                            };
-                            $('#changecompany-form').submit(function (e) {
-                                e.preventDefault();
-                                employerdto.CompanyName = $('select#CompanyName').val();
-                                $.ajax({
-                                method: "PUT",
-                                headers: {
-                                    'Authorization': "Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")"
-                                },
-                                async: false,
-                                url: "@url/update/company",
-                                data: JSON.stringify(employerdto),
-                                contentType: "application/json; charset=utf-8",
-                                success: function (data) {
-                                   location.reload();
-                                },
-                                error: function (data) {
-                                    alert(JSON.stringify(data));
-                                    $('#changecompanyinfo').html("<span style='color: crimson;'>Failed to update company</span>");
-                                }
-                            });
-                            });
-                        })
                     });
                 }
             });
         });
-    </script> }
-<div class="user">
-    <div><img src="https://flaticons.net/icon.php?slug_category=application&slug_icon=user-profile" id="profileimg"></div>
-    <div>
-        <div class="user-data names">
-        </div>
-        <div class="user-data email"></div>
-        <div class="user-data companyName"></div>
-        <div class="user-data resume"></div>
-    </div>
-    <h4 id="changeerror" style="color: crimson;"></h4>
-    <ul class="changedataul">
-        <li class="change-data" id="email-field">
-            <button type="button" class="changedata" id="changeemail">Изменить почту</button>
-            <form method="post" id="changeemail-form" style="margin-top: 20px">
-                <input type="email" name="changeemail" style="border: none; font-size: 16px; padding: 5px"><br />
-                <button type="submit" class="signout" style="border:none; color: white; padding: 0 10px;
-                        font-size: 22px; background-color: dodgerblue; font-family: Bahnschrift, Arial, serif; cursor: pointer; margin-top: 20px">
-                    Подтвердить
-                </button>
-            </form>
-            <h5 id="changeemailinfo" style="margin-top: 20px"></h5>
-        </li>
-        <li class="change-data" id="pass-field">
-            <button type="button" class="changedata" id="changepass">Изменить пароль</button>
-            <form method="post" id="changepass-form" style="margin-top: 20px">
-                <input type="password" name="changepass" style="border: none; font-size: 16px; padding: 5px"><br />
-                <button type="submit" class="signout" style="border:none; color: white; padding: 0 10px;
-                        font-size: 22px; background-color: dodgerblue; font-family: Bahnschrift, Arial, serif; cursor: pointer; margin-top: 20px">
-                    Подтвердить
-                </button>
-            </form>
-            <h5 id="changepassinfo" style="margin-top: 20px"></h5>
-        </li>
-        <li class="change-data">
-            <button type="button" id="addadsbtn" class="changedata"></button>
-        </li>
-    </ul>
-    @await Html.PartialAsync("AdvertisementForm")
-    <div class="userads">
 
-    </div>
-    <script>
-        $('#addadsbtn').click(function () {
-            $('.advertisement').show();
+
+
+        $('.changecompanyform').submit(function (e) {
+            e.preventDefault();
+            let companyName = $('.newcompany').val();
+            if (companyName === null || companyName === '') $('.changefieldsblock').html('Select your company');
+            else {
+                user.companyName = companyName;
+                user.password = "foo";
+                $.ajax({
+                    method: "PUT",
+                    headers: {
+                        'Authorization': "Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")"
+                    },
+                    url: '@url' + "/update/company",
+                    data: JSON.stringify(user),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        $('.changefieldsblock').html(data.responseText);
+                    }
+                });
+            }
         });
-        $('.advertisement').hide();
+
+
+        $('.oldpassword').keyup(function (e) {
+            e.preventDefault();
+            user.password = $('.oldpassword').val();
+            $.ajax({
+                method: "POST",
+                headers: {
+                    'Authorization': "Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")"
+                },
+                url: '@url' + '/confirmpassword',
+                data: JSON.stringify(user),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data === true) {
+                        $('.oldpassword').hide();
+                        $('.newpasswordblock').show();
+                        $('.changefieldsblock').html('<p style="color: mediumspringgreen">Enter your new password</p>');
+                    }
+                    else $('.changefieldsblock').html('Wrong password');
+                },
+                error: function (data) {
+                    $('.changefieldsblock').html(data.responseText);
+                }
+            });
+        });
+
+        $('.changepasswordform').submit(function (e) {
+            e.preventDefault();
+            let password = $('.newpassword').val();
+            if (password === null || password === '') $('.changefieldsblock').html('Enter your new password');
+            else {
+                user.password = password;
+                $.ajax({
+                    method: "PUT",
+                    headers: {
+                        'Authorization': "Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")"
+                    },
+                    url: '@url' + '/update/password',
+                    data: JSON.stringify(user),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        $('.changefieldsblock').html(data.responseText);
+                    }
+                });
+            }
+        });
+    });
+
     </script>
-</div>
+    <div class="container emp-profile user-profile">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="profile-head">
+                        <h3 class="user-namesurname">
+                        </h3>
+                        <h4 id="user-role">
+                            @role
+                        </h4>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="true">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="ads-tab" data-toggle="tab" href="#advertisements" role="tab"
+                                   aria-controls="advertisements" aria-selected="false">@ads</a>
+                            </li>
+                            @{ 
+                                if (isEmployer)
+                                {
+                                    <li class="nav-item">
+                                   <a class="nav-link" id="addads-tab" data-toggle="tab" href="#addads" role="tab"
+                                   aria-controls="addads" aria-selected="false">Add advertisement</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @{
+                    if (isStudent)
+                    {
+                        <div class="col-md-4">
+                            <h5>Resume:</h5>
+                            <div class="resume">
+                                <button type="button" class="btn btn-success" id="uploadresumebtn">Upload resume:</button>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="tab-content profile-tab" id="myTabContent">
+                                <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                                    <div class="changefieldsblock" style="color: crimson;"></div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label>First name:</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p class="user-firstname"></p>
+                                        </div>
+                                        <div class="col-md-6"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label>Last name:</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p class="user-lastname"></p>
+                                        </div>
+                                        <div class="col-md-6"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <button class="btn btn-info changeemailbtn" style="display: inline; margin-right: 10px;">Change</button>
+                                            <label>Email:</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <p class="user-email"></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <form class="changeemailform">
+                                                <input type="email" class="newemail form-control" style="display: inline;">
+                                                <button type="submit" class="btn btn-outline-primary" style="display: inline; margin-left: 20px;">Submit</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <button class="btn btn-info changepasswordbtn">Change password</button>
+                                        </div>
+                                        <div class="col-md-6 changepasswordblock">
+                                            <form class="changepasswordform">
+                                                <div class="form-row"><input type="password" class="form-control oldpassword"></div>
+                                                <div class="form-row newpasswordblock">
+                                                    <input type="password" class="form-control newpassword"><br><br>
+                                                    <button type="submit" class="btn btn-outline-primary">Submit</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane fade" id="advertisements" role="tabpanel" aria-labelledby="advertisements-tab">
+                                    <script>
+                                        $.ajax({
+                                            method: "GET",
+                                            headers: {
+                                           'Authorization': "Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")"
+                                            },
+                                            url: '@url/favourites',
+                                            success: function (data) {
+                                                for (let i = 0; i < data.length; i++) {
+                                                    $('#advertisements').append('<div class="empadv"><div class="row"><h2 class="emp-title col-md-10">' + Number(i + 1) + '. ' + data[i].title + '</h2><form class="col-md-2 deletefavads">' +
+                                                        '<button class="btn btn-danger"><img src="https://icons-for-free.com/iconfiles/png/512/delete+remove+trash+trash+bin+trash+can+icon-1320073117929397588.png" style="max-width: 20px" class="img-fluid"></button></form></div>' +
+                                                        '<a href="/home/advertisements/id=' + data[i].advertisementId + '" role="button" class="btn btn-outline-primary">Learn more...</a>' +
+                                                        '</div>');
+                                                }
+
+                                                        $('.deletefavads').each(function (id) {
+                                                         $(this).submit(function (e) {
+                                                             e.preventDefault();
+                                                            $.ajax({
+                                                                type: "DELETE",
+                                                                headers: {
+                                                                    'Authorization': 'Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")'
+                                                                },
+                                                                url: '@url/favourites/ad=' + data[id].advertisementId + '/delete',
+                                                                success: function (data) {
+                                                                    location.reload();
+                                                                },
+                                                                error: function (response) {
+                                                                    $('#adsdeleteerror').html(response.responseText);
+                                                                }
+                                                            });
+                                                        });
+                                                    });
+                                            },
+                                            error: function (response) {
+                                                $('#adserror').html(response.responseText);
+                                            }
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                                        }
+                                        else if (isEmployer)
+                                        {
+                        <div style="padding: 30px; width: 100% !important;">
+                            <div class="tab-content profile-tab" id="myTabContent">
+                                <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
+                                    <div class="changefieldsblock" style="color: crimson;"></div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>First name:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="user-firstname"></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Last name:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="user-lastname"></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <button class="btn btn-info changeemailbtn" style="display: inline; margin-right: 10px;">Change</button>
+                                            <label>Email:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="user-email"></p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <form class="changeemailform">
+                                                <input type="email" class="newemail form-control" style="display: inline;">
+                                                <button type="submit" class="btn btn-outline-primary" style="display: inline; margin-left: 20px;">Submit</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <button class="btn btn-info changecompanybtn" style="display: inline; margin-right: 10px;">Change</button>
+                                            <label>Company:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p class="user-company"></p>
+                                        </div>
+                                        <div class="col-md-4 changecompanyblock">
+                                            <form class="changecompanyform">
+                                                <select class="newcompany form-control">
+                                                </select>
+                                                <button type="submit" class="btn btn-outline-primary">Submit</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <button class="btn btn-info changepasswordbtn">Change password</button>
+                                        </div>
+                                        <div class="col-md-6 changepasswordblock">
+                                            <form class="changepasswordform">
+                                                <div class="form-row"><input type="password" class="form-control oldpassword"></div>
+                                                <div class="form-row newpasswordblock">
+                                                    <input type="password" class="form-control newpassword"><br><br>
+                                                    <button type="submit" class="btn btn-outline-primary">Submit</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane fade" id="advertisements" role="tabpanel" aria-labelledby="profile-tab">
+                                    <div id="adsdeleteerror" style="color: crimson;"></div>
+                                    <script>
+                                        $.get(
+                                            '/advertisements/emp=@id'
+                                        ).done(function (data) {
+                                            for (let i = 0; i < data.length; i++) {
+                                                $('#advertisements').append('<div class="empadv">' +
+                                                    '<div class="row"><h2 class="empadv-title col-md-10">' + Number(i + 1) + '. ' + data[i].title + '</h2>' +
+                                                    '<form class="deleteads col-md-2"><button class="btn btn-danger"><img src="https://icons-for-free.com/iconfiles/png/512/delete+remove+trash+trash+bin+trash+can+icon-1320073117929397588.png" style="max-width: 30px" class="img-fluid"></button></form>' +
+                                                    '</div><a href="/home/advertisements/id=' + data[i].advertisementId + '" role="button" class="btn btn-large btn-outline-primary">Learn more...</a>' +
+                                                    '</div>');
+                                            }
+
+
+                                             $('.deleteads').each(function (id) {
+                                                 $(this).submit(function (e) {
+                                                     e.preventDefault();
+                                                    $.ajax({
+                                                        type: "DELETE",
+                                                        headers: {
+                                                            'Authorization': 'Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")'
+                                                        },
+                                                        url: '/advertisements/id=' + data[id].advertisementId + '/delete',
+                                                        success: function (data) {
+                                                            location.reload();
+                                                        },
+                                                        error: function (response) {
+                                                            $('#adsdeleteerror').html(response.responseText);
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    </script>
+                                </div>
+
+
+                                <div class="tab-pane fade" id="addads" role="tabpanel" aria-labelledby="addads-tab">
+                                    <div class="advertisementform bg-dark" style="color: white;">
+                                        <h1 style="text-align: center; margin-bottom: 20px;">Your advertisement</h1>
+                                        <form method="post" id="addadsform">
+                                            <h4 id="adserror" style="color: crimson; font-weight: normal;"></h4>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="title">Title</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="title" name="title" placeholder="Your title..." class="adsfield">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="salary">Salary</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input type="number" id="salary" name="salary" placeholder="Your salary..." class="adsfield">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="position">Position</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <select id="position" name="position" class="adsfield">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" class="companyId" name="companyId">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="description">Description</label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <textarea id="description" class="adsfield" name="description" placeholder="Place here your description..." style="height:200px"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <button id="adssubmit" class="btn btn-large btn-outline-primary">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            $.get(
+                                '/positions'
+                            ).done(function (data) {
+                                let positions = data;
+                                for (let i = 0; i < positions.length; i++) {
+                                    $('#position').append('<option value="' + positions[i].name + '">' + positions[i].name + '</option>');
+                                }
+                            });
+
+
+                            $('#addadsform').submit(function (e) {
+                                e.preventDefault();
+                                let ads = {
+                                    Title: $('#title').val(),
+                                    Salary: $('#salary').val(),
+                                    PositionName: $('#position').val(),
+                                    Description: $('#description').val(),
+                                    CompanyId: $('.companyId').val()
+                                };
+                                var isValid = false;
+                                for (var key in ads) {
+                                    if (ads[key] === '') isValid = true;
+                                };
+                                if (isValid === true) $('#adserror').html("Fill all fields");
+                                else {
+                                    $.ajax({
+                                        method: "POST",
+                                        headers: {
+                                       'Authorization': "Bearer @HttpContextAccessor.HttpContext.Session.GetString("Token")"
+                                        },
+                                        url: "/advertisements/emp=@id/add",
+                                        data: JSON.stringify(ads),
+                                        contentType: "application/json; charset=utf-8",
+                                        success: function (response) {
+                                            $('#adserror').html('<p style="color: mediumspringgreen;">Added new advertisement</p>');
+                                            setTimeout(function () { location.reload(); }, 2000);
+                                        },
+                                        error: function (response) {
+                                            $('#adserror').html(response.responseText);
+                                        }
+                                    });
+                                }
+                        });
+                        </script>
+                    }
+                }
+            </div>
+    </div>
+}

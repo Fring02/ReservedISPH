@@ -30,7 +30,7 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
         [HttpPost("register")]
         public async Task<IActionResult> RegisterStudent(StudentDto st)
         {
-            if (!ModelState.IsValid) return BadRequest(new { message = "Fill all fields"});
+            if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var student = new Student()
             {
                 FirstName = st.FirstName,
@@ -38,11 +38,12 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
                 Email = st.Email,
                 Role = "student",
             };
-            if (await _authRepos.UserExists(student)) return BadRequest(new { message = "This user already exists" });
+            if (await _authRepos.UserExists(student)) return BadRequest("This user already exists");
             student = await _authRepos.Register(student, st.Password);
-            if (student == null) return BadRequest(new { message = "Oops, failed to register" });
+            if (student == null) return BadRequest("Oops, failed to register");
             var identity = await _tokenService.CreateIdentity(st.Email, st.Password);
             string token = _tokenService.CreateToken(identity, out string identityName, Configuration);
+
             HttpContext.Session.SetString("Token", token);
             HttpContext.Session.SetString("Id", student.StudentId.ToString());
             HttpContext.Session.SetString("Name", student.FirstName);
@@ -53,10 +54,11 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
         [HttpPost("login")]
         public async Task<IActionResult> LoginStudent(LoginDto st)
         {
-            if (!ModelState.IsValid) return BadRequest(new { message = "Fill all fields" });
+            if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var student = await _tokenService.CreateIdentity(st.Email, st.Password);
-            if (student == null) return Unauthorized(new { message = "Username or password is incorrect" });
+            if (student == null) return Unauthorized("Username or password is incorrect");
             string token = _tokenService.CreateToken(student, out string identityName, Configuration);
+
             HttpContext.Session.SetString("Token", token);
             HttpContext.Session.SetString("Id", student.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             HttpContext.Session.SetString("Name", student.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Name).Value);
@@ -68,7 +70,7 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
         public IActionResult SignOut()
         {
             HttpContext.Session.Clear();
-            return LocalRedirect("~/home/index");
+            return LocalRedirect("~/home/main");
         }
     }
 }

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using ISPH.Infrastructure.Configuration;
+using ISPH.Core.DTO.Filter;
 
 namespace ISPH.API.Controllers.ApiControllers
 {
@@ -30,8 +31,24 @@ namespace ISPH.API.Controllers.ApiControllers
         [HttpGet]
         public async Task<IEnumerable<NewsDto>> GetAllNewsAsync()
         {
-            var news = await _repos.GetAll();
-            return _mapper.Map<IEnumerable<NewsDto>>(news);
+            return await _repos.GetAll();
+        }
+        [HttpGet("minyear")]
+        public async Task<int> GetMinNewsPublicationYear()
+        {
+            return await _repos.GetMinNewsPublicationYear();
+        }
+
+        [HttpGet("amount={amount}")]
+        public async Task<IEnumerable<NewsDto>> GetNewsForAmount(int amount)
+        {
+            return await _repos.GetNews(amount);
+        }
+
+        [HttpPost("filter")]
+        public async Task<IEnumerable<NewsDto>> GetFilteredNews(FilteredNewsOrArticleDto dto)
+        {
+            return await _repos.GetFilteredNews(dto);
         }
 
         [HttpGet("id={id}")]
@@ -58,7 +75,7 @@ namespace ISPH.API.Controllers.ApiControllers
             {
                await dto.File.CopyToAsync(stream);
             }
-            if (await _repos.Create(news)) return LocalRedirect("/home/index");
+            if (await _repos.Create(news)) return LocalRedirect("/home/main");
 
             return BadRequest("Failed to add news");
         }
@@ -75,7 +92,7 @@ namespace ISPH.API.Controllers.ApiControllers
             news.PublishDate = dto.PublishDate.GetValueOrDefault();
             news.Description = dto.Description;
 
-            if (await _repos.Update(news)) return Ok("/home/index");
+            if (await _repos.Update(news)) return Ok("Updated news");
             return BadRequest("Failed to update news");
         }
 
@@ -87,7 +104,7 @@ namespace ISPH.API.Controllers.ApiControllers
             if (news == null) return BadRequest("These news are already deleted");
             string fullPath = Path.GetFullPath("static" + news.ImagePath);
             System.IO.File.Delete(fullPath);
-            if (await _repos.Delete(news)) return LocalRedirect("/home/index");
+            if (await _repos.Delete(news)) return LocalRedirect("/home/main");
             return BadRequest("Failed to delete news");
         }
     }

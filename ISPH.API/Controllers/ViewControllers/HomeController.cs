@@ -2,40 +2,31 @@
 
 namespace ISPH.API.Controllers.ViewControllers
 {
+    [Controller]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Main()
         {
-           return View();
+            return View();
         }
 
         public IActionResult Advertisements()
         {
-            return View("Index");
+            return View("Main");
         }
-
-        public IActionResult RegistrationForm()
-        {
-            return PartialView("RegistrationForm");
-        }
-        public IActionResult AuthorisationForm()
-        {
-            return PartialView("AuthorisationForm");
-        }
-
+        
         public IActionResult Profile()
         {
-            return View("Index");
-        }
-
-        public IActionResult Articles()
-        {
-            return View("Index");
+            return View("Main");
         }
 
         public IActionResult News()
         {
-            return View("Index");
+            return View("Main");
+        }
+        public IActionResult Articles()
+        {
+            return View("Main");
         }
     }
 }

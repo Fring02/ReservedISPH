@@ -24,5 +24,6 @@ namespace ISPH.Infrastructure.Extensions
                 Advertisements = a
             });
         }
+
     }
 }

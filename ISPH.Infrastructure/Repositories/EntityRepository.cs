@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ISPH.Core.Interfaces.Repositories;
 namespace ISPH.Infrastructure.Repositories
 {
-   public abstract class EntityRepository<T> : IEntityRepository<T> where T : class
+   public abstract class EntityRepository<T, D> : IEntityRepository<T, D> where T : class where D : class
     {
         protected readonly EntityContext Context;
         protected EntityRepository(EntityContext context)
@@ -25,10 +25,18 @@ namespace ISPH.Infrastructure.Repositories
             return await Context.SaveChangesAsync() > 0;
         }
 
-        public virtual async Task<IEnumerable<T>> GetAll()
+        public virtual async Task<bool> DeleteById(Guid id)
         {
-            return await Context.Set<T>().AsNoTracking().ToListAsync();
+            var entity = await Context.Set<T>().FindAsync(id);
+            if (entity != null)
+            {
+                Context.Set<T>().Remove(entity);
+                return await Context.SaveChangesAsync() > 0;
+            }
+            return false;
         }
+
+        public abstract Task<IEnumerable<D>> GetAll();
 
         public virtual async Task<T> GetById(Guid id)
         {

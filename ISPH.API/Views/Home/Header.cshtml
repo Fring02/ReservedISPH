@@ -1,0 +1,67 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<header class="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a href="/home/main">
+            <img src="https://thumb.tildacdn.com/tild3366-6632-4135-a433-623932303730/-/resize/240x/-/format/webp/Astana_IT_University.png" 
+                 alt="Responsive image" class="header-img"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link nav-option" href="#">For students</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-option" href="#">For employers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-option" href="#">Companies</a>
+                </li>
+            </ul>
+            @{
+                var session = HttpContextAccessor.HttpContext.Session;
+                var notAvailableToken = string.IsNullOrEmpty(session.GetString("Token"));
+                var loc = session.GetString("Role") + "s";
+                if (notAvailableToken)
+                {
+                    <div class="user-buttons">
+                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#signupModal">
+                            Sign up
+                        </button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signinModal">
+                            Sign in
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    var isAdmin = session.GetString("Role") == "admin";
+                    if(isAdmin) loc = "students";
+                            <div class="user-buttons">
+                                @{
+                                    if (isAdmin)
+                                    {
+                                        <button type="button" class="btn btn-warning addarticlebtn">Add article</button>
+                                        <button type="button" class="btn btn-warning addnewsbtn">Add news</button>
+                                    }
+                                }
+                                <a href="/home/profile">
+                                    <img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png"
+                                         class="img-fluid profile">
+                                </a>
+                                <form method="post" action="/users/@loc/auth/signout" style="display: inline; margin-left: 10px;">
+                                    <button type="submit" class="btn btn-danger">Sign out</button>
+                                </form>
+                            </div>
+                        }
+            }
+        </div>
+    </nav>
+</header>
+
+@await Html.PartialAsync("RegistrationForm")
+@await Html.PartialAsync("LoginForm")

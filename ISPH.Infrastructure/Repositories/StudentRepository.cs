@@ -8,33 +8,34 @@ using ISPH.Core.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using ISPH.Core.Interfaces.Authentification;
 using ISPH.Infrastructure.Services.Hashing;
+using ISPH.Core.DTO;
 
 namespace ISPH.Infrastructure.Repositories
 {
-    public class StudentRepository : EntityRepository<Student>, IUserAuthentification<Student>, IStudentsRepository
+    public class StudentRepository : EntityRepository<Student, StudentDto>, IUserAuthentification<Student>, IStudentsRepository
     {
         private readonly DataHashService<Student> _hashService = new StudentsHashService();
         public StudentRepository(EntityContext context) : base(context)
         {
         }
-        public async Task<Student> GetByEmail(string email)
-        {
-            return await Context.Students.AsNoTracking().FirstOrDefaultAsync(student => student.Email == email);
-        }
         public override async Task<bool> HasEntity(Student entity)
         {
             return await Context.Students.AnyAsync(st => st.Email == entity.Email);
         }
-        public override async Task<IEnumerable<Student>> GetAll()
+        public override async Task<IEnumerable<StudentDto>> GetAll()
         {
-           return await Context.Students.OrderBy(st => st.StudentId).
-               Include(student => student.Resume).
+           return await Context.Students.AsNoTracking().OrderBy(st => st.StudentId).
+               Include(student => student.Resume).Select(st => new StudentDto(st)
+               {
+                   ResumeId = st.Resume.ResumeId,
+                   ResumeName = st.Resume.Name
+               }).
                ToListAsync();
         }
 
         public override async Task<Student> GetById(Guid id)
         {
-            return await Context.Students.AsNoTracking().
+           return await Context.Students.AsNoTracking().
                 Include(st => st.Resume).
                 FirstOrDefaultAsync(st => st.StudentId == id);
         }
@@ -61,7 +62,7 @@ namespace ISPH.Infrastructure.Repositories
 
         public async Task<Student> Login(string email, string password)
         {
-            var user = await Context.Students.FirstOrDefaultAsync(st => st.Email == email);
+            var user = await Context.Students.AsNoTracking().FirstOrDefaultAsync(st => st.Email == email);
             if (user == null) return null;
             return _hashService.CheckHashedPassword(user, password) ? user : null;
         }

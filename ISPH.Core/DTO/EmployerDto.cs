@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ISPH.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,6 +9,18 @@ namespace ISPH.Core.DTO
 {
     public class EmployerDto
     {
+        public EmployerDto()
+        {
+
+        }
+        public EmployerDto(Employer e)
+        {
+            EmployerId = e.EmployerId;
+            LastName = e.LastName;
+            FirstName = e.FirstName;
+            Email = e.Email;
+            CompanyId = e.CompanyId;
+        }
         public Guid EmployerId { get; set; }
         [Required]
         public string LastName { get; set; }
@@ -20,7 +33,7 @@ namespace ISPH.Core.DTO
         [MaxLength(40)]
         public string Email { get; set; }
         [Required]
-        public string CompanyName { get; set; }
         public Guid CompanyId { get; set; }
+        public string CompanyName { get; set; }
     }
 }

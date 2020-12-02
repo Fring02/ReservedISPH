@@ -8,6 +8,7 @@ using ISPH.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ISPH.Infrastructure.Configuration;
+using ISPH.Infrastructure.Services.Hashing;
 
 namespace ISPH.API.Controllers.ApiControllers
 {
@@ -16,23 +17,30 @@ namespace ISPH.API.Controllers.ApiControllers
     public class StudentsController : ControllerBase
     {
         private readonly IStudentsRepository _repos;
-        private readonly IMapper _mapper;
-        public StudentsController(IStudentsRepository repos, IMapper mapper)
+        private readonly DataHashService<Student> dataService = new StudentsHashService();
+        public StudentsController(IStudentsRepository repos)
         {
             _repos = repos;
-            _mapper = mapper;
         }
         [HttpGet]
         [Authorize(Roles = RoleType.Admin)]
         public async Task<IEnumerable<StudentDto>> GetAllStudents()
         {
-            var ads = await _repos.GetAll();
-            return _mapper.Map<IEnumerable<StudentDto>>(ads);
+           return await _repos.GetAll();
         }
         [HttpGet("id={id}")]
-        public async Task<Student> GetStudentAsync(Guid id)
+        public async Task<StudentDto> GetStudentByIdAsync(Guid id)
         {
-            return await _repos.GetById(id);
+            var st = await _repos.GetById(id);
+            if(st.Resume != null)
+            {
+                return new StudentDto(st) {
+                ResumeId = st.Resume.ResumeId,
+                ResumeName = st.Resume.Name,
+                ResumePath = st.Resume.Path 
+                };
+            }
+            return new StudentDto(st);
         }
         
 
@@ -40,7 +48,6 @@ namespace ISPH.API.Controllers.ApiControllers
         [Authorize(Roles = RoleType.Student)]
         public async Task<IActionResult> UpdateStudentEmailAsync(StudentDto st, Guid id)
         {
-            if(!ModelState.IsValid) return BadRequest("Fill all fields");
             var student = await _repos.GetById(id);
             if (student == null) return BadRequest("This student doesn't exist");
             student.Email = st.Email;
@@ -48,15 +55,21 @@ namespace ISPH.API.Controllers.ApiControllers
             return BadRequest("Failed to update student");
         }
 
+        [HttpPost("id={id}/confirmpassword")]
+        [Authorize(Roles = RoleType.Student)]
+        public async Task<bool> ConfirmStudentPasswordAsync(StudentDto st, Guid id)
+        {
+            return dataService.CheckHashedPassword(await _repos.GetById(id), st.Password);
+        }
+
         [HttpPut("id={id}/update/password")]
         [Authorize(Roles = RoleType.Student)]
         public async Task<IActionResult> UpdateStudentPasswordAsync(StudentDto st, Guid id)
         {
-            if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var student = await _repos.GetById(id);
-            if (!await _repos.HasEntity(student)) return BadRequest("This employer is not in database");
+            if (student == null) return BadRequest("This student doesn't exist");
             if (await _repos.UpdatePassword(student, st.Password)) return Ok("Updated");
-            return BadRequest("Failed to update employer");
+            return BadRequest("Failed to update student");
         }
 
 
@@ -64,12 +77,7 @@ namespace ISPH.API.Controllers.ApiControllers
         [Authorize(Roles = RoleType.Admin)]
         public async Task<IActionResult> DeleteStudentAsync(Guid id)
         {
-            var student = await _repos.GetById(id);
-            if (student == null) return BadRequest("This student is already deleted");
-            if (await _repos.Delete(student))
-            {
-                return Ok("Deleted student");
-            }
+            if (await _repos.DeleteById(id)) return Ok("Deleted student");
             return BadRequest("Failed to delete student");
         }
 

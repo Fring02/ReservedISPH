@@ -16,6 +16,7 @@ using ISPH.Infrastructure;
 using ISPH.Infrastructure.Hubs;
 using ISPH.Infrastructure.Data;
 using ISPH.Core.Helpers;
+using ISPH.Infrastructure.Configuration;
 
 namespace ISPH.API
 {
@@ -84,7 +85,7 @@ namespace ISPH.API
                 endpoints.MapHub<ChatHub>("/chat");
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Main}/{id?}");
 
             });
         }

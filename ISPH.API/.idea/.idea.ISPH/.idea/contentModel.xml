@@ -63,7 +63,6 @@
           <e p="siteoptimizeimg.jpg" t="Include" />
           <e p="vscodestories.jpeg" t="Include" />
         </e>
-        <e p="main.html" t="Include" />
         <e p="microsoft" t="Include">
           <e p="signalr" t="Include">
             <e p="dist" t="Include">
@@ -82,18 +81,11 @@
       </e>
       <e p="Views" t="Include">
         <e p="Home" t="Include">
-          <e p="Advertisement.cshtml" t="Include" />
-          <e p="AdvertisementForm.cshtml" t="Include" />
-          <e p="AdvertisementsForCom.cshtml" t="Include" />
-          <e p="AdvertisementsForPos.cshtml" t="Include" />
-          <e p="ArticleForm.cshtml" t="Include" />
-          <e p="ArticlePage.cshtml" t="Include" />
-          <e p="AuthorisationForm.cshtml" t="Include" />
-          <e p="FIlterForm.cshtml" t="Include" />
-          <e p="Index.cshtml" t="Include" />
-          <e p="NewsForm.cshtml" t="Include" />
-          <e p="NewsPage.cshtml" t="Include" />
-          <e p="Profile.cshtml" t="Include" />
+          <e p="Footer.cshtml" t="Include" />
+          <e p="Header.cshtml" t="Include" />
+          <e p="LoginForm.cshtml" t="Include" />
+          <e p="Main.cshtml" t="Include" />
+          <e p="MainContent.cshtml" t="Include" />
           <e p="RegistrationForm.cshtml" t="Include" />
         </e>
       </e>
@@ -108,6 +100,7 @@
         </e>
         <e p="CompanyDTO.cs" t="Include" />
         <e p="EmployerDTO.cs" t="Include" />
+        <e p="FavouriteAdvertisementDto.cs" t="Include" />
         <e p="FilteredAdvertisementDTO.cs" t="Include" />
         <e p="NewsDTO.cs" t="Include" />
         <e p="PositionDTO.cs" t="Include" />
@@ -143,6 +136,9 @@
         <e p="Company.cs" t="Include" />
         <e p="Employer.cs" t="Include" />
         <e p="FavouriteAdvertisement.cs" t="Include" />
+        <e p="General" t="Include">
+          <e p="UserModel.cs" t="Include" />
+        </e>
         <e p="News.cs" t="Include" />
         <e p="Position.cs" t="Include" />
         <e p="Resume.cs" t="Include" />
@@ -172,6 +168,7 @@
         <e p="ChatHub.cs" t="Include" />
       </e>
       <e p="ISPH.Infrastructure.csproj" t="IncludeRecursive" />
+      <e p="Migrations" t="Include" />
       <e p="obj" t="ExcludeRecursive">
         <e p="Debug" t="Include">
           <e p="netstandard2.0" t="Include">

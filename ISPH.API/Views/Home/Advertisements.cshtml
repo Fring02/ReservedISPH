@@ -1,0 +1,432 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var path = HttpContextAccessor.HttpContext.Request.Path.Value;
+    var id = HttpContextAccessor.HttpContext.Session.GetString("Id");
+    var isAdmin = HttpContextAccessor.HttpContext.Session.GetString("Role") == "admin";
+    var isEmployer = HttpContextAccessor.HttpContext.Session.GetString("Role") == "employer";
+    var token = HttpContextAccessor.HttpContext.Session.GetString("Token");
+    if (path.Contains("id"))
+    {
+    <script>
+            let url = substr(5, location.pathname);
+            $.get(
+                url
+            ).done(function (data) {
+                let adv = data;
+                adv.employer.password = "foo";
+                $('.advertisement-title').html(data.title);
+                $('.advertisement-company').html(data.employer.companyName);
+                $('.advertisement-salary').html(data.salary + ' KZT');
+                $('.advertisement-desc').html(data.description);
+                $('.employer-name-surname').html(data.employer.firstName + ' ' + data.employer.lastName);
+                $('.employer-email').html(data.employer.email);
+                if ('@id' === data.employerId) {
+                    $('.advertisement-info').prepend(
+                        '<div class="update-adv-error"></div>' +
+                        '<div class="updateadvblock row">' +
+                        '<div class="updateadvtitle col-md-3">' +
+                        '<button class="btn btn-success titlebtn">Update title</button>' +
+                        '<form class="updateadv-form update-title-form">' +
+                        '<div class="form-row">' +
+                        '<input type="text" class="form-control new-title">' +
+                        '</div>' +
+                        '<button type="submit" class="btn btn-outline-primary">Submit</button>' +
+                        '</form>' +
+                        '</div>' +
+                        '<div class="updateadvdate col-md-3">' +
+                        '<button class="btn btn-success salarybtn">Update salary</button>' +
+                        '<form class="updateadv-form update-salary-form">' +
+                        '<div class="form-row">' +
+                        '<input type="number" min="0" class="form-control new-salary">' +
+                        '</div>' +
+                        '<button type="submit" class="btn btn-outline-primary">Submit</button>' +
+                        '</form>' +
+                        '</div>' +
+                        '<div class="updateadvdesc col-md-3">' +
+                        '<button class="btn btn-success descbtn">Update description</button>' +
+                        '<form class="updateadv-form update-desc-form">' +
+                        '<div class="form-row">' +
+                        '<textarea class="form-control new-desc" rows="3"></textarea>' +
+                        '</div>' +
+                        '<button type="submit" class="btn btn-outline-primary">Submit</button>' +
+                        '</form>' +
+                        '</div>' +
+                        '<div class="updateadvposition col-md-3">' +
+                        '<button class="btn btn-success positionbtn">Update position</button>' +
+                        '<form class="updateadv-form update-position-form">' +
+                        '<div class="form-row">' +
+                        '<select class="form-control new-position"></select>' +
+                        '</div>' +
+                        '<button type="submit" class="btn btn-outline-primary">Submit</button>' +
+                        '</form>' +
+                        '</div>' +
+                        '</div>'
+                    );
+                    $('.updateadv-form').hide();
+                    $('.titlebtn').click(function () {
+                        $('.update-title-form').show();
+                    });
+                    $('.salarybtn').click(function () {
+                        $('.update-salary-form').show();
+                    });
+                    $('.descbtn').click(function () {
+                        $('.update-desc-form').show();
+                    });
+                    $('.positionbtn').click(function () {
+                        $.get(
+                            '/positions'
+                        ).done(function (data) {
+                            for (let i = 0; i < data.length; i++) {
+                                $('.new-position').append('<option value="' + data[i].positionId + '">' + data[i].name + '</option>');
+                            }
+                        });
+                        $('.update-position-form').show();
+                    });
+
+                    $('.update-title-form').submit(function (e) {
+                        e.preventDefault();
+                        let title = $('.new-title').val();
+                        if (title === null || title === '') $('.update-adv-error').html('Enter your title');
+                        else {
+                            adv.title = title;
+                            $.ajax({
+                                method: "PUT",
+                                headers: {
+                                    'Authorization': 'Bearer @token'
+                                },
+                                url: url + '/update/title',
+                                data: JSON.stringify(adv),
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (data) {
+                                    location.reload();
+                                },
+                                error: function(data){
+                                    $('.update-adv-error').html(data.responseText);
+                                }
+                            });
+                        }
+                    });
+
+                    $('.update-salary-form').submit(function (e) {
+                        e.preventDefault();
+                        let salary = $('.new-salary').val();
+                        if (salary === null) $('.update-salary-error').html('Enter your salary');
+                        else {
+                            adv.salary = salary;
+                            $.ajax({
+                                method: "PUT",
+                                headers: {
+                                    'Authorization': 'Bearer @token'
+                                },
+                                url: url + '/update/salary',
+                                data: JSON.stringify(adv),
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (data) {
+                                    location.reload();
+                                },
+                                error: function (data) {
+                                    $('.update-adv-error').html(data.responseText);
+                                }
+                            });
+                        }
+                    });
+
+                    $('.update-desc-form').submit(function (e) {
+                        e.preventDefault();
+                        let desc = $('.new-desc').val();
+                        if (desc === null || desc === '') $('.update-adv-error').html('Enter your description');
+                        else {
+                            adv.description = desc;
+                            $.ajax({
+                                method: "PUT",
+                                headers: {
+                                    'Authorization': 'Bearer @token'
+                                },
+                                url: url + '/update/description',
+                                data: JSON.stringify(adv),
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (data) {
+                                    location.reload();
+                                },
+                                error: function (data) {
+                                    $('.update-adv-error').html(data.responseText);
+                                }
+                            });
+                        }
+                    });
+
+                    $('.update-position-form').submit(function (e) {
+                        e.preventDefault();
+                        let positionId = $('.new-position').val();
+                        if (positionId === null || positionId === '') $('.update-adv-error').html('Enter your position');
+                        else {
+                            adv.positionId = positionId;
+                            $.ajax({
+                                method: "PUT",
+                                headers: {
+                                    'Authorization': 'Bearer @token'
+                                },
+                                url: url + '/update/position',
+                                data: JSON.stringify(adv),
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (data) {
+                                    location.reload();
+                                },
+                                error: function (data) {
+                                    $('.update-adv-error').html(data.responseText);
+                                }
+                            });
+                        }
+                    });
+                };
+            });
+    </script>
+        <div class="row container-fluid advertisement-block bg-light" style="padding-top: 50px; padding-bottom: 30px;">
+            <div class="col-xs-7 col-md-9 advertisement-info">
+                @{
+                    var isStudent = HttpContextAccessor.HttpContext.Session.GetString("Role") == "student";
+                    if (isStudent || isAdmin)
+                    {
+                        var adId = path.Substring("/home/advertisements/id=".Length);
+                        var favpath = "/users/students/id=" + id + "/favourites/ad=" + adId;
+                        <script>
+                            $.get(
+                                '@favpath'
+                            ).done(function (data) {
+                                if (data === undefined) {
+                                    $('.advertisement-info').prepend('<form method="post" action="@favpath/add"><button type="submit" class="btn btn-outline-success">Add to favourites</button>' +
+                                        '</form>');
+                                } else {
+                                    $('.advertisement-info').prepend('<button type="button" class="btn btn-primary" disabled>In favourites</button>');
+                                }
+                            });
+                        </script>
+                    }
+                }
+                <h1 class="advertisement-title"></h1>
+                <div class="row">
+                    <div class="col-md-4 advertisement-detail" style="margin: 10px 0;">Salary: <span class="badge badge-success advertisement-salary"></span></div>
+                    <div class="col-md-8"></div>
+                </div>
+                <p class="lead advertisement-desc"></p>
+                <hr>
+                <div class="media" style="margin-top: 30px;">
+                    <img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png" class="mr-3 img-fluid" style="max-width: 10%;" alt="...">
+                    <div class="media-body">
+                        <h5 class="mt-0 employer-name-surname"></h5>
+                        <div class="advertisement-detail">Company: <span class="badge badge-warning advertisement-company"></span></div>
+                        <span class="employer-email"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-3 row chat-window col-xs-5" id="chat_window_1">
+                <div class="col-xs-12 col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading top-bar bg-dark"><h3 class="panel-title">Chat with employer</h3></div>
+                        <div class="panel-body msg_container_base">
+                            <div class="row msg_container base_sent">
+                                <div class="col-md-10 col-xs-10">
+                                    <div class="messages msg_sent">
+                                        <p>
+                                            that mongodb thing looks good, huh?
+                                            tiny master db, and huge document store
+                                        </p>
+                                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-xs-2 avatar">
+                                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class="img-responsive">
+                                </div>
+                            </div>
+
+
+                            <div class="row msg_container base_receive">
+                                <div class="col-md-2 col-xs-2 avatar">
+                                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class="img-responsive">
+                                </div>
+                                <div class="col-md-10 col-xs-10">
+                                    <div class="messages msg_receive">
+                                        <p>
+                                            that mongodb thing looks good, huh?
+                                            tiny master db, and huge document store
+                                        </p>
+                                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="panel-footer">
+                            <div class="input-group">
+                                <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" id="btn-chat">Send</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row container-fluid" style="padding-top: 50px; border-bottom: 2px solid black; padding-bottom: 30px">
+            <div class="col-md-3 filter">
+                <form method="post" id="filter-ads-form">
+                    <div class="form-row">
+                        <h5 class="filter-title">Company: </h5>
+                        <select class="form-control company-filter-list">
+                            <option value="@Guid.Empty">Choose your company...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <h5 class="filter-title">Position: </h5>
+                        <select class="form-control position-filter-list">
+                            <option value="@Guid.Empty">Choose your position...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <h5 class="filter-title">Salary: </h5>
+                        <select class="form-control salary-filter-list">
+                            <option value="0">Choose your salary...</option>
+                        </select>
+                    </div>
+                    <div class="form-row" style="margin-top: 30px;">
+                        <div class="col-md-4"></div>
+                        <button type="submit" class="btn btn-large btn-primary col-md-4">Find</button>
+                        <div class="col-md-4"></div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="advertisements-list col-md-9">
+
+            </div>
+        </div>
+
+
+
+         <script>
+            let url = substr(5, location.pathname);
+            $.get(
+                url
+            ).done(function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    $('.advertisements-list').append('<div class="advertisements-list-el">' +
+                        '<div class="media-body">' +
+                        '<div class="row">' +
+                        '<h2 class="mt-0 latest-advertisement-title advertisement-list-el-title col-md-12">' + data[i].title + '</h2>' +
+                        '</div>' +
+                        '<div class="row" style="margin-bottom: 20px;">' +
+                        '<h5 class="mt-0 latest-advertisement-company col-md-3 advertisement-list-el-company">Company: <span style="color: orange; margin-left: 10px;">' + data[i].employer.companyName + '</span></h5>' +
+                        '<h5 class="mt-0 latest-advertisement-salary col-md-4 advertisement-list-el-salary">Offered Salary: <span style="color: mediumspringgreen; margin-left: 10px;">' + data[i].salary + 'KZT</span></h5>' +
+                        '<div class="col-md-5">' +
+                        '</div>' +
+                        '</div>' +
+                        '<a href="/home/advertisements/id=' + data[i].advertisementId + '" class="btn btn-large btn-success latest-advertisement-btn">Learn more...</a>' +
+                        '</div>' +
+                        '</div>');
+                }
+            });
+
+
+            $.get(
+                '/companies'
+            ).done(function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    $('.company-filter-list').append('<option value="' + data[i].companyId + '">' + data[i].name + '</option>');
+                }
+            });
+
+            $.get(
+                '/positions'
+            ).done(function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    $('.position-filter-list').append('<option value="' + data[i].positionId + '">' + data[i].name + '</option>');
+                }
+            });
+
+            $.get(
+                '/advertisements/maxsalary'
+            ).done(function (data) {
+                let i = 0, j = 0;
+                while (i < data) {
+                    i += 50000;
+                    $('.salary-filter-list').append('<option value="' + Math.round((i + j) / 2) + '">' + j + ' - ' + i + ' KZT</option>');
+                    j = i;
+                }
+            });
+
+
+
+            $('#filter-ads-form').submit(function (e) {
+                let filtered = {
+                    Salary: $('.salary-filter-list').val(),
+                    CompanyId: $('.company-filter-list').val(),
+                    PositionId: $('.position-filter-list').val()
+                };
+                e.preventDefault();
+                $.ajax({
+                    method: "POST",
+                    url: "/advertisements/filter",
+                    data: JSON.stringify(filtered),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('.advertisements-list').empty();
+                        for (let i = 0; i < data.length; i++) {
+                            $('.advertisements-list').append('<div class="advertisements-list-el">' +
+                                '<div class="media-body">' +
+                                '<div class="row">' +
+                                '<h2 class="mt-0 latest-advertisement-title advertisement-list-el-title col-md-12">' + data[i].title + '</h2>' +
+                                '</div>' +
+                                '<div class="row" style="margin-bottom: 20px;">' +
+                                '<h5 class="mt-0 latest-advertisement-company col-md-3 advertisement-list-el-company">Company: <span style="color: orange; margin-left: 10px;">' + data[i].employer.companyName + '</span></h5>' +
+                                '<h5 class="mt-0 latest-advertisement-salary col-md-4 advertisement-list-el-salary">Offered Salary: <span style="color: mediumspringgreen; margin-left: 10px;">' + data[i].salary + 'KZT</span></h5>' +
+                                '<div class="col-md-5">' +
+                                '</div>' +
+                                '</div>' +
+                                '<a href="/home/advertisements/id=' + data[i].advertisementId + '" class="btn btn-large btn-success latest-advertisement-btn">Learn more...</a>' +
+                                '</div>' +
+                                '</div>');
+                        }
+                        $(window).scrollTop(0);
+                    },
+                    error: function (response) {
+                        alert(JSON.stringify(response));
+                    }
+                });
+            });
+        </script>
+    }
+        <script>
+            $.get(
+                '/articles/amount=3'
+            ).done(function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    $('.latest-articles').append('<div class="article-part">' +
+                        '<h4><a href="/home/articles/id=' + data[i].articleId + '">' + data[i].title + '</a></h4>' +
+                        '<p class="lead article-date">' + data[i].publishDateString + '</p>' +
+                        '</div>');
+                }
+            });
+
+            $.get(
+                '/news/amount=3'
+            ).done(function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    $('.latest-news').append('<div class="news-part">' +
+                        '<h4><a href="/home/news/id=' + data[i].newsId + '">' + data[i].title + '</a></h4>' +
+                        '<p class="lead news-date">' + data[i].publishDateString + '</p>' +
+                        '</div>');
+                }
+            });
+        </script>
+}

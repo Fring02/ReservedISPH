@@ -6,15 +6,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using ISPH.Infrastructure.Configuration;
 
 namespace ISPH.Infrastructure.Services.TokenConfiguration
 {
     public abstract class TokenCreatingService<T>
     {
-       protected readonly IUserAuthentification<T> _repos;
+       protected readonly IUserAuthentification<T> Repos;
         protected TokenCreatingService(IUserAuthentification<T> repos)
         {
-            _repos = repos;
+            Repos = repos;
         }
         public string CreateToken(ClaimsIdentity identity, out string identityName, IConfiguration configuration)
         {

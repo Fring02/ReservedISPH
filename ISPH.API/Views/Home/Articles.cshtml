@@ -1,0 +1,252 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var path = HttpContextAccessor.HttpContext.Request.Path.Value;
+    if (path.Contains("id"))
+    {
+        var token = HttpContextAccessor.HttpContext.Session.GetString("Token");
+        bool isAdmin = HttpContextAccessor.HttpContext.Session.GetString("Role") == "admin";
+    <script>
+            let url = substr(5, location.pathname);
+            $.get(
+                url
+            ).done(function (data) {
+                let news = data;
+                $('.article-title').html(data.title);
+                $('.article-date').append(data.publishDateString);
+                $('.article-desc').append(data.description);
+                $('.article-image').prop('src', data.imagePath);
+
+
+                $('.updatenewsarticle-form').hide();
+                $('.titlebtn').click(function(){
+                    $('.update-title-form').show();
+                });
+                $('.datebtn').click(function(){
+                    $('.update-date-form').show();
+                });
+                $('.descbtn').click(function(){
+                    $('.update-desc-form').show();
+                });
+
+                $('.update-title-form').submit(function(e){
+                    e.preventDefault();
+                    let title = $('.new-title').val();
+                    if(title === null || title === '') $('.update-newsarticle-error').html('Enter your title');
+                    else{
+                        news.title = title;
+                        $.ajax({
+                            method: "PUT",
+                            headers: {
+                                'Authorization': 'Bearer @token'
+                            },
+                            url: url + '/update',
+                            data: JSON.stringify(news),
+                            contentType: 'application/json; charset=utf-8',
+                            success: function(data){
+                                location.reload();
+                            },
+                            error: function(data){
+                                $('.update-newsarticle-error').html(data.responseText);
+                            }
+                        });
+                    }
+                });
+
+                $('.update-date-form').submit(function(e){
+                    e.preventDefault();
+                    let date = $('.new-date').val();
+                    if(date === null) $('.update-newsarticle-error').html('Enter your date');
+                    else{
+                        news.publishDate = date;
+                        $.ajax({
+                            method: "PUT",
+                            headers: {
+                                'Authorization': 'Bearer @token'
+                            },
+                            url: url + '/update',
+                            data: JSON.stringify(news),
+                            contentType: 'application/json; charset=utf-8',
+                            success: function(data){
+                                location.reload();
+                            },
+                            error: function(data){
+                                $('.update-newsarticle-error').html(data.responseText);
+                            }
+                        });
+                    }
+                });
+
+                $('.update-desc-form').submit(function(e){
+                    e.preventDefault();
+                    let desc = $('.new-desc').val();
+                    if(desc === null || desc === '') $('.update-newsarticle-error').html('Enter your description');
+                    else{
+                        news.description = desc;
+                        $.ajax({
+                            method: "PUT",
+                            headers: {
+                                'Authorization': 'Bearer @token'
+                            },
+                            url: url + '/update',
+                            data: JSON.stringify(news),
+                            contentType: 'application/json; charset=utf-8',
+                            success: function(data){
+                                location.reload();
+                            },
+                            error: function(data){
+                                $('.update-newsarticle-error').html(data.responseText);
+                            }
+                        });
+                    }
+                });
+            });
+    </script>
+        <div class="row container-fluid article-block bg-light w-100" style="padding-top: 50px; padding-bottom: 30px; margin: 0 !important;">
+            <div class="card mb-3">
+                @{
+                    if (isAdmin)
+                    {
+                        <div class="update-newsarticle-error"></div>
+                        <div class="updatenewsarticleblock row">
+                            <div class="updatenewsarticletitle col-md-4">
+                                <button class="btn btn-success titlebtn">Update title</button>
+                                <form class="updatenewsarticle-form update-title-form">
+                                    <div class="form-row">
+                                        <input type="text" class="form-control new-title">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary">Submit</button>
+                                </form>
+                            </div>
+                            <div class="updatenewsarticledate col-md-4">
+                                <button class="btn btn-success datebtn">Update publication date</button>
+                                <form class="updatenewsarticle-form update-date-form">
+                                    <div class="form-row">
+                                        <input type="date" class="form-control new-date">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary">Submit</button>
+                                </form>
+                            </div>
+                            <div class="updatenewsarticledesc col-md-4">
+                                <button class="btn btn-success descbtn">Update description</button>
+                                <form class="updatenewsarticle-form update-desc-form">
+                                    <div class="form-row">
+                                        <textarea class="form-control new-desc" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                }
+                <img class="card-img-top img-fluid article-image" src="..." alt="Card image cap">
+                <div class="card-body">
+                    <p class="lead"><small class="text-muted article-date"></small></p>
+                    <h2 class="card-title article-title"></h2>
+                    <p class="card-text article-desc"></p>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+
+        <div class="row container-fluid bg-light w-100" style="padding-top: 50px; padding-bottom: 30px; margin: 0 !important;">
+            <div class="col-md-2 filter">
+                <h1 class="display-4" style="margin-bottom: 20px;">Articles</h1>
+                <form method="post" id="filter-articles-form">
+                    <div class="form-row">
+                        <h5 class="filter-title">Month: </h5>
+                        <select class="form-control month">
+                            <option value="0">Choose month of publication...</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <h5 class="filter-title">Year: </h5>
+                        <select class="form-control year">
+                            <option value="0">Choose year of publication...</option>
+                        </select>
+                    </div>
+                    <div class="form-row" style="margin-top: 30px; justify-content: center">
+                        <button type="submit" class="btn btn-large btn-primary col-md-4">Find</button>
+                    </div>
+                </form>
+            </div>
+            <div class="articles-list col-md-10">
+
+            </div>
+        </div>
+
+
+        <script>
+            let url = substr(5, location.pathname);
+            $.get(
+                url
+            ).done(function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    $('.articles-list').append('<div class="card">' +
+                        '<img class="card-img-top" src="' + data[i].imagePath + '" alt="Card image cap">' +
+                        '<div class="card-body">' +
+                        '<h5 class="card-title">' + data[i].title + '</h5>' +
+                        '<p class="card-text"><a href="/home/articles/id=' + data[i].newsId + '" role="button" class="btn btn-primary">Learn more...</a></p>' +
+                        '<p class="card-text"><small class="text-muted">' + data[i].publishDateString + '</small></p>' +
+                        '</div>' +
+                        '</div>');
+                }
+            });
+
+
+            $.get(
+                '/articles/minyear'
+            ).done(function (data) {
+                let currentYear = new Date().getFullYear();
+                if (currentYear > data)
+                    for (let i = data; i <= currentYear; i++) $('.year').append('<option value="' + i + '">' + i + '</option>');
+                else $('.year').append('<option value="' + year + '">' + year + '</option>');
+            });
+
+            $('#filter-articles-form').submit(function (e) {
+                let filtered = {
+                    Year: $('.year').val(),
+                    Month: $('.month').val()
+                };
+                e.preventDefault();
+                $.ajax({
+                    method: "POST",
+                    url: "/articles/filter",
+                    data: JSON.stringify(filtered),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('.articles-list').empty();
+                        for (let i = 0; i < data.length; i++) {
+                            $('.articles-list').append('<div class="card">' +
+                                '<img class="card-img-top img-fluid" src="' + data[i].imagePath + '" alt="Card image cap">' +
+                                '<div class="card-body">' +
+                                '<h5 class="card-title">' + data[i].title + '</h5>' +
+                                '<p class="card-text"><a href="/home/articles/id=' + data[i].newsId + '" role="button" class="btn btn-primary">Learn more...</a></p>' +
+                                '<p class="card-text"><small class="text-muted">' + data[i].publishDateString + '</small></p>' +
+                                '</div>' +
+                                '</div>');
+                        }
+                        $(window).scrollTop(0);
+                    },
+                    error: function (response) {
+                        alert(JSON.stringify(response));
+                    }
+                });
+            });
+        </script>
+    }
+}

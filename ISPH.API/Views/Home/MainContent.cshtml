@@ -1,0 +1,202 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var path = HttpContextAccessor.HttpContext.Request.Path.Value;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("Role");
+    <main class="content bg-light" style="margin: 0;">
+
+        @{
+            if (role == "admin")
+            {
+                <div class="addnewsblock container">
+                    <form class="addeventform" enctype="multipart/form-data" method="post" action="/news/add">
+                        <div class="form-row" style="justify-content: flex-end;"><button type="button" class="btn btn-lg btn-danger closenewsblock">Close</button></div>
+                        <div class="form-row" style="justify-content: center;"><h1 class="addeventtitle display-4">New news:</h1></div>
+                        <div class="form-group">
+                            <label for="newstitle">Title</label>
+                            <input id="newstitle" name="Title" type="text" class="form-control" placeholder="Your title...">
+                        </div>
+                        <div class="form-group">
+                            <label for="newspublishdate">Publish date</label>
+                            <input id="newspublishdate" name="PublishDate" type="date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="newsdescription">News description</label>
+                            <textarea id="newsdescription" name="Description" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="newsfile">News image:</label>
+                            <input type="file" name="File" class="form-control-file" id="newsfile">
+                        </div>
+                        <div class="form-row" style="justify-content: flex-end;">
+                            <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+
+
+                <div class="addarticleblock container">
+                    <form class="addeventform" enctype="multipart/form-data" method="post" action="/articles/add">
+                        <div class="form-row" style="justify-content: flex-end;"><button type="button" class="btn btn-lg btn-danger closearticleblock">Close</button></div>
+                        <div class="form-row" style="justify-content: center;"><h1 class="addeventtitle display-4">New article:</h1></div>
+                        <div class="form-group">
+                            <label for="articletitle">Title</label>
+                            <input id="articletitle" name="Title" type="text" class="form-control" placeholder="Your title...">
+                        </div>
+                        <div class="form-group">
+                            <label for="articlepublishdate">Publish date</label>
+                            <input id="articlepublishdate" name="PublishDate" type="date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="articledescription">Description</label>
+                            <textarea id="articledescription" name="Description" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="articlefile">Article image:</label>
+                            <input type="file" name="File" class="form-control-file" id="articlefile">
+                        </div>
+                        <div class="form-row" style="justify-content: flex-end;">
+                            <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <script>
+                    $('.addnewsblock').hide();
+                    $('.addarticleblock').hide();
+                </script>
+            }
+            if (path.EndsWith("main"))
+            {
+                <script>
+                    $.get(
+                        '/companies'
+                    ).done(function (data) {
+                        for (let i = 0; i < data.length; i++) {
+                            $('.companies').append('<div class="company"><img src="' + data[i].imagePath + '" class="img-fluid company-img"><h2>' +
+                                '<a href="/home/advertisements/com=' + data[i].companyId + '" role="button" class="btn btn-info">Learn more...</a></h2></div>');
+                        }
+                    });
+
+
+                    $.get(
+                        '/positions'
+                    ).done(function (data) {
+                        for (let i = 0; i < data.length; i++) {
+                            $('.positions').append('<div class="card position col-md-3">' +
+                                '<img src="' + data[i].imagePath + '" class="card-img-top position-img" alt="...">' +
+                                '<div class="card-body">' +
+                                '<h5 class="card-title position-info">' + data[i].name + '</h5>' +
+                                '<p class="card-text position-info">Advertisements: ' + data[i].amount + '.</p>' +
+                                '<a href="/home/advertisements/pos=' + data[i].positionId + '" class="btn btn-primary position-info">Find...</a>' +
+                                '</div></div>');
+                        }
+                    });
+
+                    $.get(
+                        '/articles/amount=3'
+                    ).done(function (data) {
+                        for (let i = 0; i < data.length; i++) {
+                            $('.latest-articles').append('<div class="article-part">' +
+                                '<h4><a href="/home/articles/id=' + data[i].articleId + '">' + data[i].title + '</a></h4>' +
+                                '<p class="lead article-date">' + data[i].publishDateString + '</p>' +
+                                '</div>');
+                        }
+                    });
+
+                    $.get(
+                        '/news/amount=3'
+                    ).done(function (data) {
+                        for (let i = 0; i < data.length; i++) {
+                            $('.latest-news').append('<div class="news-part">' +
+                                '<h4><a href="/home/news/id=' + data[i].newsId + '">' + data[i].title + '</a></h4>' +
+                                '<p class="lead news-date">' + data[i].publishDateString + '</p>' +
+                                '</div>');
+                        }
+                    });
+
+                    $.get(
+                        '/advertisements/amount=3'
+                    ).done(function (data) {
+                        for (let i = 0; i < data.length; i++) {
+                            $('.latest-advertisements').append('<div class="media latest-advertisement">' +
+                                '<img src="https://cdn2.iconfinder.com/data/icons/computer-63/100/Dev-06-512.png" class="mr-3 latest-advertisement-img" alt = "adv-icon">' +
+                                '<div class="media-body">' +
+                                '<h4 class="mt-0 latest-advertisement-title">' + data[i].title + '</h4>' +
+                                '<h5 class="mt-0 latest-advertisement-company">Company: ' + '<span style="color: orange;">' + data[i].employer.companyName + '</span>' + '</h5>' +
+                                '<h5 class="mt-0 latest-advertisement-salary">Offered Salary: ' + '<span style="color: mediumspringgreen;">' + data[i].salary + '</span>' + '</h5>' +
+                                '<a href="/home/advertisements/id=' + data[i].advertisementId + '" class="btn btn-info latest-advertisement-btn">Learn more...</a>' +
+                                '</div>' +
+                                '</div>');
+                        }
+                    });
+                </script>
+                <div class="jumbotron intro">
+                    <h1 class="display-4">Welcome to AITU Industrial Student Position Hunters!</h1>
+                    <p class="lead">Offer and find job for students of Astana IT University.</p>
+                    <hr class="my-4">
+                    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+                </div>
+                <div class="companies-block section row container-fluid">
+                    <div class="col-md-12">
+                        <h1 class="item-title">Companies: </h1>
+                        <p class="lead item-description">
+                            Find companies and their advertisements for you:
+                        </p>
+                    </div>
+
+                    <div class="companies">
+
+                    </div>
+                </div>
+                <div class="positions-block section container-fluid">
+                    <h1 class="display-4 item-title">Positions</h1>
+                    <p class="lead item-description">Find advertisements for positions:</p>
+                    <div class="positions row">
+
+                    </div>
+                </div>
+                <div class="advertisements-block section container">
+                    <h1 class="display-4 item-title">Advertisements</h1>
+                    <p class="lead item-description">Find latest advertisements:</p>
+
+                    <div class="latest-advertisements">
+                    </div>
+                    <div style="text-align: right;"><a href="/home/advertisements" class="btn btn-success latest-advertisement-btn">Find more...</a></div>
+                </div>
+            }
+            else
+            {
+                if (path.Contains("advertisements"))
+                {
+                    @await Html.PartialAsync("Advertisements")
+                }
+             }
+            }
+        <div class="container articles-news-block section">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 class="display-5 item-title">Articles</h1>
+                    <hr>
+                    <div class="latest-articles">
+                    </div>
+                    <div style="justify-content: flex-end;">
+                        <a href="/home/articles" role="button" class="btn btn-outline-primary d-block">Learn more...</a>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <h1 class="display-5 item-title">News</h1>
+                    <hr>
+                    <div class="latest-news">
+                    </div>
+                    <div style="justify-content: flex-end;">
+                        <a href="/home/news" role="button" class="btn btn-outline-primary d-block">Learn more...</a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </main>
+}

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using ISPH.Core.DTO;
 
 namespace ISPH.API.Controllers.ApiControllers
 {
@@ -16,12 +17,10 @@ namespace ISPH.API.Controllers.ApiControllers
     {
         private readonly IResumesRepository _repos;
         private readonly IWebHostEnvironment _env;
-        private readonly IMapper _mapper;
-        public ResumesController(IResumesRepository repos, IWebHostEnvironment environment, IMapper mapper)
+        public ResumesController(IResumesRepository repos, IWebHostEnvironment environment)
         {
             _repos = repos;
             _env = environment;
-            _mapper = mapper;
         }
 
         
@@ -31,25 +30,31 @@ namespace ISPH.API.Controllers.ApiControllers
         {
             if(file != null)
             {
-                if (file.ContentType != "application/pdf") return BadRequest(new { message = "Wrong format of resume" });
+                if (file.ContentType != "application/pdf") return BadRequest("Wrong format of resume");
                 string path = "/Resumes/" + file.FileName;
                 await using(var fileStream = new FileStream(_env.WebRootPath + path, FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
                 }
                 var resume = new Resume() { Name = file.FileName, Path = path, StudentId = id };
-                if (await _repos.HasEntity(resume)) return BadRequest(new { message = "Your resume already exists" });
+                if (await _repos.HasEntity(resume)) return BadRequest("Your resume already exists");
                 if (await _repos.Create(resume)) return LocalRedirect("/home/profile");
-                return BadRequest(new { message = "Failed to upload file" });
+                return BadRequest("Failed to upload file");
             }
 
-            return BadRequest(new { message = "You didn't upload file" });
+            return BadRequest("You didn't upload file");
         }
 
         [HttpGet]
-        public async Task<Resume> GetResumeByStudentId(Guid id)
+        public async Task<ResumeDto> GetResumeByStudentId(Guid id)
         {
-            return await _repos.GetById(id);
+            var res = await _repos.GetById(id);
+            return new ResumeDto(res)
+            {
+                StudentName = res.Student.FirstName,
+                StudentSurname = res.Student.LastName,
+                StudentEmail = res.Student.Email
+            };
         }
 
         [HttpPost]
@@ -68,7 +73,7 @@ namespace ISPH.API.Controllers.ApiControllers
 
 
 
-        [HttpDelete("delete")]
+        [HttpPost("delete")]
         public async Task<IActionResult> DeleteResumeAsync(Guid id)
         {
             var file = await _repos.GetById(id);

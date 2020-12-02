@@ -9,7 +9,6 @@ namespace ISPH.Core.Models
     public class FavouriteAdvertisement
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public Guid AdvertisementId { get; set; }
         public Advertisement Advertisement { get; set; }

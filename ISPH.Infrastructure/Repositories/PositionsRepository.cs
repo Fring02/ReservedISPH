@@ -7,19 +7,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ISPH.Infrastructure.Extensions;
+using ISPH.Core.DTO;
 
 namespace ISPH.Infrastructure.Repositories
 {
-    public class PositionsRepository : EntityRepository<Position>, IPositionsRepository
+    public class PositionsRepository : EntityRepository<Position, PositionDto>, IPositionsRepository
     {
         public PositionsRepository(EntityContext context) : base(context)
         {
         }
 
-        public override async Task<IEnumerable<Position>> GetAll()
+        public override async Task<IEnumerable<PositionDto>> GetAll()
         {
-           return await Context.Positions.AsNoTracking().JoinAdvertisements(Context).
-               OrderBy(pos => pos.Name).ToListAsync();
+           return await Context.Positions.AsNoTracking().OrderBy(pos => pos.Name).Select(pos => new PositionDto(pos)).
+               ToListAsync();
         }
 
         public override async Task<Position> GetById(Guid id)
@@ -28,10 +29,11 @@ namespace ISPH.Infrastructure.Repositories
                 FirstOrDefaultAsync(pos => pos.PositionId == id);
         }
 
-        public async Task<Position> GetPositionByName(string name)
+        public async Task<PositionDto> GetPositionByName(string name)
         {
-            return await Context.Positions.AsNoTracking().Include(pos => pos.Advertisements)
+            var p = await Context.Positions.AsNoTracking().Include(pos => pos.Advertisements)
                 .FirstOrDefaultAsync(pos => pos.Name == name);
+            return new PositionDto(p) { Advertisements = p.Advertisements };
         }
 
         public override async Task<bool> HasEntity(Position entity)

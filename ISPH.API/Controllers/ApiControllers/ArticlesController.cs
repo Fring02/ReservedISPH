@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using ISPH.Infrastructure.Configuration;
+using ISPH.Core.DTO.Filter;
 
 namespace ISPH.API.Controllers.ApiControllers
 {
@@ -28,10 +29,27 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IList<ArticleDto>> GetAllArticles()
+        public async Task<IEnumerable<ArticleDto>> GetAllArticles()
         {
-            var arts = await _repos.GetAll();
-            return _mapper.Map<IList<ArticleDto>>(arts);
+           return await _repos.GetAll();
+        }
+
+        [HttpGet("minyear")]
+        public async Task<int> GetMinArticlesPublicationYear()
+        {
+            return await _repos.GetMinArticlePublicationYear();
+        }
+
+        [HttpGet("amount={amount}")]
+        public async Task<IEnumerable<ArticleDto>> GetArticlesForAmount(int amount)
+        {
+            return await _repos.GetArticles(amount);
+        }
+
+        [HttpPost("filter")]
+        public async Task<IEnumerable<ArticleDto>> GetFilteredNews(FilteredNewsOrArticleDto dto)
+        {
+            return await _repos.GetFilteredArticles(dto);
         }
 
         [HttpGet("id={id}")]
@@ -58,7 +76,7 @@ namespace ISPH.API.Controllers.ApiControllers
             {
                 await art.File.CopyToAsync(stream);
             }
-            if (await _repos.Create(article)) return LocalRedirect("/home/index");
+            if (await _repos.Create(article)) return LocalRedirect("/home/main");
 
             return BadRequest("Failed to add article");
         }
@@ -74,7 +92,7 @@ namespace ISPH.API.Controllers.ApiControllers
              article.Title = art.Title;
              article.PublishDate = art.PublishDate;
              article.Description = art.Description;
-            if (await _repos.Update(article)) return LocalRedirect("/home/index");
+            if (await _repos.Update(article)) return Ok("Updated article");
 
             return BadRequest("Failed to update article");
         }
@@ -87,7 +105,7 @@ namespace ISPH.API.Controllers.ApiControllers
             if (article == null) return BadRequest("This article is already deleted");
             string fullPath = Path.GetFullPath("static" + article.ImagePath);
             System.IO.File.Delete(fullPath);
-            if (await _repos.Delete(article)) return LocalRedirect("/home/index");
+            if (await _repos.Delete(article)) return LocalRedirect("/home/main");
             return BadRequest("Failed to delete article");
         }
     }

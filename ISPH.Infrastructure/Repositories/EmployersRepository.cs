@@ -8,25 +8,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using ISPH.Core.Interfaces.Authentification;
 using ISPH.Infrastructure.Services.Hashing;
+using ISPH.Core.DTO;
 
 namespace ISPH.Infrastructure.Repositories
 {
-    public class EmployersRepository : EntityRepository<Employer>, IUserAuthentification<Employer>, IEmployersRepository
+    public class EmployersRepository : EntityRepository<Employer, EmployerDto>, IUserAuthentification<Employer>, IEmployersRepository
     {
         private readonly DataHashService<Employer> _hashService = new EmployersHashService();
         public EmployersRepository(EntityContext context) : base(context)
         {
         }
 
-        public override async Task<IEnumerable<Employer>> GetAll()
+        public override async Task<IEnumerable<EmployerDto>> GetAll()
         {
            return await Context.Employers.AsNoTracking().OrderBy(emp => emp.EmployerId).
-               Include(emp => emp.Company).Include(emp => emp.Advertisements).
+               Select(e => new EmployerDto(e)
+               {
+                   CompanyName = e.Company.Name
+               }).
                 ToListAsync();
         }
         public override async Task<Employer> GetById(Guid id)
         {
-            return await Context.Employers.AsNoTracking().Include(emp => emp.Advertisements).
+           return await Context.Employers.AsNoTracking().Include(emp => emp.Company).
                 FirstOrDefaultAsync(adv => adv.EmployerId == id);
         }
         public override async Task<bool> HasEntity(Employer entity)
@@ -45,10 +49,10 @@ namespace ISPH.Infrastructure.Repositories
 
         public async Task<bool> UpdateCompany(Employer entity, string companyName)
         {
-            var company = await Context.Companies.FirstOrDefaultAsync(com => com.Name == companyName);
+            var company = await Context.Companies.AsNoTracking().FirstOrDefaultAsync(com => com.Name == companyName);
             if (company == null) return false;
-            entity.CompanyId = company.CompanyId;
             Context.Employers.Update(entity);
+            entity.CompanyId = company.CompanyId;
             var ads = Context.Advertisements.
                 Where(ad => ad.EmployerId == entity.EmployerId);
             Context.Advertisements.RemoveRange(ads);
@@ -62,7 +66,6 @@ namespace ISPH.Infrastructure.Repositories
             user.HashedPassword = hashedPass;
             user.SaltPassword = saltPass;
             await Context.Employers.AddAsync(user);
-            user.Company = await Context.Companies.FindAsync(user.CompanyId);
             await Context.SaveChangesAsync();
             return user;
         }

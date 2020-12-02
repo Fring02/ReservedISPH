@@ -1,4 +1,4 @@
-﻿namespace ISPH.Infrastructure
+﻿namespace ISPH.Infrastructure.Configuration
 {
     public class AuthOptions
     {

@@ -32,7 +32,7 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
         [HttpPost("register")]
         public async Task<IActionResult> RegisterEmployer(EmployerDto em)
         {
-            if (!ModelState.IsValid) return BadRequest(new { message = "Fill all fields" });
+            if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var employer = new Employer()
             {
                 FirstName = em.FirstName,
@@ -42,17 +42,16 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
                 CompanyId = em.CompanyId
             };
             var company = await _companyRepos.GetById(em.CompanyId);
-            if (company == null) return BadRequest(new { message = "Such company doesn't exist" });
-            if (await _authRepos.UserExists(employer)) return BadRequest(new { message = "This user already exists" });
+            if (company == null) return BadRequest("Such company doesn't exist");
+            if (await _authRepos.UserExists(employer)) return BadRequest("This user already exists");
             employer = await _authRepos.Register(employer, em.Password);
-            if (employer == null) return BadRequest(new { message = "Failed to register" });
+            if (employer == null) return BadRequest("Failed to register");
             var identity = await _tokenService.CreateIdentity(em.Email, em.Password);
             string token = _tokenService.CreateToken(identity, out string identityName, Configuration);
 
             HttpContext.Session.SetString("Token", token);
             HttpContext.Session.SetString("Id", employer.EmployerId.ToString());
             HttpContext.Session.SetString("Name", employer.FirstName);
-            HttpContext.Session.SetString("Company", employer.Company.Name);
             HttpContext.Session.SetString("Role", employer.Role);
             return Ok(new {token, name = identityName });
         }
@@ -60,14 +59,15 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
         [HttpPost("login")]
         public async Task<IActionResult> LoginEmployer(LoginDto em)
         {
-            if (!ModelState.IsValid) return BadRequest(new { message = "Fill all fields" });
+            if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var employer = await _tokenService.CreateIdentity(em.Email, em.Password);
-            if (employer == null) return Unauthorized(new { message = "Username or password is incorrect" });
+            if (employer == null) return Unauthorized("Username or password is incorrect");
             string token = _tokenService.CreateToken(employer, out string identityName, Configuration);
+
+
             HttpContext.Session.SetString("Token", token);
             HttpContext.Session.SetString("Id", employer.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             HttpContext.Session.SetString("Name", employer.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Name).Value);
-            HttpContext.Session.SetString("Company", employer.Claims.SingleOrDefault(c => c.Type == ClaimTypes.UserData).Value);
             HttpContext.Session.SetString("Role", employer.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Role).Value);
             return Ok(new {token, name = identityName });
         }
@@ -76,7 +76,7 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
         public IActionResult SignOut()
         {
             HttpContext.Session.Clear();
-            return LocalRedirect("~/home/index");
+            return LocalRedirect("~/home/main");
         }
 
     }

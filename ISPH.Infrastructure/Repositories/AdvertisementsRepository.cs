@@ -9,13 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ISPH.Infrastructure.Extensions;
+using ISPH.Core.DTO.Filter;
 
 namespace ISPH.Infrastructure.Repositories
 {
-    public class AdvertisementsRepository : EntityRepository<Advertisement>, IAdvertisementsRepository
+    public class AdvertisementsRepository : EntityRepository<Advertisement, AdvertisementDto>, IAdvertisementsRepository
     {
         private readonly IDictionary<EntityType, FilteredAds> _filteredMap;
-        private delegate Task<IEnumerable<Advertisement>> FilteredAds(Guid id);
+        private delegate Task<IEnumerable<AdvertisementDto>> FilteredAds(Guid id);
         public AdvertisementsRepository(EntityContext context) : base(context)
         {
             _filteredMap = new Dictionary<EntityType, FilteredAds>();
@@ -41,37 +43,90 @@ namespace ISPH.Infrastructure.Repositories
             position.Amount--;
             return await Context.SaveChangesAsync() > 0;
         }
-
-        public override async Task<IEnumerable<Advertisement>> GetAll()
+        public override async Task<bool> DeleteById(Guid id)
         {
-            return await Context.Advertisements.AsNoTracking().
-                Include(adv => adv.Employer).
+            var ad = await Context.Advertisements.FindAsync(id);
+            if(ad != null)
+            {
+                Context.Advertisements.Remove(ad);
+                var pos = await Context.Positions.FirstOrDefaultAsync(p => p.PositionId == ad.PositionId);
+                pos.Amount--;
+                return await Context.SaveChangesAsync() > 0;
+            }
+            return false;
+        }
+
+        public override async Task<IEnumerable<AdvertisementDto>> GetAll()
+        {
+            return await Context.Advertisements.AsNoTracking().OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    CompanyId = adv.Employer.CompanyId,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).
                 ToListAsync(); 
         }
 
-        public async Task<IEnumerable<Advertisement>> GetAdvertisementsAmount(int amount)
+
+        public async Task<uint> GetMaxAdvSalary()
+        {
+            return await Context.Advertisements.MaxAsync(adv => adv.Salary);
+        }
+
+        public async Task<IEnumerable<AdvertisementDto>> GetAdvertisementsAmount(int amount)
         {
             return await Context.Advertisements.AsNoTracking().Take(amount).OrderBy(adv => adv.Title).
-                Include(adv => adv.Employer).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    CompanyId = adv.Employer.CompanyId,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).
                 ToListAsync();
         }
 
-        public async Task<IEnumerable<Advertisement>> GetAdvertisementsPerPage(int page)
+        public async Task<IEnumerable<AdvertisementDto>> GetAdvertisementsPerPage(int page)
         {
             return await Context.Advertisements.AsNoTracking().Skip((page - 1) * 4).Take(4).
                 OrderBy(adv => adv.Title).
-                Include(adv => adv.Employer).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    CompanyId = adv.Employer.CompanyId,
+                    Employer = new EmployerDto
+                    {
+                        FirstName = adv.Employer.FirstName,
+                        LastName = adv.Employer.LastName,
+                        Email = adv.Employer.Email,
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).
                 ToListAsync();
         }
 
         public override async Task<Advertisement> GetById(Guid id)
         {
-            return await Context.Advertisements.AsNoTracking().
-                Include(adv => adv.Employer).
-                FirstOrDefaultAsync(adv => adv.AdvertisementId == id);
+            return await Context.Advertisements.AsNoTracking().Include(adv => adv.Position).Include(adv => adv.Employer).ThenInclude(emp => emp.Company)
+                .FirstOrDefaultAsync(adv => adv.AdvertisementId == id);
         }
 
-        public async Task<IEnumerable<Advertisement>> GetAdvertisementsByEntityId(Guid id, EntityType type)
+        public async Task<IEnumerable<AdvertisementDto>> GetAdvertisementsByEntityId(Guid id, EntityType type)
         {
            return await _filteredMap[type].Invoke(id);
         }
@@ -79,46 +134,212 @@ namespace ISPH.Infrastructure.Repositories
 
 
         //Ads for specific model id
-        private async Task<IEnumerable<Advertisement>> GetAdvertisementsForEmployer(Guid employerid)
+        private async Task<IEnumerable<AdvertisementDto>> GetAdvertisementsForEmployer(Guid employerid)
         {
             return await Context.Advertisements.AsNoTracking().
-                Where(adv => adv.EmployerId == employerid)
-                .Include(adv => adv.Employer).ToListAsync();
+                Where(adv => adv.EmployerId == employerid).OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    CompanyId = adv.Employer.CompanyId,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).ToListAsync();
         }
 
-        private async Task<IEnumerable<Advertisement>> GetAdvertisementsForPosition(Guid positionId)
+        private async Task<IEnumerable<AdvertisementDto>> GetAdvertisementsForPosition(Guid positionId)
         {
             return await Context.Advertisements.AsNoTracking().
-                Where(adv => adv.PositionId == positionId)
-                .Include(adv => adv.Employer).ToListAsync(); 
+                Where(adv => adv.PositionId == positionId).OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    CompanyId = adv.Employer.CompanyId,
+                    Employer = new EmployerDto
+                    {
+                        FirstName = adv.Employer.FirstName,
+                        LastName = adv.Employer.LastName,
+                        Email = adv.Employer.Email,
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).ToListAsync(); 
         }
 
-        private async Task<IEnumerable<Advertisement>> GetAdvertisementsForCompany(Guid companyId)
+        private async Task<IEnumerable<AdvertisementDto>> GetAdvertisementsForCompany(Guid companyId)
         {
             return await Context.Advertisements.AsNoTracking().
-                Where(adv => adv.Employer.CompanyId == companyId).
-                Include(adv => adv.Employer).
+                Where(adv => adv.Employer.CompanyId == companyId).OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    CompanyId = adv.Employer.CompanyId,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).
                 ToListAsync();
         }
 
 
         //filtering
-        public async Task<IEnumerable<Advertisement>> GetFilteredAdvertisements(string value)
+        public async Task<IEnumerable<AdvertisementDto>> GetFilteredAdvertisements(string value)
         {
-            var sql = string.Format("SELECT a.\"AdvertisementId\", e.\"EmployerId\", a.\"Title\", a.\"PositionId\"," +
-                " a.\"Salary\", a.\"Description\", a.\"PositionName\", e.\"CompanyId\", e.\"CompanyName\"" +
-               " FROM \"Advertisements\" a INNER JOIN \"Employers\" e ON a.\"EmployerId\" = e.\"EmployerId\" WHERE " +
-                "a.\"PositionName\" LIKE '%{0}%' OR e.\"CompanyName\" LIKE '%{0}%' ORDER BY a.\"Title\"", value);
-            return await Context.Advertisements.FromSqlRaw(sql).AsNoTracking().
-                Include(adv => adv.Employer).ToListAsync();
+            return await Context.Advertisements.Where(adv => adv.Position.Name.Contains(value) ||
+            adv.Employer.Company.Name.Contains(value)).AsNoTracking().OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).ToListAsync();
         }
 
-        public async Task<IEnumerable<Advertisement>> GetFilteredAdvertisements(FilteredAdvertisementDto ad)
+        public async Task<IEnumerable<AdvertisementDto>> GetFilteredAdvertisements(FilteredAdvertisementDto ad)
         {
-            string query = FilteredQuery(ad);
-            return await Context.Advertisements.FromSqlRaw(query).AsNoTracking().
-                Include(adv => adv.Employer).
-                OrderBy(adv => adv.Title).ToListAsync();
+            Guid pos = ad.PositionId, com = ad.CompanyId;
+            uint sal = ad.Salary.GetValueOrDefault();
+            if (pos != Guid.Empty && com != Guid.Empty && sal > 0)
+            {
+                return await Context.Advertisements.Where(adv => adv.Employer.CompanyId == com && adv.PositionId == pos && adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000).
+                    AsNoTracking().OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).ToListAsync();
+            }
+            else if (pos != Guid.Empty && com != Guid.Empty)
+            {
+                return await Context.Advertisements.Where(adv => adv.Employer.CompanyId == com && adv.PositionId == pos).
+                    AsNoTracking().OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).ToListAsync();
+            }
+            else if (pos != Guid.Empty && sal > 0)
+            {
+                return await Context.Advertisements.Where(adv => adv.PositionId == pos && adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000).
+                    AsNoTracking().OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).ToListAsync();
+            }
+            else if (com != Guid.Empty && sal > 0)
+            {
+                return await Context.Advertisements.Where(adv => adv.Employer.CompanyId == com && adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000).
+                    AsNoTracking().OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).ToListAsync();
+            }
+            else if (pos != Guid.Empty)
+            {
+                return await Context.Advertisements.Where(adv => adv.PositionId == pos).
+                    AsNoTracking().OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).ToListAsync();
+            }
+            else if (com != Guid.Empty)
+            {
+                return await Context.Advertisements.Where(adv => adv.Employer.CompanyId == com).
+                     AsNoTracking().OrderBy(adv => adv.Title).
+                 Select(adv => new AdvertisementDto()
+                 {
+                     AdvertisementId = adv.AdvertisementId,
+                     Title = adv.Title,
+                     Salary = adv.Salary,
+                     PositionName = adv.Position.Name,
+                     Employer = new EmployerDto
+                     {
+                         CompanyName = adv.Employer.Company.Name
+                     }
+                 }).ToListAsync();
+            }
+            else if (sal > 0)
+            {
+                return await Context.Advertisements.Where(adv => adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000).
+                    AsNoTracking().OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).ToListAsync();
+            }
+
+            return await Context.Advertisements.AsNoTracking().OrderBy(adv => adv.Title).
+                Select(adv => new AdvertisementDto()
+                {
+                    AdvertisementId = adv.AdvertisementId,
+                    Title = adv.Title,
+                    Salary = adv.Salary,
+                    PositionName = adv.Position.Name,
+                    Employer = new EmployerDto
+                    {
+                        CompanyName = adv.Employer.Company.Name
+                    }
+                }).ToListAsync();
         }
 
         public async Task<int> GetAdvertisementsCount()
@@ -126,51 +347,14 @@ namespace ISPH.Infrastructure.Repositories
             return await Context.Advertisements.CountAsync();
         }
 
-
-        private string FilteredQuery(FilteredAdvertisementDto ad)
+        public async Task<bool> UpdatePosition(Advertisement ad, Guid positionId)
         {
-            var builder = new StringBuilder();
-            var sql = "SELECT a.\"AdvertisementId\", e.\"EmployerId\", a.\"Title\", a.\"PositionId\"," +
-                    " a.\"Salary\", a.\"Description\", a.\"PositionName\", e.\"CompanyId\", e.\"CompanyName\" " +
-                   " FROM \"Advertisements\" a INNER JOIN \"Employers\" e ON a.\"EmployerId\" = e.\"EmployerId\" ";
-            builder.Append(sql);
-            if (ad.AnyValue(ad.CompanyName, ad.PositionName, ad.Salary))
-            {
-                builder.Append("WHERE ");
-            }   
-            string pos = ad.PositionName, com = ad.CompanyName;
-            int sal = ad.Salary.GetValueOrDefault();
-            bool posExists = !string.IsNullOrEmpty(pos), comExists = !string.IsNullOrEmpty(com), salExists = sal > 0;
-            if(posExists && comExists && salExists)
-            {
-                builder.Append(string.Format("a.\"PositionName\" LIKE '%{0}%' AND e.\"CompanyName\" LIKE '%{1}%' AND a.\"Salary\" = {2}", pos, com, sal));
-            }
-            else if(posExists && comExists)
-            {
-                builder.Append(string.Format("a.\"PositionName\" LIKE '%{0}%' AND e.\"CompanyName\" LIKE '%{1}%'", pos, com));
-            }
-            else if(posExists && salExists)
-            {
-                builder.Append(string.Format("a.\"PositionName\" LIKE '%{0}%' AND a.\"Salary\" = {1}", pos, sal));
-            }
-            else if(comExists && salExists)
-            {
-                builder.Append(string.Format("e.\"CompanyName\" LIKE '%{0}%' AND a.\"Salary\" = {1}", com, sal));
-            }
-            else if (posExists)
-            {
-                builder.Append(string.Format("a.\"PositionName\" LIKE '%{0}%'", pos));
-            }
-            else if (comExists)
-            {
-                builder.Append(string.Format("e.\"CompanyName\" LIKE '%{0}%'", com));
-            }
-            else if (salExists)
-            {
-                builder.Append(string.Format("a.\"Salary\" = {0}", sal));
-            }
-
-            return builder.ToString();
+            ad.Position.Amount--;
+            Context.Advertisements.Update(ad);
+            ad.PositionId = positionId;
+            var positionafter = await Context.Positions.FindAsync(positionId);
+            positionafter.Amount++;
+            return await Context.SaveChangesAsync() > 0;
         }
     }
 }

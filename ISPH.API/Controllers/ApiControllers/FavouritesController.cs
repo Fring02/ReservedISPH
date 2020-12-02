@@ -18,27 +18,26 @@ namespace ISPH.API.Controllers.ApiControllers
     public class FavouritesController : ControllerBase
     {
         private readonly IFavouritesRepository _repos;
-        private readonly IMapper _mapper;
-        public FavouritesController(IFavouritesRepository repos, IMapper mapper)
+        public FavouritesController(IFavouritesRepository repos)
         {
             _repos = repos;
-            _mapper = mapper;
         }
 
 
         [HttpGet]
         [Authorize]
-        public async Task<IList<AdvertisementDto>> GetFavourites(Guid studentId)
+        public async Task<IEnumerable<FavouriteAdvertisementDto>> GetFavourites(Guid studentId)
         {
-            var favourites = await _repos.GetFavourites(studentId);
-            return _mapper.Map<IList<AdvertisementDto>>(favourites.Select(fav => fav.Advertisement));
+            return await _repos.GetFavourites(studentId);
         }
 
 
         [HttpGet("ad={adId}")]
-        public async Task<FavouriteAdvertisement> GetFavourite(Guid studentId, Guid adId)
+        public async Task<FavouriteAdvertisementDto> GetFavourite(Guid studentId, Guid adId)
         {
-            return await _repos.GetById(studentId, adId);
+            var ad = await _repos.GetById(studentId, adId);
+            if (ad == null) return null;
+            return new FavouriteAdvertisementDto(ad);
         }
 
         [HttpPost("ad={adId}/add")]
@@ -49,11 +48,11 @@ namespace ISPH.API.Controllers.ApiControllers
             return BadRequest("Failed to add to favourites");
         }
 
-        [HttpPost("ad={adId}/delete")]
+        [HttpDelete("ad={adId}/delete")]
         public async Task<IActionResult> DeleteFromFavourites(Guid studentId, Guid adId)
         {
             var fav = await _repos.GetById(studentId, adId);
-            if (await _repos.DeleteFromFavourites(fav)) return LocalRedirect("/home/advertisements/id=" + adId);
+            if (await _repos.DeleteFromFavourites(fav)) return Ok("Deleted from favourites");
             return BadRequest("Failed to add to favourites");
         }
     }
