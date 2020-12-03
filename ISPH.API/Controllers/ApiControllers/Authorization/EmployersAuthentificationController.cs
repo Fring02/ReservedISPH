@@ -4,6 +4,7 @@ using ISPH.Core.Interfaces.Authentification;
 using ISPH.Core.Interfaces.Repositories;
 using ISPH.Core.Models;
 using ISPH.Infrastructure.Services.TokenConfiguration;
+using ISPH.Infrastructure.Services.Validation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -41,6 +42,8 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
                 Role = "employer",
                 CompanyId = em.CompanyId
             };
+            if (!RegistrationDataValidationService.IsValidPassword(em.Password) || !RegistrationDataValidationService.IsValidEmail(em.Email))
+                return BadRequest("Password or email is too easy to unlock. Try more complex");
             var company = await _companyRepos.GetById(em.CompanyId);
             if (company == null) return BadRequest("Such company doesn't exist");
             if (await _authRepos.UserExists(employer)) return BadRequest("This user already exists");

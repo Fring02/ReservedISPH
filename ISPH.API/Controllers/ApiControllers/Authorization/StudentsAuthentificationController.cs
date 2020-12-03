@@ -3,6 +3,7 @@ using ISPH.Core.DTO.Authorization;
 using ISPH.Core.Interfaces.Authentification;
 using ISPH.Core.Models;
 using ISPH.Infrastructure.Services.TokenConfiguration;
+using ISPH.Infrastructure.Services.Validation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -38,7 +39,9 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
                 Email = st.Email,
                 Role = "student",
             };
-            if (await _authRepos.UserExists(student)) return BadRequest("This user already exists");
+            if (!RegistrationDataValidationService.IsValidPassword(st.Password) || !RegistrationDataValidationService.IsValidEmail(st.Email))
+                return BadRequest("Password or email is too easy to unlock. Try more complex");
+                if (await _authRepos.UserExists(student)) return BadRequest("This user already exists");
             student = await _authRepos.Register(student, st.Password);
             if (student == null) return BadRequest("Oops, failed to register");
             var identity = await _tokenService.CreateIdentity(st.Email, st.Password);
