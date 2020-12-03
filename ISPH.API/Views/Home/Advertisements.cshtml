@@ -9,7 +9,7 @@
     if (path.Contains("id"))
     {
     <script>
-            let url = substr(5, location.pathname);
+        let url = substr(5, location.pathname);
             $.get(
                 url
             ).done(function (data) {
@@ -21,7 +21,109 @@
                 $('.advertisement-desc').html(data.description);
                 $('.employer-name-surname').html(data.employer.firstName + ' ' + data.employer.lastName);
                 $('.employer-email').html(data.employer.email);
+                let availableToken = '@HttpContextAccessor.HttpContext.Session.GetString("Token")'.length > 0;
+                if(availableToken){
+                    const hubConnection = new signalR.HubConnectionBuilder()
+                                                                    .withUrl("/chat")
+                                                                    .build();
+                    let role = '@HttpContextAccessor.HttpContext.Session.GetString("Role")';
+
+                    hubConnection.on('SendStudent', function (message, name) {
+                        if (role === 'employer') {
+                            $('.panel-body').append('<div class="row msg_container base_receive">' +
+                                '<div class="col-md-2 col-xs-2 avatar">' +
+                                '<img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class="img-responsive">' +
+                                '</div>' +
+                                '<div class="col-md-10 col-xs-10">' +
+                                '<div class="messages msg_receive">' +
+                                '<p>' + message + '</p>' +
+                                '<time datetime="@DateTime.Now">' + name + '</time>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>');
+                        }
+                        else {
+                            $('.panel-body').append('<div class="row msg_container base_sent">'+
+                                    '<div class="col-md-10 col-xs-10">'+
+                                    '<div class="messages msg_sent">'+
+                                    '<p>' + message + '</p>'+
+                                    '<time datetime="@DateTime.Now">' + name + '</time>'+
+                                    '</div>'+
+                                    '</div>'+
+                                    '<div class="col-md-2 col-xs-2 avatar">'+
+                                    '<img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class="img-responsive">'+
+                                    '</div>'+
+                                    '</div>');
+                        }
+                    });
+
+                    hubConnection.on('SendEmployer', function (message, name) {
+                        if (role === 'employer') {
+                            $('.panel-body').append('<div class="row msg_container base_sent">' +
+                                '<div class="col-md-10 col-xs-10">' +
+                                '<div class="messages msg_sent">' +
+                                '<p>' + message + '</p>' +
+                                '<time datetime="@DateTime.Now">' + name + '</time>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="col-md-2 col-xs-2 avatar">' +
+                                '<img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class="img-responsive">' +
+                                '</div>' +
+                                '</div>');
+                        }
+                        else {
+                            $('.panel-body').append('<div class="row msg_container base_receive">'+
+                                 '<div class="col-md-2 col-xs-2 avatar">'+
+                                 '<img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class="img-responsive">'+
+                                 '</div>'+
+                                 '<div class="col-md-10 col-xs-10">'+
+                                 '<div class="messages msg_receive">'+
+                                 '<p>' + message + '</p>'+
+                                 '<time datetime="@DateTime.Now">' + name + '</time>'+
+                                 '</div>'+
+                                 '</div>'+
+                                 '</div>');
+                        }
+                    });
+
+                    hubConnection.on('SendResume', function (url, name) {
+                        $.get(
+                            url
+                        ).done(function (data) {
+                            if (role === 'employer') {
+                            $('.panel-body').append('<div class="row msg_container base_sent">' +
+                                '<div class="col-md-10 col-xs-10">' +
+                                '<div class="messages msg_sent">' +
+                                '<p><form action="' + url + '" method="post" enctype="multipart/form-data">' +
+                                '<button type="submit" class="btn btn-outline-primary"> ' + data.name + '</button></form></p>' +
+                                '<time datetime="@DateTime.Now">' + name + '</time>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="col-md-2 col-xs-2 avatar">' +
+                                '<img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class="img-responsive">' +
+                                '</div>' +
+                                '</div>');
+                            }
+                            else {
+                            $('.panel-body').append('<div class="row msg_container base_receive">'+
+                                 '<div class="col-md-2 col-xs-2 avatar">'+
+                                 '<img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class="img-responsive">'+
+                                 '</div>'+
+                                 '<div class="col-md-10 col-xs-10">'+
+                                 '<div class="messages msg_receive">'+
+                                '<p><form action="' + url + '" method="post" enctype="multipart/form-data">' +
+                                '<button type="submit" class="btn btn-outline-primary"> ' + data.name + '</button></form></p>'+
+                                 '<time datetime="@DateTime.Now">' + name + '</time>'+
+                                 '</div>'+
+                                 '</div>'+
+                                 '</div>');
+                            }
+                        });
+                    });
+                    let resume = null;
+                    let resumePath = '/users/students/id=@id/resume';
                 if ('@id' === data.employerId) {
+
                     $('.advertisement-info').prepend(
                         '<div class="update-adv-error"></div>' +
                         '<div class="updateadvblock row">' +
@@ -101,7 +203,7 @@
                                 success: function (data) {
                                     location.reload();
                                 },
-                                error: function(data){
+                                error: function (data) {
                                     $('.update-adv-error').html(data.responseText);
                                 }
                             });
@@ -179,8 +281,37 @@
                             });
                         }
                     });
-                };
-            });
+                } else {
+                                $.get(
+                                    resumePath
+                                ).done(function (data) {
+                                    if (data === undefined) resume = null;
+                                    else resume = data;
+                                });
+                }
+                    $('.chat_btn').click(function () {
+                        let message = $('.chat_input').val();
+                        if (role === 'employer') {
+                            hubConnection.invoke('SendEmployer', message, '@HttpContextAccessor.HttpContext.Session.GetString("Name")');
+                        } else {
+                            hubConnection.invoke('SendStudent', message, '@HttpContextAccessor.HttpContext.Session.GetString("Name")');
+                        }
+                    });
+
+                    $('.resume_btn').click(function () {
+                            if (resume === null) {
+                                $('.chaterror').html("Sorry, but you don't have your resume uploaded in profile");
+                            }
+                            else {
+                                hubConnection.invoke("SendResume", resumePath, '@HttpContextAccessor.HttpContext.Session.GetString("Name")');
+                            }
+                    });
+                hubConnection.start().then(function () {
+                     hubConnection.invoke("CreateGroup", adv.employerId, '@id');
+                });
+           }
+      });
+
     </script>
         <div class="row container-fluid advertisement-block bg-light" style="padding-top: 50px; padding-bottom: 30px;">
             <div class="col-xs-7 col-md-9 advertisement-info">
@@ -221,57 +352,33 @@
                 </div>
             </div>
 
+                    <div class="col-md-3 row chat-window col-xs-5" id="chat_window_1">
+                        <div class="col-xs-12 col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading top-bar bg-dark"><h3 class="panel-title">Chat</h3></div>
+                                <div class="panel-body msg_container_base">
+                                </div>
 
-            <div class="col-md-3 row chat-window col-xs-5" id="chat_window_1">
-                <div class="col-xs-12 col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading top-bar bg-dark"><h3 class="panel-title">Chat with employer</h3></div>
-                        <div class="panel-body msg_container_base">
-                            <div class="row msg_container base_sent">
-                                <div class="col-md-10 col-xs-10">
-                                    <div class="messages msg_sent">
-                                        <p>
-                                            that mongodb thing looks good, huh?
-                                            tiny master db, and huge document store
-                                        </p>
-                                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+
+                                <div class="panel-footer">
+                                    <div class="input-group">
+                                        <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary chat_btn" id="btn-chat">Send</button><br /><br />
+                                            @{ 
+                                                if (isStudent || isAdmin)
+                                                {
+                                                   <button class="btn btn-success resume_btn">Send resume</button>
+                                                   <span class="badge badge-danger chat-error"></span>
+                                                }
+                                            }
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="col-md-2 col-xs-2 avatar">
-                                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class="img-responsive">
-                                </div>
-                            </div>
-
-
-                            <div class="row msg_container base_receive">
-                                <div class="col-md-2 col-xs-2 avatar">
-                                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class="img-responsive">
-                                </div>
-                                <div class="col-md-10 col-xs-10">
-                                    <div class="messages msg_receive">
-                                        <p>
-                                            that mongodb thing looks good, huh?
-                                            tiny master db, and huge document store
-                                        </p>
-                                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="panel-footer">
-                            <div class="input-group">
-                                <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" id="btn-chat">Send</button>
-                                </span>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+     </div>
     }
     else
     {

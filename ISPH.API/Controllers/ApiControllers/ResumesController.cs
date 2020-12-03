@@ -6,7 +6,6 @@ using ISPH.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
 using ISPH.Core.DTO;
 
 namespace ISPH.API.Controllers.ApiControllers
@@ -49,12 +48,16 @@ namespace ISPH.API.Controllers.ApiControllers
         public async Task<ResumeDto> GetResumeByStudentId(Guid id)
         {
             var res = await _repos.GetById(id);
-            return new ResumeDto(res)
+            if (res != null)
             {
-                StudentName = res.Student.FirstName,
-                StudentSurname = res.Student.LastName,
-                StudentEmail = res.Student.Email
-            };
+                return new ResumeDto(res)
+                {
+                    StudentName = res.Student.FirstName,
+                    StudentSurname = res.Student.LastName,
+                    StudentEmail = res.Student.Email
+                };
+            }
+            return null;
         }
 
         [HttpPost]

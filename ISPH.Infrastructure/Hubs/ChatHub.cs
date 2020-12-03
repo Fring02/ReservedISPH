@@ -10,32 +10,27 @@ namespace ISPH.Infrastructure.Hubs
 {
     public class ChatHub : Hub
     {
-        private static string _groupname;
-        private static int _number = 0;
-        private readonly LinkedList<string> _users = new LinkedList<string>();
-        public async Task Send(string message, string userName, string employerName, string role)
+        private static string groupName;
+
+        public async Task CreateGroup(string employerId, string studentId)
         {
-            if (!string.IsNullOrEmpty(role) && role != "employer") _groupname = userName + " " + employerName; 
-            if(_number != 2)
-            {
-                _users.AddLast(Context.ConnectionId);
-                await Groups.AddToGroupAsync(Context.ConnectionId, _groupname);
-                _number++;
-            }
-            await Clients.Group(_groupname).SendAsync("Send", message, userName);
+            if(employerId != studentId) groupName = employerId + studentId;
+           await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         }
 
-        public async Task SendResume(string url)
+        public async Task SendStudent(string message, string studentName)
         {
-            await Clients.Group(_groupname).SendAsync("SendResume", url);
+            await Clients.Group(groupName).SendAsync("SendStudent", message, studentName);
         }
-        public override Task OnDisconnectedAsync(Exception exception)
+        
+        public async Task SendEmployer(string message, string employerName)
         {
-            foreach (var id in _users)
-                Groups.RemoveFromGroupAsync(id, _groupname);
-            _number = 0;
-            _users.Clear();
-            return base.OnDisconnectedAsync(exception);
+            await Clients.Group(groupName).SendAsync("SendEmployer", message, employerName);
+        }
+
+        public async Task SendResume(string url, string name)
+        {
+            await Clients.Group(groupName).SendAsync("SendResume", url, name);
         }
     }
 }

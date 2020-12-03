@@ -51,17 +51,13 @@
       <e p="Startup.cs" t="Include" />
       <e p="static" t="Include">
         <e p="images" t="Include">
-          <e p="andy-lg.png" t="Include" />
-          <e p="apple-iphone-logo-png-1_large.png" t="Include" />
-          <e p="bi.jpg" t="Include" />
-          <e p="codecode.jpg" t="Include" />
-          <e p="header.jpg" t="Include" />
-          <e p="Iphone12news.jpg" t="Include" />
-          <e p="macbook.jpeg" t="Include" />
-          <e p="progarticle.jpeg" t="Include" />
-          <e p="redbull.jpg" t="Include" />
-          <e p="siteoptimizeimg.jpg" t="Include" />
-          <e p="vscodestories.jpeg" t="Include" />
+          <e p="0.jpg" t="Include" />
+          <e p="1606065336.jpg" t="Include" />
+          <e p="5_j1uic8b8ctqoub7lngko-p72o.jpeg" t="Include" />
+          <e p="brazil.jpeg" t="Include" />
+          <e p="bwr2l38e9clkvpe8kt6l5b-aapo.jpeg" t="Include" />
+          <e p="HuaweiICTSolutionsKazakhstan2020.jpg" t="Include" />
+          <e p="ibm.jpeg" t="Include" />
         </e>
         <e p="microsoft" t="Include">
           <e p="signalr" t="Include">
@@ -81,11 +77,16 @@
       </e>
       <e p="Views" t="Include">
         <e p="Home" t="Include">
+          <e p="Advertisements.cshtml" t="Include" />
+          <e p="Articles.cshtml" t="Include" />
+          <e p="ChatApp.cshtml" t="Include" />
           <e p="Footer.cshtml" t="Include" />
           <e p="Header.cshtml" t="Include" />
           <e p="LoginForm.cshtml" t="Include" />
           <e p="Main.cshtml" t="Include" />
           <e p="MainContent.cshtml" t="Include" />
+          <e p="News.cshtml" t="Include" />
+          <e p="Profile.cshtml" t="Include" />
           <e p="RegistrationForm.cshtml" t="Include" />
         </e>
       </e>
@@ -101,9 +102,13 @@
         <e p="CompanyDTO.cs" t="Include" />
         <e p="EmployerDTO.cs" t="Include" />
         <e p="FavouriteAdvertisementDto.cs" t="Include" />
-        <e p="FilteredAdvertisementDTO.cs" t="Include" />
+        <e p="Filter" t="Include">
+          <e p="FilteredAdvertisementDTO.cs" t="Include" />
+          <e p="FilteredNewsOrArticleDto.cs" t="Include" />
+        </e>
         <e p="NewsDTO.cs" t="Include" />
         <e p="PositionDTO.cs" t="Include" />
+        <e p="ResumeDto.cs" t="Include" />
         <e p="StudentDTO.cs" t="Include" />
       </e>
       <e p="Enums" t="Include">
