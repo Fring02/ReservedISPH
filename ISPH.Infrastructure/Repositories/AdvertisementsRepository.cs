@@ -7,9 +7,7 @@ using ISPH.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using ISPH.Infrastructure.Extensions;
 using ISPH.Core.DTO.Filter;
 
 namespace ISPH.Infrastructure.Repositories
@@ -20,10 +18,12 @@ namespace ISPH.Infrastructure.Repositories
         private delegate Task<IEnumerable<AdvertisementDto>> FilteredAds(Guid id);
         public AdvertisementsRepository(EntityContext context) : base(context)
         {
-            _filteredMap = new Dictionary<EntityType, FilteredAds>();
-            if (!_filteredMap.ContainsKey(EntityType.Company)) _filteredMap.Add(EntityType.Company, GetAdvertisementsForCompany);
-            if (!_filteredMap.ContainsKey(EntityType.Employer)) _filteredMap.Add(EntityType.Employer, GetAdvertisementsForEmployer);
-            if (!_filteredMap.ContainsKey(EntityType.Position)) _filteredMap.Add(EntityType.Position, GetAdvertisementsForPosition);
+            _filteredMap = new Dictionary<EntityType, FilteredAds>
+            {
+                { EntityType.Company, GetAdvertisementsForCompany },
+                { EntityType.Employer, GetAdvertisementsForEmployer },
+                { EntityType.Position, GetAdvertisementsForPosition }
+            };
         }
         public override async Task<bool> Create(Advertisement entity)
         {
@@ -48,10 +48,7 @@ namespace ISPH.Infrastructure.Repositories
             var ad = await Context.Advertisements.FindAsync(id);
             if(ad != null)
             {
-                Context.Advertisements.Remove(ad);
-                var pos = await Context.Positions.FirstOrDefaultAsync(p => p.PositionId == ad.PositionId);
-                pos.Amount--;
-                return await Context.SaveChangesAsync() > 0;
+                return await Delete(ad);
             }
             return false;
         }
@@ -122,8 +119,9 @@ namespace ISPH.Infrastructure.Repositories
 
         public override async Task<Advertisement> GetById(Guid id)
         {
-            return await Context.Advertisements.AsNoTracking().Include(adv => adv.Position).Include(adv => adv.Employer).ThenInclude(emp => emp.Company)
-                .FirstOrDefaultAsync(adv => adv.AdvertisementId == id);
+            return await Context.Advertisements.AsNoTracking().Include(adv => adv.Position).Include(adv => adv.Employer).
+                ThenInclude(emp => emp.Company)
+                .FirstOrDefaultAsync(adv => adv.AdvertisementId.Equals(id));
         }
 
         public async Task<IEnumerable<AdvertisementDto>> GetAdvertisementsByEntityId(Guid id, EntityType type)
@@ -137,7 +135,7 @@ namespace ISPH.Infrastructure.Repositories
         private async Task<IEnumerable<AdvertisementDto>> GetAdvertisementsForEmployer(Guid employerid)
         {
             return await Context.Advertisements.AsNoTracking().
-                Where(adv => adv.EmployerId == employerid).OrderBy(adv => adv.Title).
+                Where(adv => adv.EmployerId.Equals(employerid)).OrderBy(adv => adv.Title).
                 Select(adv => new AdvertisementDto()
                 {
                     AdvertisementId = adv.AdvertisementId,
@@ -155,7 +153,7 @@ namespace ISPH.Infrastructure.Repositories
         private async Task<IEnumerable<AdvertisementDto>> GetAdvertisementsForPosition(Guid positionId)
         {
             return await Context.Advertisements.AsNoTracking().
-                Where(adv => adv.PositionId == positionId).OrderBy(adv => adv.Title).
+                Where(adv => adv.PositionId.Equals(positionId)).OrderBy(adv => adv.Title).
                 Select(adv => new AdvertisementDto()
                 {
                     AdvertisementId = adv.AdvertisementId,
@@ -176,7 +174,7 @@ namespace ISPH.Infrastructure.Repositories
         private async Task<IEnumerable<AdvertisementDto>> GetAdvertisementsForCompany(Guid companyId)
         {
             return await Context.Advertisements.AsNoTracking().
-                Where(adv => adv.Employer.CompanyId == companyId).OrderBy(adv => adv.Title).
+                Where(adv => adv.Employer.CompanyId.Equals(companyId)).OrderBy(adv => adv.Title).
                 Select(adv => new AdvertisementDto()
                 {
                     AdvertisementId = adv.AdvertisementId,
@@ -215,121 +213,39 @@ namespace ISPH.Infrastructure.Repositories
         {
             Guid pos = ad.PositionId, com = ad.CompanyId;
             uint sal = ad.Salary.GetValueOrDefault();
+            var filtered = Context.Advertisements.OrderBy(adv => adv.Title).AsNoTracking();
             if (pos != Guid.Empty && com != Guid.Empty && sal > 0)
             {
-                return await Context.Advertisements.Where(adv => adv.Employer.CompanyId == com && adv.PositionId == pos && adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000).
-                    AsNoTracking().OrderBy(adv => adv.Title).
-                Select(adv => new AdvertisementDto()
-                {
-                    AdvertisementId = adv.AdvertisementId,
-                    Title = adv.Title,
-                    Salary = adv.Salary,
-                    PositionName = adv.Position.Name,
-                    Employer = new EmployerDto
-                    {
-                        CompanyName = adv.Employer.Company.Name
-                    }
-                }).ToListAsync();
+                filtered = filtered.Where(adv => adv.Employer.CompanyId == com && adv.PositionId == pos &&
+                adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000);
             }
             else if (pos != Guid.Empty && com != Guid.Empty)
             {
-                return await Context.Advertisements.Where(adv => adv.Employer.CompanyId == com && adv.PositionId == pos).
-                    AsNoTracking().OrderBy(adv => adv.Title).
-                Select(adv => new AdvertisementDto()
-                {
-                    AdvertisementId = adv.AdvertisementId,
-                    Title = adv.Title,
-                    Salary = adv.Salary,
-                    PositionName = adv.Position.Name,
-                    Employer = new EmployerDto
-                    {
-                        CompanyName = adv.Employer.Company.Name
-                    }
-                }).ToListAsync();
+                filtered = filtered.Where(adv => adv.Employer.CompanyId == com && adv.PositionId == pos);
             }
             else if (pos != Guid.Empty && sal > 0)
             {
-                return await Context.Advertisements.Where(adv => adv.PositionId == pos && adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000).
-                    AsNoTracking().OrderBy(adv => adv.Title).
-                Select(adv => new AdvertisementDto()
-                {
-                    AdvertisementId = adv.AdvertisementId,
-                    Title = adv.Title,
-                    Salary = adv.Salary,
-                    PositionName = adv.Position.Name,
-                    Employer = new EmployerDto
-                    {
-                        CompanyName = adv.Employer.Company.Name
-                    }
-                }).ToListAsync();
+                filtered = filtered.Where(adv => adv.PositionId == pos && adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000);
             }
             else if (com != Guid.Empty && sal > 0)
             {
-                return await Context.Advertisements.Where(adv => adv.Employer.CompanyId == com && adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000).
-                    AsNoTracking().OrderBy(adv => adv.Title).
-                Select(adv => new AdvertisementDto()
-                {
-                    AdvertisementId = adv.AdvertisementId,
-                    Title = adv.Title,
-                    Salary = adv.Salary,
-                    PositionName = adv.Position.Name,
-                    Employer = new EmployerDto
-                    {
-                        CompanyName = adv.Employer.Company.Name
-                    }
-                }).ToListAsync();
+                filtered = filtered.Where(adv => adv.Employer.CompanyId == com && adv.Salary >= sal - 25000 &&
+                adv.Salary <= sal + 25000);
             }
             else if (pos != Guid.Empty)
             {
-                return await Context.Advertisements.Where(adv => adv.PositionId == pos).
-                    AsNoTracking().OrderBy(adv => adv.Title).
-                Select(adv => new AdvertisementDto()
-                {
-                    AdvertisementId = adv.AdvertisementId,
-                    Title = adv.Title,
-                    Salary = adv.Salary,
-                    PositionName = adv.Position.Name,
-                    Employer = new EmployerDto
-                    {
-                        CompanyName = adv.Employer.Company.Name
-                    }
-                }).ToListAsync();
+                filtered = filtered.Where(adv => adv.PositionId == pos);
             }
             else if (com != Guid.Empty)
             {
-                return await Context.Advertisements.Where(adv => adv.Employer.CompanyId == com).
-                     AsNoTracking().OrderBy(adv => adv.Title).
-                 Select(adv => new AdvertisementDto()
-                 {
-                     AdvertisementId = adv.AdvertisementId,
-                     Title = adv.Title,
-                     Salary = adv.Salary,
-                     PositionName = adv.Position.Name,
-                     Employer = new EmployerDto
-                     {
-                         CompanyName = adv.Employer.Company.Name
-                     }
-                 }).ToListAsync();
+                filtered = filtered.Where(adv => adv.Employer.CompanyId == com);
             }
             else if (sal > 0)
             {
-                return await Context.Advertisements.Where(adv => adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000).
-                    AsNoTracking().OrderBy(adv => adv.Title).
-                Select(adv => new AdvertisementDto()
-                {
-                    AdvertisementId = adv.AdvertisementId,
-                    Title = adv.Title,
-                    Salary = adv.Salary,
-                    PositionName = adv.Position.Name,
-                    Employer = new EmployerDto
-                    {
-                        CompanyName = adv.Employer.Company.Name
-                    }
-                }).ToListAsync();
+                filtered = filtered.Where(adv => adv.Salary >= sal - 25000 && adv.Salary <= sal + 25000);
             }
 
-            return await Context.Advertisements.AsNoTracking().OrderBy(adv => adv.Title).
-                Select(adv => new AdvertisementDto()
+            return await filtered.Select(adv => new AdvertisementDto()
                 {
                     AdvertisementId = adv.AdvertisementId,
                     Title = adv.Title,

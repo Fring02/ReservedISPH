@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace ISPH.API.Controllers.ApiControllers
 {
     [Route("[controller]/")]
-    [Authorize(Roles = RoleType.Admin)]
+    [Authorize(Roles = RoleType.ADMIN)]
     [ApiController]
     public class PositionsController : ControllerBase
     {

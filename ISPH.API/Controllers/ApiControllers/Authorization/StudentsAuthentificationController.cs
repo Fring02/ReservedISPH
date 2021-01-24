@@ -39,7 +39,7 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
                 Email = st.Email,
                 Role = "student",
             };
-            if (!RegistrationDataValidationService.IsValidPassword(st.Password) || !RegistrationDataValidationService.IsValidEmail(st.Email))
+            if (!DataValidator.IsValidPassword(st.Password) || !DataValidator.IsValidEmail(st.Email))
                 return BadRequest("Password or email is too easy to unlock. Try more complex");
                 if (await _authRepos.UserExists(student)) return BadRequest("This user already exists");
             student = await _authRepos.Register(student, st.Password);

@@ -33,26 +33,26 @@ namespace ISPH.Infrastructure.Repositories
 
         public async Task<IEnumerable<ArticleDto>> GetArticles(int amount)
         {
-            return await Context.Articles.AsNoTracking().OrderByDescending(art => art.PublishDate).Take(amount).Select(art => new ArticleDto(art)).ToListAsync();
+            return await Context.Articles.AsNoTracking().OrderByDescending(art => art.PublishDate).Take(amount).Select(art => new ArticleDto(art)).
+                ToListAsync();
         }
 
         public async Task<IEnumerable<ArticleDto>> GetFilteredArticles(FilteredNewsOrArticleDto dto)
         {
             int year = dto.Year, month = dto.Month;
-            if(year > 0 && month > 0)
-            return await Context.Articles.AsNoTracking().Where(art => art.PublishDate.Year == year && art.PublishDate.Month == month).OrderByDescending(art => art.PublishDate).
+            var filtered = Context.Articles.OrderByDescending(art => art.PublishDate).AsNoTracking();
+            if (year > 0 && month > 0)
+            return await filtered.Where(art => art.PublishDate.Year == year && art.PublishDate.Month == month).
                 Select(art => new ArticleDto(art)).ToListAsync();
             else
             {
-                if(year > 0)
-                    return await Context.Articles.AsNoTracking().Where(art => art.PublishDate.Year == year).OrderByDescending(art => art.PublishDate).
-                Select(art => new ArticleDto(art)).ToListAsync();
-                else if(month > 0)
-                    return await Context.Articles.AsNoTracking().Where(art => art.PublishDate.Month == month).OrderByDescending(art => art.PublishDate).
-                Select(art => new ArticleDto(art)).ToListAsync();
-                else
-                    return await Context.Articles.AsNoTracking().OrderByDescending(art => art.PublishDate).
-                Select(art => new ArticleDto(art)).ToListAsync();
+
+                if (year > 0)
+                    filtered = filtered.Where(art => art.PublishDate.Year == year);
+                else if (month > 0)
+                    filtered = filtered.Where(art => art.PublishDate.Month == month);
+
+                return await filtered.Select(art => new ArticleDto(art)).ToListAsync();
             }
         }
 

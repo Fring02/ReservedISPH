@@ -15,7 +15,7 @@ namespace ISPH.Infrastructure.Repositories
         }
         public virtual async Task<bool> Create(T entity)
         {
-            await Context.Set<T>().AddAsync(entity);
+            Context.Set<T>().Add(entity);
             return await Context.SaveChangesAsync() > 0;
         }
 
@@ -30,8 +30,7 @@ namespace ISPH.Infrastructure.Repositories
             var entity = await Context.Set<T>().FindAsync(id);
             if (entity != null)
             {
-                Context.Set<T>().Remove(entity);
-                return await Context.SaveChangesAsync() > 0;
+                return await Delete(entity);
             }
             return false;
         }

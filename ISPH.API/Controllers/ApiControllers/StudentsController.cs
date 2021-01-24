@@ -23,7 +23,7 @@ namespace ISPH.API.Controllers.ApiControllers
             _repos = repos;
         }
         [HttpGet]
-        [Authorize(Roles = RoleType.Admin)]
+        [Authorize(Roles = RoleType.ADMIN)]
         public async Task<IEnumerable<StudentDto>> GetAllStudents()
         {
            return await _repos.GetAll();
@@ -45,7 +45,7 @@ namespace ISPH.API.Controllers.ApiControllers
         
 
         [HttpPut("id={id}/update/email")]
-        [Authorize(Roles = RoleType.Student)]
+        [Authorize(Roles = RoleType.STUDENT)]
         public async Task<IActionResult> UpdateStudentEmailAsync(StudentDto st, Guid id)
         {
             var student = await _repos.GetById(id);
@@ -56,14 +56,14 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpPost("id={id}/confirmpassword")]
-        [Authorize(Roles = RoleType.Student)]
+        [Authorize(Roles = RoleType.STUDENT)]
         public async Task<bool> ConfirmStudentPasswordAsync(StudentDto st, Guid id)
         {
             return dataService.CheckHashedPassword(await _repos.GetById(id), st.Password);
         }
 
         [HttpPut("id={id}/update/password")]
-        [Authorize(Roles = RoleType.Student)]
+        [Authorize(Roles = RoleType.STUDENT)]
         public async Task<IActionResult> UpdateStudentPasswordAsync(StudentDto st, Guid id)
         {
             var student = await _repos.GetById(id);
@@ -74,7 +74,7 @@ namespace ISPH.API.Controllers.ApiControllers
 
 
         [HttpDelete("id={id}/delete")]
-        [Authorize(Roles = RoleType.Admin)]
+        [Authorize(Roles = RoleType.ADMIN)]
         public async Task<IActionResult> DeleteStudentAsync(Guid id)
         {
             if (await _repos.DeleteById(id)) return Ok("Deleted student");

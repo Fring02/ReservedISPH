@@ -81,7 +81,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpPut("id={id}/update")]
-        [Authorize(Roles = RoleType.Admin)]
+        [Authorize(Roles = RoleType.ADMIN)]
         public async Task<IActionResult> UpdateNewsAsync(NewsDto dto, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
@@ -97,7 +97,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpDelete("id={id}/delete")]
-        [Authorize(Roles = RoleType.Admin)]
+        [Authorize(Roles = RoleType.ADMIN)]
         public async Task<IActionResult> DeleteNewsAsync(Guid id)
         {
             var news = await _repos.GetById(id);

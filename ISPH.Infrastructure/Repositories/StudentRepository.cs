@@ -55,7 +55,7 @@ namespace ISPH.Infrastructure.Repositories
             _hashService.CreateHashedPassword(password, out byte[] hashedPass, out byte[] saltPass);
             user.HashedPassword = hashedPass;
             user.SaltPassword = saltPass;
-            await Context.Students.AddAsync(user);
+            Context.Students.Add(user);
             await Context.SaveChangesAsync();
             return user;
         }

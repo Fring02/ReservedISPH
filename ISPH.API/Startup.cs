@@ -53,9 +53,9 @@ namespace ISPH.API
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                     ValidateIssuer = true,
-                    ValidIssuer = AuthOptions.Issuer,
+                    ValidIssuer = AuthOptions.ISSUER,
                     ValidateAudience = true,
-                    ValidAudience = AuthOptions.Audience,
+                    ValidAudience = AuthOptions.AUDIENCE,
                     ValidateLifetime = true
                 };
             }); 

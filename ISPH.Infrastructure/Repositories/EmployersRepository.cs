@@ -14,9 +14,10 @@ namespace ISPH.Infrastructure.Repositories
 {
     public class EmployersRepository : EntityRepository<Employer, EmployerDto>, IUserAuthentification<Employer>, IEmployersRepository
     {
-        private readonly DataHashService<Employer> _hashService = new EmployersHashService();
+        private readonly DataHashService<Employer> _hashService;
         public EmployersRepository(EntityContext context) : base(context)
         {
+            _hashService = new EmployersHashService();
         }
 
         public override async Task<IEnumerable<EmployerDto>> GetAll()
@@ -53,9 +54,9 @@ namespace ISPH.Infrastructure.Repositories
             if (company == null) return false;
             Context.Employers.Update(entity);
             entity.CompanyId = company.CompanyId;
-            var ads = Context.Advertisements.
+            var adsToDelete = Context.Advertisements.
                 Where(ad => ad.EmployerId == entity.EmployerId);
-            Context.Advertisements.RemoveRange(ads);
+            Context.Advertisements.RemoveRange(adsToDelete);
             return await Context.SaveChangesAsync() > 0;
         }
         //Auth
@@ -65,7 +66,7 @@ namespace ISPH.Infrastructure.Repositories
             _hashService.CreateHashedPassword(password, out byte[] hashedPass, out byte[] saltPass);
             user.HashedPassword = hashedPass;
             user.SaltPassword = saltPass;
-            await Context.Employers.AddAsync(user);
+            Context.Employers.Add(user);
             await Context.SaveChangesAsync();
             return user;
         }

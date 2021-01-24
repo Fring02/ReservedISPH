@@ -38,20 +38,18 @@ namespace ISPH.Infrastructure.Repositories
         public async Task<IEnumerable<NewsDto>> GetFilteredNews(FilteredNewsOrArticleDto dto)
         {
             int year = dto.Year, month = dto.Month;
-            if(year > 0 && month > 0)
-            return await Context.News.Where(news => news.PublishDate.Year == year && news.PublishDate.Month == month).OrderByDescending(news => news.PublishDate).
-                Select(news => new NewsDto(news)).ToListAsync();
+            var filtered = Context.News.OrderByDescending(art => art.PublishDate).AsNoTracking();
+            if (year > 0 && month > 0)
+                return await filtered.Where(art => art.PublishDate.Year == year && art.PublishDate.Month == month).
+                    Select(art => new NewsDto(art)).ToListAsync();
             else
             {
-                if(year > 0)
-                    return await Context.News.Where(news => news.PublishDate.Year == year).OrderByDescending(news => news.PublishDate).
-                Select(news => new NewsDto(news)).ToListAsync();
-                else if(month > 0)
-                    return await Context.News.Where(news => news.PublishDate.Month == month).OrderByDescending(news => news.PublishDate).
-                Select(news => new NewsDto(news)).ToListAsync();
-                else
-                    return await Context.News.OrderByDescending(news => news.PublishDate).
-                Select(news => new NewsDto(news)).ToListAsync();
+                if (year > 0)
+                    filtered = filtered.Where(art => art.PublishDate.Year == year);
+                else if (month > 0)
+                    filtered = filtered.Where(art => art.PublishDate.Month == month);
+
+                return await filtered.Select(art => new NewsDto(art)).ToListAsync();
             }
         }
 

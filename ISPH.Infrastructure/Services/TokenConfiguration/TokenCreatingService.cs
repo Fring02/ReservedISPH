@@ -12,25 +12,24 @@ namespace ISPH.Infrastructure.Services.TokenConfiguration
 {
     public abstract class TokenCreatingService<T>
     {
-       protected readonly IUserAuthentification<T> Repos;
+       protected readonly IUserAuthentification<T> _userAuthRepos;
         protected TokenCreatingService(IUserAuthentification<T> repos)
         {
-            Repos = repos;
+            _userAuthRepos = repos;
         }
         public string CreateToken(ClaimsIdentity identity, out string identityName, IConfiguration configuration)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
             var token = new JwtSecurityToken(
                 claims: identity.Claims,
-                audience: AuthOptions.Audience,
-                issuer: AuthOptions.Issuer,
-                expires: DateTime.Now.AddHours(AuthOptions.Lifetime),
+                audience: AuthOptions.AUDIENCE,
+                issuer: AuthOptions.ISSUER,
+                expires: DateTime.Now.AddHours(AuthOptions.LIFETIME),
                 signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
                 );
             var handler = new JwtSecurityTokenHandler();
-            var encodedToken = handler.WriteToken(token);
             identityName = identity.Name;
-            return encodedToken;
+            return handler.WriteToken(token);
         }
 
         public abstract Task<ClaimsIdentity> CreateIdentity(string email, string password);

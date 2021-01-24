@@ -23,7 +23,7 @@ namespace ISPH.API.Controllers.ApiControllers
             _repos = repos;
         }
         [HttpGet]
-        [Authorize(Roles = RoleType.Admin)]
+        [Authorize(Roles = RoleType.ADMIN)]
         public async Task<IEnumerable<EmployerDto>> GetAllEmployersAsync()
         {
             return await _repos.GetAll();
@@ -45,7 +45,7 @@ namespace ISPH.API.Controllers.ApiControllers
 
 
         [HttpPut("id={id}/update/email")]
-        [Authorize(Roles = RoleType.Employer)]
+        [Authorize(Roles = RoleType.EMPLOYER)]
         public async Task<IActionResult> UpdateEmployerEmailAsync(EmployerDto em, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
@@ -57,7 +57,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpPut("id={id}/update/company")]
-        [Authorize(Roles = RoleType.Employer)]
+        [Authorize(Roles = RoleType.EMPLOYER)]
         public async Task<IActionResult> UpdateEmployerCompanyAsync(EmployerDto em, Guid id)
         {
             if (string.IsNullOrEmpty(em.CompanyName)) return BadRequest("Fill all fields");
@@ -71,7 +71,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpPut("id={id}/update/password")]
-        [Authorize(Roles = RoleType.Employer)]
+        [Authorize(Roles = RoleType.EMPLOYER)]
         public async Task<IActionResult> UpdateEmployerPasswordAsync(EmployerDto st, Guid id)
         {
             var employer = await _repos.GetById(id);
@@ -82,14 +82,14 @@ namespace ISPH.API.Controllers.ApiControllers
 
 
         [HttpPost("id={id}/confirmpassword")]
-        [Authorize(Roles = RoleType.Employer)]
+        [Authorize(Roles = RoleType.EMPLOYER)]
         public async Task<bool> ConfirmEmployerPasswordAsync(EmployerDto st, Guid id)
         {
             return dataService.CheckHashedPassword(await _repos.GetById(id), st.Password);
         }
 
         [HttpDelete("id={id}/delete")]
-        [Authorize(Roles = RoleType.Admin)]
+        [Authorize(Roles = RoleType.ADMIN)]
         public async Task<IActionResult> DeleteEmployerAsync(Guid id)
         {
             if(await _repos.DeleteById(id)) return Ok("Deleted employer");

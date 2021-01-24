@@ -26,6 +26,7 @@
                 var session = HttpContextAccessor.HttpContext.Session;
                 var notAvailableToken = string.IsNullOrEmpty(session.GetString("Token"));
                 var loc = session.GetString("Role") + "s";
+                if (loc == "admins") loc = "students";
                 if (notAvailableToken)
                 {
                     <div class="user-buttons">

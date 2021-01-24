@@ -25,7 +25,7 @@ namespace ISPH.Infrastructure.Repositories
         }
         public async Task<bool> AddToFavourites(FavouriteAdvertisement ad)
         {
-            await _context.Favourites.AddAsync(ad);
+            _context.Favourites.Add(ad);
             return await _context.SaveChangesAsync() > 0;
         }
 

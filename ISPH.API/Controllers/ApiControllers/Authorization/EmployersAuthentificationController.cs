@@ -42,7 +42,7 @@ namespace ISPH.API.Controllers.ApiControllers.Authorization
                 Role = "employer",
                 CompanyId = em.CompanyId
             };
-            if (!RegistrationDataValidationService.IsValidPassword(em.Password) || !RegistrationDataValidationService.IsValidEmail(em.Email))
+            if (!DataValidator.IsValidPassword(em.Password) || !DataValidator.IsValidEmail(em.Email))
                 return BadRequest("Password or email is too easy to unlock. Try more complex");
             var company = await _companyRepos.GetById(em.CompanyId);
             if (company == null) return BadRequest("Such company doesn't exist");

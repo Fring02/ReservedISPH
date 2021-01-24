@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace ISPH.Infrastructure.Services.Validation
 {
-    public static class RegistrationDataValidationService
+    public static class DataValidator
     {
         public static bool IsValidPassword(string password)
         {

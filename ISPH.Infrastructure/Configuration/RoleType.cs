@@ -2,8 +2,8 @@
 {
     public class RoleType
     {
-        public const string Admin = "admin";
-        public const string Student = "student";
-        public const string Employer = "employer";
+        public const string ADMIN = "admin";
+        public const string STUDENT = "student";
+        public const string EMPLOYER = "employer";
     }
 }

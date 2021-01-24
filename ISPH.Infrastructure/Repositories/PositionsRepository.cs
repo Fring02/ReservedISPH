@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ISPH.Infrastructure.Extensions;
 using ISPH.Core.DTO;
 
 namespace ISPH.Infrastructure.Repositories

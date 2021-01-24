@@ -31,7 +31,7 @@ namespace ISPH.API.Controllers.ApiControllers
             {
                 if (file.ContentType != "application/pdf") return BadRequest("Wrong format of resume");
                 string path = "/Resumes/" + file.FileName;
-                await using(var fileStream = new FileStream(_env.WebRootPath + path, FileMode.Create))
+                using(var fileStream = new FileStream(_env.WebRootPath + path, FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
                 }
@@ -66,7 +66,7 @@ namespace ISPH.API.Controllers.ApiControllers
             var resume = await _repos.GetById(id);
             var path = resume.Path;
             var memoryStream = new MemoryStream();
-            await using(var stream = new FileStream(_env.WebRootPath + path, FileMode.Open))
+            using(var stream = new FileStream(_env.WebRootPath + path, FileMode.Open))
             {
               await stream.CopyToAsync(memoryStream);
             }

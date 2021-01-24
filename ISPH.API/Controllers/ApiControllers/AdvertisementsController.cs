@@ -85,7 +85,7 @@ namespace ISPH.API.Controllers.ApiControllers
 
 
         [HttpPost("emp={id}/add")]
-        [Authorize(Roles = RoleType.Employer)]
+        [Authorize(Roles = RoleType.EMPLOYER)]
         public async Task<IActionResult> AddAdvertisement(AdvertisementDto adv, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
@@ -119,7 +119,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpPut("id={id}/update/title")]
-        [Authorize(Roles = RoleType.Employer)]
+        [Authorize(Roles = RoleType.EMPLOYER)]
         public async Task<IActionResult> UpdateAdvertisementTitle(AdvertisementDto dto, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
@@ -132,7 +132,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpPut("id={id}/update/description")]
-        [Authorize(Roles = RoleType.Employer)]
+        [Authorize(Roles = RoleType.EMPLOYER)]
         public async Task<IActionResult> UpdateAdvertisementDescription(AdvertisementDto dto, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
@@ -145,7 +145,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpPut("id={id}/update/salary")]
-        [Authorize(Roles = RoleType.Employer)]
+        [Authorize(Roles = RoleType.EMPLOYER)]
         public async Task<IActionResult> UpdateAdvertisementSalary(AdvertisementDto dto, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
@@ -158,7 +158,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpPut("id={id}/update/position")]
-        [Authorize(Roles = RoleType.Employer)]
+        [Authorize(Roles = RoleType.EMPLOYER)]
         public async Task<IActionResult> UpdateAdvertisementPosition(AdvertisementDto dto, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
@@ -169,7 +169,7 @@ namespace ISPH.API.Controllers.ApiControllers
         }
 
         [HttpDelete("id={id}/delete")]
-        [Authorize(Roles = RoleType.Employer)]
+        [Authorize(Roles = RoleType.EMPLOYER)]
         public async Task<IActionResult> DeleteAdvertisement(Guid id)
         {
             if (await _repos.DeleteById(id)) return Ok("Deleted ads");
