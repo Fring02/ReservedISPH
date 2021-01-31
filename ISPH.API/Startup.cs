@@ -17,6 +17,7 @@ using ISPH.Infrastructure.Hubs;
 using ISPH.Infrastructure.Data;
 using ISPH.Core.Helpers;
 using ISPH.Infrastructure.Configuration;
+using Microsoft.OpenApi.Models;
 
 namespace ISPH.API
 {
@@ -63,6 +64,10 @@ namespace ISPH.API
             services.AddSignalR();
             services.AddAutoMapper(typeof(AutoMapperProfiles));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Work Finding API", Version = "v1" });
+            });
             services.AddControllersWithViews();
         }
 
@@ -87,6 +92,12 @@ namespace ISPH.API
                     name: "default",
                     pattern: "{controller=Home}/{action=Main}/{id?}");
 
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Work Finding API V1");
             });
         }
     }
