@@ -1,0 +1,16 @@
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\bin\Debug\netcoreapp3.1\Domain.Interfaces.Repositories.deps.json
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\bin\Debug\netcoreapp3.1\Domain.Interfaces.Repositories.dll
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\bin\Debug\netcoreapp3.1\Domain.Interfaces.Repositories.pdb
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\bin\Debug\netcoreapp3.1\Domain.Core.dll
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\bin\Debug\netcoreapp3.1\Domain.Dtos.dll
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\bin\Debug\netcoreapp3.1\Domain.Interfaces.Core.dll
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\bin\Debug\netcoreapp3.1\Domain.Dtos.pdb
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\bin\Debug\netcoreapp3.1\Domain.Core.pdb
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\bin\Debug\netcoreapp3.1\Domain.Interfaces.Core.pdb
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\obj\Debug\netcoreapp3.1\Domain.Interfaces.Repositories.csproj.AssemblyReference.cache
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\obj\Debug\netcoreapp3.1\Domain.Interfaces.Repositories.AssemblyInfoInputs.cache
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\obj\Debug\netcoreapp3.1\Domain.Interfaces.Repositories.AssemblyInfo.cs
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\obj\Debug\netcoreapp3.1\Domain.Interfaces.Repositories.csproj.CoreCompileInputs.cache
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\obj\Debug\netcoreapp3.1\Domain.Interfaces.Repositories.csproj.CopyComplete
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\obj\Debug\netcoreapp3.1\Domain.Interfaces.Repositories.dll
+C:\Users\ASUS\source\repos\ISPH\Domain.Interfaces.Repositories\obj\Debug\netcoreapp3.1\Domain.Interfaces.Repositories.pdb

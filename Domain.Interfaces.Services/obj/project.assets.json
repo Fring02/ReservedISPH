@@ -1,0 +1,152 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "Domain.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "Domain.Interfaces.Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Domain.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Domain.Core.dll": {}
+        }
+      },
+      "Domain.Dtos/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "Domain.Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Domain.Dtos.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Domain.Dtos.dll": {}
+        }
+      },
+      "Domain.Interfaces.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "compile": {
+          "bin/placeholder/Domain.Interfaces.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Domain.Interfaces.Core.dll": {}
+        }
+      },
+      "Domain.Interfaces.Repositories/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "Domain.Dtos": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Domain.Interfaces.Repositories.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Domain.Interfaces.Repositories.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Domain.Core/1.0.0": {
+      "type": "project",
+      "path": "../Domain.Core/Domain.Core.csproj",
+      "msbuildProject": "../Domain.Core/Domain.Core.csproj"
+    },
+    "Domain.Dtos/1.0.0": {
+      "type": "project",
+      "path": "../Domain.Dtos/Domain.Dtos.csproj",
+      "msbuildProject": "../Domain.Dtos/Domain.Dtos.csproj"
+    },
+    "Domain.Interfaces.Core/1.0.0": {
+      "type": "project",
+      "path": "../Domain.Interfaces.Core/Domain.Interfaces.Core.csproj",
+      "msbuildProject": "../Domain.Interfaces.Core/Domain.Interfaces.Core.csproj"
+    },
+    "Domain.Interfaces.Repositories/1.0.0": {
+      "type": "project",
+      "path": "../Domain.Interfaces.Repositories/Domain.Interfaces.Repositories.csproj",
+      "msbuildProject": "../Domain.Interfaces.Repositories/Domain.Interfaces.Repositories.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETCoreApp,Version=v3.1": [
+      "Domain.Interfaces.Core >= 1.0.0",
+      "Domain.Interfaces.Repositories >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\ASUS\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Services\\Domain.Interfaces.Services.csproj",
+      "projectName": "Domain.Interfaces.Services",
+      "projectPath": "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Services\\Domain.Interfaces.Services.csproj",
+      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Services\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "netcoreapp3.1"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "projectReferences": {
+            "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Core\\Domain.Interfaces.Core.csproj": {
+              "projectPath": "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Core\\Domain.Interfaces.Core.csproj"
+            },
+            "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Repositories\\Domain.Interfaces.Repositories.csproj": {
+              "projectPath": "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Repositories\\Domain.Interfaces.Repositories.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

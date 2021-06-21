@@ -1,0 +1,76 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "Domain.Interfaces.Services/1.0.0": {
+        "dependencies": {
+          "Domain.Interfaces.Core": "1.0.0",
+          "Domain.Interfaces.Repositories": "1.0.0"
+        },
+        "runtime": {
+          "Domain.Interfaces.Services.dll": {}
+        }
+      },
+      "Domain.Core/1.0.0": {
+        "dependencies": {
+          "Domain.Interfaces.Core": "1.0.0"
+        },
+        "runtime": {
+          "Domain.Core.dll": {}
+        }
+      },
+      "Domain.Dtos/1.0.0": {
+        "dependencies": {
+          "Domain.Core": "1.0.0"
+        },
+        "runtime": {
+          "Domain.Dtos.dll": {}
+        }
+      },
+      "Domain.Interfaces.Core/1.0.0": {
+        "runtime": {
+          "Domain.Interfaces.Core.dll": {}
+        }
+      },
+      "Domain.Interfaces.Repositories/1.0.0": {
+        "dependencies": {
+          "Domain.Dtos": "1.0.0"
+        },
+        "runtime": {
+          "Domain.Interfaces.Repositories.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Domain.Interfaces.Services/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Domain.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Domain.Dtos/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Domain.Interfaces.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Domain.Interfaces.Repositories/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

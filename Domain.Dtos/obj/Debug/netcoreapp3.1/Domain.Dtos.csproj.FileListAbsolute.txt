@@ -1,0 +1,14 @@
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\bin\Debug\netcoreapp3.1\Domain.Dtos.deps.json
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\bin\Debug\netcoreapp3.1\Domain.Dtos.dll
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\bin\Debug\netcoreapp3.1\Domain.Dtos.pdb
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\bin\Debug\netcoreapp3.1\Domain.Core.dll
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\bin\Debug\netcoreapp3.1\Domain.Interfaces.Core.dll
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\bin\Debug\netcoreapp3.1\Domain.Core.pdb
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\bin\Debug\netcoreapp3.1\Domain.Interfaces.Core.pdb
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\obj\Debug\netcoreapp3.1\Domain.Dtos.csproj.AssemblyReference.cache
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\obj\Debug\netcoreapp3.1\Domain.Dtos.AssemblyInfoInputs.cache
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\obj\Debug\netcoreapp3.1\Domain.Dtos.AssemblyInfo.cs
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\obj\Debug\netcoreapp3.1\Domain.Dtos.csproj.CoreCompileInputs.cache
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\obj\Debug\netcoreapp3.1\Domain.Dtos.csproj.CopyComplete
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\obj\Debug\netcoreapp3.1\Domain.Dtos.dll
+C:\Users\ASUS\source\repos\ISPH\Domain.Dtos\obj\Debug\netcoreapp3.1\Domain.Dtos.pdb

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace>ISPH.Domain.Interfaces.Services</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Domain.Interfaces.Core\Domain.Interfaces.Core.csproj" />
+      <ProjectReference Include="..\Domain.Interfaces.Repositories\Domain.Interfaces.Repositories.csproj" />
+    </ItemGroup>
+
+</Project>
