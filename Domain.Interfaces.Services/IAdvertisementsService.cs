@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ISPH.Domain.Core.Models;
 using ISPH.Domain.Dtos.Filter;
-using ISPH.Domain.Interfaces.Repositories;
 
 namespace ISPH.Domain.Interfaces.Services
 {
     public interface IAdvertisementsService : 
-        IEntityService<IAdvertisementsRepository, Advertisement, Guid>
+        IEntityService<Advertisement, Guid>
     {
         
         Task<IEnumerable<Advertisement>> GetAdvertisementsByCompanyAsync(Guid companyId);

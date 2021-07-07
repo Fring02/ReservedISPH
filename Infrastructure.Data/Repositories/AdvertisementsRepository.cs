@@ -30,9 +30,9 @@ namespace ISPH.Infrastructure.Data.Repositories
                 .FirstOrDefaultAsync(adv => adv.Id == id);
         }
 
-        public override async Task<IEnumerable<Advertisement>> GetAllAsync()
+        public override async Task<IReadOnlyCollection<Advertisement>> GetAllAsync()
         {
-            return await _context.Advertisements.AsNoTracking().OrderBy(adv => adv.Title).
+            return await _context.Advertisements.AsNoTracking().OrderByDescending(adv => adv.Salary).
                 ToListAsync(); 
         }
 
@@ -50,48 +50,20 @@ namespace ISPH.Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<Advertisement>> GetAdvertisementsByPageAsync(int page)
         {
-            return await _context.Advertisements.AsNoTracking().Skip((page - 1) * 4).Take(4).
-                OrderBy(adv => adv.Title).
+            return await _context.Advertisements.AsNoTracking().Skip((page - 1) * 4).Take(4)
+                .OrderByDescending(adv => adv.Salary).
                 ToListAsync();
         }
 
-        public async Task<IEnumerable<Advertisement>> GetAdvertisementsByEmployerAsync(Guid employerId)
+        public async Task<IReadOnlyCollection<Advertisement>> GetBy(Expression<Func<Advertisement, bool>> predicate)
         {
             return await _context.Advertisements.AsNoTracking().
-                Where(adv => adv.EmployerId == employerId).OrderBy(adv => adv.Title).ToListAsync();
-        }
-
-        public async Task<IEnumerable<Advertisement>> GetAdvertisementsByPositionAsync(Guid positionId)
-        {
-            return await _context.Advertisements.AsNoTracking().
-                Where(adv => adv.PositionId.Equals(positionId)).OrderBy(adv => adv.Title).ToListAsync(); 
-        }
-
-        public async Task<IEnumerable<Advertisement>> GetAdvertisementsByCompanyAsync(Guid companyId)
-        {
-            return await _context.Advertisements.AsNoTracking().
-                Where(adv => adv.Employer.CompanyId == companyId).OrderBy(adv => adv.Title).
-                ToListAsync();
-        }
-
-        public async Task<IEnumerable<Advertisement>> GetFilteredAdvertisementsAsync(Expression<Func<Advertisement, bool>> predicate)
-        {
-            return await _context.Advertisements.AsNoTracking().Where(predicate).ToListAsync();
+                Where(predicate).OrderByDescending(adv => adv.Salary).ToListAsync();
         }
 
         public async Task<int> GetAdvertisementsCountAsync()
         {
             return await _context.Advertisements.CountAsync();
         }
-
-        /*public async Task<bool> UpdatePosition(Advertisement ad, Guid positionId)
-        {
-            ad.Position.Amount--;
-            _context.Advertisements.Update(ad);
-            ad.PositionId = positionId;
-            var positionafter = await _context.Positions.FindAsync(positionId);
-            positionafter.Amount++;
-            return await _context.SaveChangesAsync() > 0;
-        }*/
     }
 }

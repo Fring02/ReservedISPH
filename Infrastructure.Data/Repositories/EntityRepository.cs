@@ -40,7 +40,7 @@ namespace ISPH.Infrastructure.Data.Repositories
             return await _context.Set<TEntity>().FindAsync(id);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
+        public virtual async Task<IReadOnlyCollection<TEntity>> GetAllAsync()
         {
             return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
         }

@@ -19,9 +19,9 @@ namespace ISPH.API.TokenConfiguration
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
             var token = new JwtSecurityToken(
                 claims: identity.Claims,
-                audience: AuthOptions.AUDIENCE,
-                issuer: AuthOptions.ISSUER,
-                expires: DateTime.Now.AddHours(AuthOptions.LIFETIME),
+                audience: AuthOptions.Audience,
+                issuer: AuthOptions.Issuer,
+                expires: DateTime.Now.AddHours(AuthOptions.Lifetime),
                 signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature)
                 );
             var handler = new JwtSecurityTokenHandler();

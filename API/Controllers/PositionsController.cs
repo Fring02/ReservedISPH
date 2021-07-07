@@ -42,7 +42,7 @@ namespace ISPH.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPositionAsync(PositionCreateDto pos)
+        public async Task<IActionResult> AddPositionAsync([FromBody] PositionCreateDto pos)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var position = _mapper.Map<Position>(pos);
@@ -62,7 +62,7 @@ namespace ISPH.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePositionAsync(PositionUpdateDto pos, Guid id)
+        public async Task<IActionResult> UpdatePositionAsync([FromBody] PositionUpdateDto pos, Guid id)
         {
             if (string.IsNullOrEmpty(pos.Name) && string.IsNullOrEmpty(pos.ImagePath))
                 return BadRequest("Required at least 1 field to update");

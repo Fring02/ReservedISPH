@@ -15,9 +15,9 @@ namespace ISPH.Infrastructure.Data.Repositories
         {
         }
 
-        public override async Task<IEnumerable<Employer>> GetAllAsync()
+        public override async Task<IReadOnlyCollection<Employer>> GetAllAsync()
         {
-           return await _context.Employers.AsNoTracking().OrderBy(emp => emp.Id).
+           return await _context.Employers.AsNoTracking().
                 ToListAsync();
         }
 

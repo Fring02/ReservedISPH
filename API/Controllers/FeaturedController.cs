@@ -43,7 +43,7 @@ namespace ISPH.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToFeatured(FeaturedAdvertisementCreateDto dto)
+        public async Task<IActionResult> AddToFeatured([FromBody] FeaturedAdvertisementCreateDto dto)
         {
             var fav = _mapper.Map<FeaturedAdvertisement>(dto);
             try

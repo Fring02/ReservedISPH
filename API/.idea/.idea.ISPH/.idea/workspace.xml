@@ -27,7 +27,121 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="39f3324b-c5fd-49d7-b422-641b1ee68d94" name="Default Changelist" comment="Architecture rework" />
+    <list default="true" id="39f3324b-c5fd-49d7-b422-641b1ee68d94" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/IFilter.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Data.AssemblyInfo.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Data.AssemblyInfoInputs.cache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Data.assets.cache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Domain.Interfaces.Data.csproj.nuget.dgspec.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/ISPH.Domain.Interfaces.Repositories.csproj.nuget.g.props" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/ISPH.Domain.Interfaces.Repositories.csproj.nuget.g.targets" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ISPH/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ISPH/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/AdvertisementsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/AdvertisementsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Auth/AuthenticationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Auth/AuthenticationController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/CompaniesController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/CompaniesController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/EmployersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/EmployersController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/FeaturedController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/FeaturedController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/PositionsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/PositionsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/StudentsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/StudentsController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ISPH.sln" beforeDir="false" afterPath="$PROJECT_DIR$/ISPH.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Startup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Startup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TokenConfiguration/TokenCreatingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TokenConfiguration/TokenCreatingService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/API.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/API.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/API.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/netcoreapp3.1/API.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/API.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/API.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/API.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/API.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/API.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/API.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/API.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/API.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/API.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/API.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Core/Configuration/AuthentificationOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Core/Configuration/AuthentificationOptions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Core/Models/BaseUser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Core/Models/BaseUser.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Core/Models/Employer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Core/Models/Employer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Core/Models/Student.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Core/Models/Student.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Core/IUser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Core/IUser.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/Domain.Interfaces.Repositories.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/Domain.Interfaces.Data.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/IAdvertisementsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/IAdvertisementsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/ICompaniesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/ICompaniesRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/IEmployersRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/IEmployersRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/IEntityRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/IEntityRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/IFeaturedAdvertisementsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/IFeaturedAdvertisementsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/IPositionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/IPositionsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/IResumesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/IResumesRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/IStudentsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/IStudentsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/bin/Debug/netcoreapp3.1/Domain.Core.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/bin/Debug/netcoreapp3.1/Domain.Core.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/bin/Debug/netcoreapp3.1/Domain.Core.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/bin/Debug/netcoreapp3.1/Domain.Core.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/bin/Debug/netcoreapp3.1/Domain.Dtos.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/bin/Debug/netcoreapp3.1/Domain.Dtos.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/bin/Debug/netcoreapp3.1/Domain.Dtos.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/bin/Debug/netcoreapp3.1/Domain.Dtos.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/bin/Debug/netcoreapp3.1/Domain.Interfaces.Core.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/bin/Debug/netcoreapp3.1/Domain.Interfaces.Core.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/bin/Debug/netcoreapp3.1/Domain.Interfaces.Core.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/bin/Debug/netcoreapp3.1/Domain.Interfaces.Core.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/bin/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.deps.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/bin/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.deps.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/bin/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/bin/Debug/netcoreapp3.1/Domain.Interfaces.Data.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/bin/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/bin/Debug/netcoreapp3.1/Domain.Interfaces.Data.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/.NETCoreApp,Version=v3.1.AssemblyAttributes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.csproj.CopyComplete" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.csproj.CopyComplete" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.csproj.FileListAbsolute.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/Domain.Interfaces.Repositories.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/ISPH.Domain.Interfaces.Repositories.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/ISPH.Domain.Interfaces.Repositories.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/ISPH.Domain.Interfaces.Repositories.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/ISPH.Domain.Interfaces.Repositories.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Debug/netcoreapp3.1/ISPH.Domain.Interfaces.Repositories.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Debug/netcoreapp3.1/ISPH.Domain.Interfaces.Repositories.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Domain.Interfaces.Repositories.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Domain.Interfaces.Repositories.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Domain.Interfaces.Repositories.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Domain.Interfaces.Data.csproj.nuget.g.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/Domain.Interfaces.Repositories.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Domain.Interfaces.Data.csproj.nuget.g.targets" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/ISPH.Domain.Interfaces.Repositories.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/ISPH.Domain.Interfaces.Repositories.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/ISPH.Domain.Interfaces.Repositories.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Domain.Interfaces.Repositories.csproj.nuget.g.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/ISPH.Domain.Interfaces.Repositories.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/Domain.Interfaces.Repositories.csproj.nuget.g.targets" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/project.packagespec.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Repositories/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Data/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/Domain.Interfaces.Services.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/Domain.Interfaces.Services.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/IAdvertisementsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/IAdvertisementsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/ICompaniesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/ICompaniesService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/IEmployersService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/IEmployersService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/IEntityService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/IEntityService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/IFeaturedAdvertisementsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/IFeaturedAdvertisementsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/IPositionsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/IPositionsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/IResumesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/IResumesService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/IStudentsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/IStudentsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/obj/Domain.Interfaces.Services.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/obj/Domain.Interfaces.Services.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Domain.Interfaces.Services/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../Domain.Interfaces.Services/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/Services/AdvertisementsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/Services/AdvertisementsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/Services/BaseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/Services/BaseService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/Services/CompaniesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/Services/CompaniesService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/Services/EmployersService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/Services/EmployersService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/Services/PositionsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/Services/PositionsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/obj/Debug/netcoreapp3.1/Infrastructure.Business.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/obj/Debug/netcoreapp3.1/Infrastructure.Business.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/obj/Debug/netcoreapp3.1/Infrastructure.Business.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/obj/Debug/netcoreapp3.1/Infrastructure.Business.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/obj/Infrastructure.Business.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/obj/Infrastructure.Business.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Business/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Business/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/Infrastructure.Data.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/Infrastructure.Data.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/AdvertisementsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/AdvertisementsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/CompaniesRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/CompaniesRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/EmployersRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/EmployersRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/EntityRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/EntityRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/PositionsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/PositionsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/StudentRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/Repositories/StudentRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/obj/Debug/netcoreapp3.1/Infrastructure.Data.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/obj/Debug/netcoreapp3.1/Infrastructure.Data.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/obj/Infrastructure.Data.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/obj/Infrastructure.Data.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Infrastructure.Data/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../Infrastructure.Data/obj/rider.project.restore.info" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,88 +166,86 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/Company.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Dtos/Authorization/LoginDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/Employer.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9B492DB0-BCF0-4FF2-A061-0B1B1842AAD0/a2/ccd916be/AutoMapperProfiles.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/FeaturedAdvertisement.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/Student.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/49190D21-E084-46CA-BF9D-36A7E3C0B32C/F3/ActionMethodExecutor.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/Advertisement.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Dtos/Filter/FilteredAdvertisementDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Infrastructure.Business/Mapping/EntityProfile.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Infrastructure.Business/Utils/Validation/DataValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Infrastructure.Business/Utils/Hashing/PasswordHasher.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Repositories/IStudentsRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Data/IResumesRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Infrastructure.Business/Utils/Validation/DataValidator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Data/IEntityRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Infrastructure.Business/Mapping/EntityProfile.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Data/ICompaniesRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Data/IStudentsRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Data/IPositionsRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Data/IFeaturedAdvertisementsRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Data/IEmployersRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Data/IAdvertisementsRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/Advertisement.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/Student.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Extensions/ServicesDependencies.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Repositories/IResumesRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Repositories/IPositionsRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Repositories/IFeaturedAdvertisementsRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Repositories/IEntityRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Repositories/IAdvertisementsRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Repositories/ICompaniesRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Repositories/IEmployersRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/Resume.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/FeaturedAdvertisement.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/Employer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/Company.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TokenConfiguration/TokenCreatingService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Core/Configuration/AuthentificationOptions.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Infrastructure.Data/Contexts/EntityContext.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Core/IUser.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../Domain.Core/Configuration/RoleType.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../Domain.Core/Models/Position.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Infrastructure.Data/Contexts/EntityContext.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Core/Configuration/AuthentificationOptions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Core/Configuration/RoleType.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Dtos/Filter/FilteredAdvertisementDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Interfaces.Core/IUser.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../Domain.Dtos/Authorization/LoginDto.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/../Domain.Dtos/Users/EmployerUpdateDto.cs" />
-      <option value="$PROJECT_DIR$/../Domain.Interfaces.Core/IEntity.cs" />
-      <option value="$PROJECT_DIR$/static.resx" />
-      <option value="$PROJECT_DIR$/../Infrastructure.Business/Services/ResumesService.cs" />
-      <option value="$PROJECT_DIR$/Controllers/ResumesController.cs" />
-      <option value="$PROJECT_DIR$/Controllers/Auth/AuthentificationController.cs" />
-      <option value="$PROJECT_DIR$/../Domain.Core/Exceptions/UserFoundException.cs" />
-      <option value="$PROJECT_DIR$/Controllers/Auth/EmployersAuthentificationController.cs" />
-      <option value="$PROJECT_DIR$/Controllers/EmployersAuthentificationController.cs" />
-      <option value="$PROJECT_DIR$/TokenConfiguration/EmployerTokenService.cs" />
-      <option value="$PROJECT_DIR$/../Infrastructure.Business/Utils/Hashing/PasswordHasher.cs" />
-      <option value="$PROJECT_DIR$/TokenConfiguration/StudentTokenService.cs" />
-      <option value="$PROJECT_DIR$/TokenConfiguration/TokenCreatingService.cs" />
-      <option value="$PROJECT_DIR$/../Domain.Dtos/Users/IAuthUserDto.cs" />
-      <option value="$PROJECT_DIR$/../Domain.Interfaces.Services/IEmployersService.cs" />
-      <option value="$PROJECT_DIR$/../Domain.Interfaces.Services/IStudentsService.cs" />
-      <option value="$PROJECT_DIR$/Controllers/Auth/AuthenticationController.cs" />
       <option value="$PROJECT_DIR$/Extensions/ServicesDependencies.cs" />
-      <option value="$PROJECT_DIR$/Startup.cs" />
       <option value="$PROJECT_DIR$/../Infrastructure.Data/Contexts/EntityContext.cs" />
       <option value="$PROJECT_DIR$/../Infrastructure.Data/Infrastructure.Data.csproj" />
-      <option value="$PROJECT_DIR$/../Domain.Interfaces.Core/IUser.cs" />
-      <option value="$PROJECT_DIR$/../Domain.Core/Models/BaseUser.cs" />
-      <option value="$PROJECT_DIR$/../Domain.Core/Models/Employer.cs" />
-      <option value="$PROJECT_DIR$/../Domain.Core/Models/Student.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/PositionCreateDto.cs" />
-      <option value="$PROJECT_DIR$/Controllers/PositionsController.cs" />
       <option value="$PROJECT_DIR$/Properties/launchSettings.json" />
-      <option value="$PROJECT_DIR$/Controllers/CompaniesController.cs" />
       <option value="$PROJECT_DIR$/../Domain.Interfaces.Services/Auth/IUserService.cs" />
       <option value="$PROJECT_DIR$/../Infrastructure.Business/Services/StudentsService.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/Users/StudentViewDto.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/ResumeDto.cs" />
       <option value="$PROJECT_DIR$/../Infrastructure.Business/Mapping/EntityProfile.cs" />
-      <option value="$PROJECT_DIR$/Controllers/StudentsController.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/Users/IRegisterUserDto.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/Users/StudentCreateDto.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/Users/EmployerCreateDto.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/Users/EmployerViewDto.cs" />
       <option value="$APPLICATION_CONFIG_DIR$/consoles/db/2159729a-dfa2-438a-a9fd-3b87db623532/console.sql" />
-      <option value="$PROJECT_DIR$/../Infrastructure.Business/Services/BaseService.cs" />
       <option value="$PROJECT_DIR$/../Infrastructure.Business/Services/EmployersService.cs" />
-      <option value="$PROJECT_DIR$/Controllers/EmployersController.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/Filter/FilteredAdvertisementDto.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/AdvertisementCreateDto.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/PositionViewDto.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/AdvertisementViewDto.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/EmployerElementViewDto.cs" />
-      <option value="$PROJECT_DIR$/../Infrastructure.Data/Repositories/AdvertisementsRepository.cs" />
       <option value="$PROJECT_DIR$/../Domain.Dtos/AdvertisementElementViewDto.cs" />
+      <option value="$PROJECT_DIR$/Startup.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Interfaces.Repositories/IAdvertisementsRepository.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Interfaces.Data/IFilter.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Interfaces.Data/IAdvertisementsRepository.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Interfaces.Data/ICompaniesRepository.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Interfaces.Data/IEntityRepository.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Interfaces.Data/IPositionsRepository.cs" />
+      <option value="$PROJECT_DIR$/../Infrastructure.Data/Repositories/AdvertisementsRepository.cs" />
+      <option value="$PROJECT_DIR$/../Infrastructure.Data/Repositories/EntityRepository.cs" />
+      <option value="$PROJECT_DIR$/../Infrastructure.Data/Repositories/CompaniesRepository.cs" />
+      <option value="$PROJECT_DIR$/../Infrastructure.Data/Repositories/PositionsRepository.cs" />
+      <option value="$PROJECT_DIR$/../Infrastructure.Data/Repositories/StudentRepository.cs" />
+      <option value="$PROJECT_DIR$/../Infrastructure.Data/Repositories/EmployersRepository.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Interfaces.Services/IEntityService.cs" />
+      <option value="$PROJECT_DIR$/../Infrastructure.Business/Services/BaseService.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Core/Models/BaseUser.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Interfaces.Core/IUser.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Core/Models/Employer.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Core/Models/Student.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Core/Configuration/AuthentificationOptions.cs" />
+      <option value="$PROJECT_DIR$/../Infrastructure.Business/Services/AdvertisementsService.cs" />
+      <option value="$PROJECT_DIR$/Controllers/Auth/AuthenticationController.cs" />
+      <option value="$PROJECT_DIR$/../Domain.Dtos/AdvertisementFilterDto.cs" />
       <option value="$PROJECT_DIR$/Controllers/AdvertisementsController.cs" />
+      <option value="$PROJECT_DIR$/Controllers/CompaniesController.cs" />
+      <option value="$PROJECT_DIR$/Controllers/EmployersController.cs" />
+      <option value="$PROJECT_DIR$/Controllers/FeaturedController.cs" />
+      <option value="$PROJECT_DIR$/Controllers/PositionsController.cs" />
+      <option value="$PROJECT_DIR$/Controllers/StudentsController.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1jKYqHzATSROK997DkbGRxlP8BF" />
@@ -240,7 +352,9 @@
       <workItem from="1624248708559" duration="2538000" />
       <workItem from="1624254398255" duration="5776000" />
       <workItem from="1624276976565" duration="2094000" />
-      <workItem from="1624279134806" duration="290000" />
+      <workItem from="1624279134806" duration="368000" />
+      <workItem from="1624723792001" duration="135000" />
+      <workItem from="1625669962119" duration="4381000" />
     </task>
     <task id="LOCAL-00001" summary="Резервная копия перед изменением на Guid">
       <created>1605779317124</created>

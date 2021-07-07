@@ -43,19 +43,19 @@ namespace ISPH.Infrastructure.Services.Services
         public async Task<IEnumerable<Advertisement>> GetAdvertisementsByCompanyAsync(Guid companyId)
         {
             if (companyId == default) return null;
-            return await _repository.GetAdvertisementsByCompanyAsync(companyId);
+            return await _repository.GetBy(a => a.Employer.CompanyId == companyId);
         }
 
         public async Task<IEnumerable<Advertisement>> GetAdvertisementsByEmployerAsync(Guid employerId)
         {
             if (employerId == default) return null;
-            return await _repository.GetAdvertisementsByEmployerAsync(employerId);
+            return await _repository.GetBy(a => a.EmployerId == employerId);
         }
 
         public async Task<IEnumerable<Advertisement>> GetAdvertisementsByPositionAsync(Guid positionId)
         {
             if (positionId == default) return null;
-            return await _repository.GetAdvertisementsByPositionAsync(positionId);
+            return await _repository.GetBy(a => a.PositionId == positionId);
         }
 
         public async Task<IEnumerable<Advertisement>> GetFilteredAdvertisementsAsync(FilteredAdvertisementDto ad)
@@ -70,7 +70,7 @@ namespace ISPH.Infrastructure.Services.Services
                 if (ad.CompanyId != default) _filter = _filter.With(a => a.Employer.CompanyId == ad.CompanyId);
                 if (ad.PositionId != default) _filter = _filter.With(a => a.PositionId == ad.PositionId);
             }
-            return await _repository.GetFilteredAdvertisementsAsync(_filter.Result);
+            return await _repository.GetBy(_filter.Result);
         }
 
         public async Task<int> GetAdvertisementsCountAsync()

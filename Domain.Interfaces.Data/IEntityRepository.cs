@@ -12,6 +12,6 @@ namespace ISPH.Domain.Interfaces.Repositories
          Task DeleteAsync(TEntity entity);
          Task<bool> HasEntityAsync(TEntity entity);
          Task<TEntity> GetByIdAsync(TId id);
-         Task<IEnumerable<TEntity>> GetAllAsync();
+         Task<IReadOnlyCollection<TEntity>> GetAllAsync();
     }
 }

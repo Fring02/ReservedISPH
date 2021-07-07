@@ -41,7 +41,7 @@ namespace ISPH.API.Controllers
             return _mapper.Map<CompanyViewDto>(com);
         }
         [HttpPost]
-        public async Task<IActionResult> AddCompanyAsync(CompanyCreateDto com)
+        public async Task<IActionResult> AddCompanyAsync([FromBody] CompanyCreateDto com)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var company = _mapper.Map<Company>(com);
@@ -61,7 +61,7 @@ namespace ISPH.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCompanyAsync(CompanyUpdateDto com, Guid id)
+        public async Task<IActionResult> UpdateCompanyAsync([FromBody] CompanyUpdateDto com, Guid id)
         {
             if (string.IsNullOrEmpty(com.Name) && string.IsNullOrEmpty(com.ImagePath)) return BadRequest("Fill all fields");
             var company = await _companiesService.GetByIdAsync(id);

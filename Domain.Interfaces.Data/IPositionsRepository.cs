@@ -6,7 +6,7 @@ namespace ISPH.Domain.Interfaces.Repositories
 {
     public interface IPositionsRepository : IEntityRepository<Position, Guid>
     {
-         Task<Position> GetPositionByNameAsync(string name);
+         Task<Position> GetByNameAsync(string name);
     }
     
 }

@@ -15,7 +15,7 @@ namespace ISPH.Infrastructure.Data.Repositories
         {
         }
 
-        public override async Task<IEnumerable<Company>> GetAllAsync()
+        public override async Task<IReadOnlyCollection<Company>> GetAllAsync()
         {
             return await _context.Companies.AsNoTracking().OrderBy(company => company.Name).
                ToListAsync();
@@ -26,7 +26,7 @@ namespace ISPH.Infrastructure.Data.Repositories
             return await _context.Companies.AnyAsync(company => company.Name == entity.Name);
         }
 
-        public async Task<Company> GetCompanyByNameAsync(string name)
+        public async Task<Company> GetByNameAsync(string name)
         {
             return await _context.Companies.AsNoTracking().FirstOrDefaultAsync(company => company.Name == name);
         }

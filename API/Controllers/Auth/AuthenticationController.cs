@@ -26,7 +26,7 @@ namespace ISPH.API.Controllers.Auth
             _mapper = mapper;
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register(TRegisterUser regUser)
+        public async Task<IActionResult> Register([FromBody] TRegisterUser regUser)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var user = _mapper.Map<TUser>(regUser);
@@ -52,7 +52,7 @@ namespace ISPH.API.Controllers.Auth
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto authUser)
+        public async Task<IActionResult> Login([FromBody] LoginDto authUser)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var user = await _userService.Login(authUser.Email, authUser.Password);

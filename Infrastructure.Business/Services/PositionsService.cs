@@ -23,7 +23,7 @@ namespace ISPH.Infrastructure.Services.Services
         public async Task<Position> GetPositionByNameAsync(string name)
         {
             if (string.IsNullOrEmpty(name)) return null;
-            return await _repository.GetPositionByNameAsync(name);
+            return await _repository.GetByNameAsync(name);
         }
     }
 }

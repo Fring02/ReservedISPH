@@ -28,16 +28,8 @@ namespace ISPH.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<AdvertisementElementViewDto>> GetAdvertisements(int page, uint salary, string value,
-            Guid companyId, Guid positionId)
+        public async Task<IEnumerable<AdvertisementElementViewDto>> GetAdvertisements([FromQuery] FilteredAdvertisementDto filter, int page)
         {
-            var filter = new FilteredAdvertisementDto
-            {
-                Salary = salary,
-                CompanyId = companyId,
-                PositionId = positionId,
-                Value = value
-            };
             if (filter.IsValid)
             {
                 var ads = await _advertisementsService.GetFilteredAdvertisementsAsync(filter);
@@ -47,15 +39,13 @@ namespace ISPH.API.Controllers
                 }
                 return _mapper.Map<IEnumerable<AdvertisementElementViewDto>>(ads);
             }
-
             if (page > 0)
             {
                 return _mapper.Map<IEnumerable<AdvertisementElementViewDto>>(await _advertisementsService.GetAdvertisementsByPageAsync(page) 
-                                                                             ?? new List<Advertisement>());
+             ?? new List<Advertisement>());
             }
-
             return _mapper.Map<IEnumerable<AdvertisementElementViewDto>>(await _advertisementsService.GetAllAsync() 
-                                                                         ?? new List<Advertisement>());
+             ?? new List<Advertisement>());
         }
 
 
@@ -92,7 +82,7 @@ namespace ISPH.API.Controllers
         
         //[Authorize(Roles = RoleType.Employer)]
         [HttpPost]
-        public async Task<IActionResult> CreateAdvertisement(AdvertisementCreateDto adv)
+        public async Task<IActionResult> CreateAdvertisement([FromBody] AdvertisementCreateDto adv)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var advertisement = _mapper.Map<Advertisement>(adv);
@@ -122,7 +112,7 @@ namespace ISPH.API.Controllers
 
         [HttpPut("{id}")]
         //[Authorize(Roles = RoleType.Employer)]
-        public async Task<IActionResult> UpdateAdvertisement(AdvertisementUpdateDto dto, Guid id)
+        public async Task<IActionResult> UpdateAdvertisement([FromBody] AdvertisementUpdateDto dto, Guid id)
         {
             if (!ModelState.IsValid) return BadRequest("Fill all fields");
             var ad = await _advertisementsService.GetByIdAsync(id);

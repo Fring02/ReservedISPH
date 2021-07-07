@@ -12,10 +12,6 @@ namespace ISPH.Domain.Core.Models
         public Company Company { get; set; }
         public IEnumerable<Advertisement> Advertisements { get; set; }
 
-        public override string Role
-        {
-            get;
-            set;
-        } = RoleType.Employer;
+        public override string Role => RoleType.Employer;
     }
 }

@@ -23,7 +23,7 @@ namespace ISPH.Infrastructure.Services.Services
         public async Task<Company> GetCompanyByNameAsync(string name)
         {
             if (!string.IsNullOrEmpty(name)) return null;
-            return await _repository.GetCompanyByNameAsync(name);
+            return await _repository.GetByNameAsync(name);
         }
     }
 }

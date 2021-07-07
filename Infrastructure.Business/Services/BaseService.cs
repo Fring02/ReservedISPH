@@ -5,7 +5,7 @@ using ISPH.Domain.Interfaces.Services;
 
 namespace ISPH.Infrastructure.Services.Services
 {
-    public class BaseService<TRepository, TEntity, TId> : IEntityService<TRepository, TEntity, TId>
+    public class BaseService<TRepository, TEntity, TId> : IEntityService<TEntity, TId>
         where TRepository : IEntityRepository<TEntity, TId> where TEntity : class
     {
         protected TRepository _repository;
@@ -40,7 +40,7 @@ namespace ISPH.Infrastructure.Services.Services
            return await _repository.GetByIdAsync(id);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
+        public virtual async Task<IReadOnlyCollection<TEntity>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
         }

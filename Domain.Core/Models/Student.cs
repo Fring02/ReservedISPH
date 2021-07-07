@@ -6,10 +6,10 @@ using ISPH.Domain.Interfaces.Core;
 
 namespace ISPH.Domain.Core.Models
 {
-    public class Student : BaseUser<Guid>, IEntity<Guid>
+    public class Student : BaseUser<Guid>
     {
         public Resume Resume { get; set; }
-        public List<FeaturedAdvertisement> FeaturedAdvertisements { get; set; }
-        public override string Role { get; set; } = RoleType.Student;
+        public IEnumerable<FeaturedAdvertisement> FeaturedAdvertisements { get; set; }
+        public override string Role => RoleType.Student;
     }
 }

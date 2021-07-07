@@ -9,7 +9,7 @@ namespace ISPH.Domain.Core.Models
         public TId Id { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
-        public abstract string Role { get; set; }
+        public abstract string Role { get; }
         public byte[] HashedPassword { get; set; }
         public byte[] SaltPassword { get; set; }
         public string Email { get; set; }

@@ -42,7 +42,7 @@ namespace ISPH.API.Controllers
 
         [HttpPut("{id}")]
         //[Authorize(Roles = RoleType.Employer)]
-        public async Task<IActionResult> UpdateEmployerAsync(EmployerUpdateDto em, Guid id)
+        public async Task<IActionResult> UpdateEmployerAsync([FromBody] EmployerUpdateDto em, Guid id)
         {
             if (string.IsNullOrEmpty(em.Email) && string.IsNullOrEmpty(em.Password))
                 return BadRequest("Required at least 1 field to update");

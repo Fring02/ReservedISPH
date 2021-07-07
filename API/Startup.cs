@@ -53,9 +53,9 @@ namespace ISPH.API
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                     ValidateIssuer = true,
-                    ValidIssuer = AuthOptions.ISSUER,
+                    ValidIssuer = AuthOptions.Issuer,
                     ValidateAudience = true,
-                    ValidAudience = AuthOptions.AUDIENCE,
+                    ValidAudience = AuthOptions.Audience,
                     ValidateLifetime = true
                 };
             }); 
@@ -77,6 +77,8 @@ namespace ISPH.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(b => b.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();

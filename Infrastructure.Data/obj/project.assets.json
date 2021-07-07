@@ -306,17 +306,17 @@
           "bin/placeholder/Domain.Interfaces.Core.dll": {}
         }
       },
-      "Domain.Interfaces.Repositories/1.0.0": {
+      "Domain.Interfaces.Data/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
           "Domain.Dtos": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/Domain.Interfaces.Repositories.dll": {}
+          "bin/placeholder/Domain.Interfaces.Data.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Domain.Interfaces.Repositories.dll": {}
+          "bin/placeholder/Domain.Interfaces.Data.dll": {}
         }
       },
       "Domain.Interfaces.Services/1.0.0": {
@@ -324,7 +324,7 @@
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
           "Domain.Interfaces.Core": "1.0.0",
-          "Domain.Interfaces.Repositories": "1.0.0"
+          "Domain.Interfaces.Data": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Domain.Interfaces.Services.dll": {}
@@ -923,10 +923,10 @@
       "path": "../Domain.Interfaces.Core/Domain.Interfaces.Core.csproj",
       "msbuildProject": "../Domain.Interfaces.Core/Domain.Interfaces.Core.csproj"
     },
-    "Domain.Interfaces.Repositories/1.0.0": {
+    "Domain.Interfaces.Data/1.0.0": {
       "type": "project",
-      "path": "../Domain.Interfaces.Repositories/Domain.Interfaces.Repositories.csproj",
-      "msbuildProject": "../Domain.Interfaces.Repositories/Domain.Interfaces.Repositories.csproj"
+      "path": "../Domain.Interfaces.Data/Domain.Interfaces.Data.csproj",
+      "msbuildProject": "../Domain.Interfaces.Data/Domain.Interfaces.Data.csproj"
     },
     "Domain.Interfaces.Services/1.0.0": {
       "type": "project",
@@ -937,7 +937,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "Domain.Core >= 1.0.0",
-      "Domain.Interfaces.Repositories >= 1.0.0",
+      "Domain.Interfaces.Data >= 1.0.0",
       "Domain.Interfaces.Services >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 5.0.7",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.7",
@@ -978,8 +978,8 @@
             "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Core\\Domain.Core.csproj": {
               "projectPath": "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Core\\Domain.Core.csproj"
             },
-            "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Repositories\\Domain.Interfaces.Repositories.csproj": {
-              "projectPath": "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Repositories\\Domain.Interfaces.Repositories.csproj"
+            "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Data\\Domain.Interfaces.Data.csproj": {
+              "projectPath": "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Data\\Domain.Interfaces.Data.csproj"
             },
             "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Services\\Domain.Interfaces.Services.csproj": {
               "projectPath": "C:\\Users\\ASUS\\source\\repos\\ISPH\\Domain.Interfaces.Services\\Domain.Interfaces.Services.csproj"

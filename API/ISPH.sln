@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Dtos", "..\Domain.Dt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Interfaces.Core", "..\Domain.Interfaces.Core\Domain.Interfaces.Core.csproj", "{FB1D7B56-4D93-43AB-9149-31E94DEBB0A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Interfaces.Repositories", "..\Domain.Interfaces.Repositories\Domain.Interfaces.Repositories.csproj", "{0F0BEE72-0AC9-4824-906D-5502DFEDC8C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Interfaces.Data", "..\Domain.Interfaces.Data\Domain.Interfaces.Data.csproj", "{0F0BEE72-0AC9-4824-906D-5502DFEDC8C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Interfaces.Services", "..\Domain.Interfaces.Services\Domain.Interfaces.Services.csproj", "{3A7C145B-0204-44EE-A257-C465DAB679FE}"
 EndProject

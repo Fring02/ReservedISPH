@@ -15,13 +15,13 @@ namespace ISPH.Infrastructure.Data.Repositories
         {
         }
 
-        public override async Task<IEnumerable<Position>> GetAllAsync()
+        public override async Task<IReadOnlyCollection<Position>> GetAllAsync()
         {
            return await _context.Positions.AsNoTracking().OrderBy(pos => pos.Name).
                ToListAsync();
         }
 
-        public async Task<Position> GetPositionByNameAsync(string name)
+        public async Task<Position> GetByNameAsync(string name)
         {
            return await _context.Positions.FirstOrDefaultAsync(pos => pos.Name == name);
         }

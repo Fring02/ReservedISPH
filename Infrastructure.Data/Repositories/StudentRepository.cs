@@ -18,7 +18,7 @@ namespace ISPH.Infrastructure.Data.Repositories
         {
             return await _context.Students.AnyAsync(st => st.Email == entity.Email);
         }
-        public override async Task<IEnumerable<Student>> GetAllAsync()
+        public override async Task<IReadOnlyCollection<Student>> GetAllAsync()
         {
            return await _context.Students.AsNoTracking().OrderBy(st => st.Id).
                Include(student => student.Resume).

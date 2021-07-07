@@ -46,7 +46,7 @@ namespace ISPH.Infrastructure.Services.Services
 
         public async Task UpdateCompanyAsync(Employer entity, string companyName)
         {
-            var company = await _companiesRepository.GetCompanyByNameAsync(companyName);
+            var company = await _companiesRepository.GetByNameAsync(companyName);
             if (company == null) throw new EntityNotFoundException($"Company by name {companyName} not found");
             entity.CompanyId = company.Id;
             try

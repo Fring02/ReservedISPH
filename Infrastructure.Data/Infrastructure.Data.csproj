@@ -15,7 +15,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain.Core\Domain.Core.csproj" />
-      <ProjectReference Include="..\Domain.Interfaces.Repositories\Domain.Interfaces.Repositories.csproj" />
+      <ProjectReference Include="..\Domain.Interfaces.Data\Domain.Interfaces.Data.csproj" />
       <ProjectReference Include="..\Domain.Interfaces.Services\Domain.Interfaces.Services.csproj" />
     </ItemGroup>
 

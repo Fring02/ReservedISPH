@@ -6,6 +6,6 @@ namespace ISPH.Domain.Interfaces.Repositories
 {
     public interface ICompaniesRepository : IEntityRepository<Company, Guid>
     {
-         Task<Company> GetCompanyByNameAsync(string name);
+         Task<Company> GetByNameAsync(string name);
     }
 }
